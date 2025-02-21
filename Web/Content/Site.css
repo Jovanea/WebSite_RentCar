@@ -1,2 +1,229 @@
-﻿body {
+﻿/*====================General CSS====================*/
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    list-style: none;
+    text-decoration: none;
+    border: none;
+    outline: none;
+    resize: none;
 }
+
+:root {
+    --color-primary: #fff;
+    --color-secondary: #ffd000;
+    --color-tertiary: #777;
+    --color-bg: #f9f9ff;
+    --color-text: #111;
+    --shadow: 0 2px 8px rgba(0,0,0,.4);
+    --shadow-1: -1rem 1rem 1.2rem 0 rgba(157, 157, 157, .5);
+    --transition: all .4s ease;
+    --width-lg: 80%;
+    --width-md: 90%;
+    --width-sm: 95%;
+}
+
+body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    background: var(--color-primary);
+    color: var(--color-text);
+    line-height: 1.7;
+}
+
+::-webkit-scrollbar {
+    height: .5rem;
+    width: .5rem;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--color-primary);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--color-secondary);
+}
+
+img {
+    width: 100%;
+    display: block;
+    object-fit: cover;
+}
+
+a {
+    color: var(--color-text);
+}
+
+span {
+    font-size: .9rem;
+}
+
+h1, h2, h3, h4 {
+    line-height: 1.2;
+}
+
+h1 {
+    font-size: 2.8rem;
+}
+
+h2 {
+    font-size: 2rem;
+}
+
+h3 {
+    font-size: 1.6rem;
+}
+
+h4 {
+    font-size: 1.3rem;
+}
+
+h5 {
+    font-size: 1rem;
+}
+
+.container {
+    margin: 0 auto;
+    width: var(--width-lg);
+}
+
+section {
+    padding: 5rem 0 0;
+}
+
+    section h2 {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+.btn {
+    display: inline-block;
+    background: var(--color-secondary);
+    width: 11rem;
+    padding: 1rem;
+    border-radius: .5rem;
+    margin-top: 1rem;
+    cursor: pointer;
+    font-size: .9rem;
+    text-transform: capitalize;
+    letter-spacing: .1rem;
+    transition: var(--transition);
+}
+
+.bnt:hover {
+    background: var(--color-primary);
+    color: var(--color-secondary);
+}
+
+.social-icons {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+    .social-icons i {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.3rem;
+        border-radius: 50%;
+        cursor: pointer;
+    }
+
+/*==========================NAV==============================*/
+
+.nt-container {
+    background: var(--color-text);
+}
+
+.nav-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--color-primary);
+    padding: .5rem;
+}
+
+    .nav-top div i {
+        color: var(--color-secondary);
+        font-size: .8rem;
+    }
+
+    .nav-top div span {
+        margin-left: .5rem;
+    }
+
+    .nav-top .social-icons {
+        margin-top: 0;
+    }
+
+        .nav-top .social-icons i {
+            color: var(--color-primary);
+            font-size: .9rem;
+        }
+
+            .nav-top .social-icons i:hover {
+                color: var(--color-secondary);
+            }
+
+.log img {
+    width: 3rem;
+    padding: .5rem 0;
+}
+
+.nl-container {
+    background: rgba(0,0,0,.9);
+}
+
+    .nl-container .container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        transition: var(--transition);
+    }
+
+.navlist {
+    display: flex;
+    gap: 2.2rem
+}
+
+.menu-btn {
+    font-size: 1.5rem;
+    color: var(--color-primary);
+    cursor: pointer;
+    display: none;
+}
+
+.navlist li a {
+    color: var(--color-primary);
+    text-transform: uppercase;
+    font-weight: 600;
+    font-size: .9rem;
+}
+
+    .navlist li a:hover {
+        color: var(--color-secondary);
+    }
+
+/*============================HOME============================*/
+
+header {
+    background: url(./images/bg.jpg);
+    background-size: cover;
+    background-position: center;
+    height: 88vh;
+    z-index: 1;
+    position: relative;
+}
+
+    header::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        background: rgba(0,0,0,.4);
+    }
