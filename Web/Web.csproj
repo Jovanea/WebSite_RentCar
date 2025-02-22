@@ -87,6 +87,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\images\car-top.png" />
+    <Content Include="Content\images\car1.jpg" />
+    <Content Include="Content\images\car2.jpg" />
+    <Content Include="Content\images\car3.jpg" />
+    <Content Include="Content\images\fon.jpg" />
     <Content Include="Content\images\logo flaticon.png" />
     <Content Include="Content\Site.css" />
     <Content Include="Global.asax" />
@@ -109,6 +114,8 @@
     <Content Include="Views\Shared\_Header.cshtml" />
     <Content Include="Views\Shared\_Footer.cshtml" />
     <Content Include="Views\Home\Carsection.cshtml" />
+    <Content Include="Views\Home\Services.cshtml" />
+    <Content Include="Views\Home\Blogs.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
