@@ -23,5 +23,10 @@ namespace Web.Controllers
         {
             return View();
         }
+
+        public ActionResult Carsection()
+        {
+            return View();
+        }
     }
 }
