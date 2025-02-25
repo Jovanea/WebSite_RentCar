@@ -46,13 +46,13 @@
                     <img src="~/Content/images/car-top.png" alt="">
                 </div>
                 <ul class="navlist">
-                    <li><a href="Index">home</a></li>
-                    <li><a href="Login">login/sign up</a></li>
-                    <li><a href="#about">about</a></li>
-                    <li><a href="Services">services</a></li>
-                    <li><a href="Carsection">car</a></li>
-                    <li><a href="Blogs">blog</a></li>
-                    <li><a href="#contact">contact</a></li>
+                    <li><a href="@Url.Action("Index","Home")">home</a></li>
+                    <li><a href="@Url.Action("Login","Home")">login/sign up</a></li>
+                    <li><a href="@Url.Action("About","Home")">about</a></li>
+                    <li><a href="@Url.Action("Services","Home")">services</a></li>
+                    <li><a href="@Url.Action("Carsection","Home")">car</a></li>
+                    <li><a href="@Url.Action("Blogs","Home")">blog</a></li>
+                    <li><a href="@Url.Action("Contacts","Home")">contact</a></li>
                 </ul>
                 <div class="menu-btn">
                     <i class="fa-solid fa-bars"></i>
