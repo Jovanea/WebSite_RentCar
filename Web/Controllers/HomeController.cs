@@ -13,11 +13,23 @@ namespace Web.Controllers
         {
             return View();
         }
-        public ActionResult about()
+
+        public ActionResult Services()
         {
             return View();
         }
-        public ActionResult contact()
+
+        public ActionResult Blogs()
+        {
+            return View();
+        }
+
+        public ActionResult Carsection()
+        {
+            return View();
+        }
+
+        public ActionResult Login()
         {
             return View();
         }
