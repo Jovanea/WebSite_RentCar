@@ -13,5 +13,13 @@ namespace Web.Controllers
         {
             return View();
         }
+        public ActionResult about()
+        {
+            return View();
+        }
+        public ActionResult contact()
+        {
+            return View();
+        }
     }
 }
