@@ -6,16 +6,30 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
-    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 </head>
 <style>
+
     body {
         font-family: Arial, sans-serif;
         margin: 0;
         padding: 0;
-        background-color: #777;
+        background: url('https://robbreport.com/wp-content/uploads/2021/07/1-15.jpg?w=1000') no-repeat center center fixed;
+        background-size: cover;
         color: #333;
     }
+
+    .info-card, .mission-section, .team-section, .stats-section {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    }
+
+        .info-card.show, .mission-section.show, .team-section.show, .stats-section.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
 
     /* Hero Banner */
     .hero-banner {
@@ -47,13 +61,28 @@
         gap: 20px;
         text-align: center;
     }
+    .info-grid, .mission-section, .team-section, .stats-section {
+        max-width: 900px; /* Setează o lățime maximă */
+        margin: 0 auto; /* Centrează panourile */
+        text-align: center; /* Asigură alinierea textului la centru */
+        padding: 20px; /* Oferă spațiu interior */
+    }
+
 
     .info-card {
+        max-width: 400px; /* Setează o lățime maximă pentru fiecare card */
+        margin: 20px auto;
         background: white;
         padding: 20px;
         border-radius: 8px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
+        /*iconuri*/
+        .info-card i {
+            font-size: 2.5rem;
+            color: #ff6600;
+            margin-bottom: 10px;
+        }
 
     /* Mission Section */
     .mission-section {
@@ -110,39 +139,87 @@
         text-align: center;
     }
 
-        .stat-item h3 {
-            font-size: 2rem;
+    .stat-item h3 {
+        font-size: 2rem;
             color: #ff6600;
             margin-bottom: 5px;
         }
+        /*butonul de inchiriere */
+    .cta-button {
+        display: inline-block;
+        background: #FFDE21;
+        color: white;
+        padding: 12px 24px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-size: 1.2rem;
+        transition: background 0.3s;
+    }
+
+        .cta-button:hover {
+            background: #e65c00;
+        }
+    .hero-banner {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 400px; /* Ajustează în funcție de nevoie */
+        text-align: center;
+    }
+   
+
 </style>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const sections = document.querySelectorAll('.info-card, .mission-section, .team-section, .stats-section');
+    function reveal() {
+        sections.forEach(section => {
+            const sectionTop = section.getBoundingClientRect().top;
+            if (sectionTop < window.innerHeight - 50) {
+                section.classList.add('show');
+            }
+        });
+    }
+    window.addEventListener('scroll', reveal);
+    reveal();
+});
+</script>
+
 <body>
+
     <div class="hero-banner">
         <div class="hero-content">
             <h1>Despre DriveNow</h1>
-            <p>Experiență și profesionalism în servicii de închirieri auto din 2010</p>
+            <a href="#contact" class="cta-button">Închiriază acum</a>
         </div>
     </div>
 
-    <div class="about-section">
-        <div class="info-grid">
-            <div class="info-card">
-                <h3>Servicii rapide</h3>
-                <p>Cu peste 13 ani de experiență în domeniul închirierilor auto, oferim servicii de cea mai înaltă calitate și în cel mai scurt timp.</p>
-            </div>
-            <div class="info-card">
-                <h3>Încredere și comfort</h3>
-                <p>Oferim asistență non-stop și suport tehnic pentru toți clienții noștri, oriunde s-ar afla.</p>
-            </div>
+    <div class="hero-banner">
+        <div class="hero-content">
+            <h1>Experiență și profesionalism în servicii de închirieri auto din 2010</h1>
         </div>
+    </div>
+
+    <div class="info-grid">
+        <div class="info-card">
+            <i class="fas fa-bolt"></i> <!-- Icon pentru viteză -->
+            <h3>Servicii rapide</h3>
+            <p>Cu peste 13 ani de experiență în domeniul închirierilor auto, oferim servicii de cea mai înaltă calitate și în cel mai scurt timp.</p>
+        </div>
+        <div class="info-card">
+            <i class="fas fa-handshake"></i> <!-- Icon pentru încredere -->
+            <h3>Încredere și comfort</h3>
+            <p>Ne asigurăm că fiecare client beneficiază de o experiență fără griji, oferind asistență non-stop și suport tehnic de încredere, indiferent de locație. Punem siguranța și confortul pe primul loc, astfel încât fiecare călătorie să fie plăcută și lipsită de stres.</p>
+        </div>
+    </div>
 
         <div class="mission-section">
             <div class="mission-content">
                 <h2>Misiunea Noastră</h2>
-                <p>Misiunea noastră este să oferim servicii de închirieri auto la standarde înalte, cu transparență și profesionalism. Ne străduim să depășim așteptările clienților noștri prin calitatea serviciilor și atenția la detalii.</p>
+                <p>Misiunea noastră este să oferim servicii de închirieri auto la standarde înalte, cu transparență și profesionalism. Ne străduim să depășim așteptările clienților noștri prin calitatea serviciilor și atenția la detalii. Oferim o flotă diversificată de vehicule moderne și bine întreținute, potrivite pentru orice nevoie – de la mașini compacte pentru oraș, până la SUV-uri spațioase și elegante pentru călătorii mai lungi.</p>
             </div>
         </div>
-
+        
         <div class="team-section">
             <h2>Echipa Noastră</h2>
             <div class="team-grid">
