@@ -43,14 +43,17 @@
         <div class="nl-container">
             <div class="container">
                 <div class="logo">
-                        <img src="~/Content/images/car-top.png" alt="">
-                    <ul class="navalist">
-                        <li><a href="Index">home</a></li>
-                        <li><a href="#about">about</a></li>
-                        <li><a href="Services">services</a></li>
-                        <li><a href="Carsection">car</a></li>
-                        <li><a href="Blogs">blog</a></li>
-                        <li><a href="#contact">contact</a></li>
+                    <div>
+                        <img src="./images/logo_flaticon.png" alt="Company Logo">
+                    </div>
+                    <ul class="navlist">
+                        <li><a href="@Url.Action("Index","Home")">home</a></li>
+                        <li><a href="@Url.Action("Login","Home")">login/sign up</a></li>
+                        <li><a href="@Url.Action("About","Home")">about</a></li>
+                        <li><a href="@Url.Action("Services","Home")">services</a></li>
+                        <li><a href="@Url.Action("Carsection","Home")">car</a></li>
+                        <li><a href="@Url.Action("Blogs","Home")">blog</a></li>
+                        <li><a href="@Url.Action("Contacts","Home")">contact</a></li>
                     </ul>
                     <div class="menu-btn">
                         <i class="fa-solid fa-bars"></i>
@@ -73,9 +76,9 @@
                 Alege modelul potrivit și bucură-te de o experiență de închiriere fără griji!
             </p>
         </div>
-        <div class="container car-container">
+        <div class="container cars-container">
             <div class="box">
-                <img src="/Content/images/cars_pexels_1.jpg" alt="Range Rover 4.0">
+                <img src="~/Content/images/cars_pexels_1.jpg" alt="">
                 <div class="info">
                     <div class="tag">
                         <span class="custom-pointer"></span>
@@ -86,18 +89,18 @@
                     <div class="details">
                         <a href="#">2020</a>
                         <a href="#">Automatic</a>
-                        <a href="#">Full option</a>
+                        <a href="#">Middle option</a>
                     </div>
                 </div>
             </div>
             <div class="box">
-                <img src="/Content/images/cars_pexels_4.jpg" alt="Mercedes-Benz GLS63">
+                <img src="/Content/images/cars_pexels_2.jpg" alt="">
                 <div class="info">
                     <div class="tag">
                         <span class="custom-pointer"></span>
                         <p>$100/DAY</p>
                     </div>
-                    <h5>Mercedes-Benz GLS63</h5>
+                    <h5>Mercedes-Benz Maybach</h5>
                     <p>Mercedes-Benz</p>
                     <div class="details">
                         <a href="#">2018</a>
@@ -107,160 +110,160 @@
                 </div>
             </div>
             <div class="box">
-                <img src="/Content/images/cars_pexels_2.jpg" alt="Range Rover 4.0">
+                <img src="/Content/images/cars_pexels_3.jpg" alt="">
                 <div class="info">
                     <div class="tag">
                         <span class="custom-pointer"></span>
-                        <p>$60/DAY</p>
+                        <p>$600/DAY</p>
                     </div>
-                    <h5>Range Rover 4.0</h5>
-                    <p>Land Rover</p>
+                    <h5>Range Rover Autobiography</h5>
+                    <p>Range Rover</p>
                     <div class="details">
-                        <a href="#">2020</a>
+                        <a href="#">2024</a>
                         <a href="#">Automatic</a>
                         <a href="#">Full option</a>
                     </div>
                 </div>
             </div>
             <div class="box">
-                <img src="/Content/images/cars_pexels_3.jpg" alt="Range Rover 4.0">
+                <img src="/Content/images/cars_pexels_4.jpg" alt="">
                 <div class="info">
                     <div class="tag">
                         <span class="custom-pointer"></span>
-                        <p>$60/DAY</p>
+                        <p>$500/DAY</p>
                     </div>
-                    <h5>Range Rover 4.0</h5>
-                    <p>Land Rover</p>
+                    <h5>Ferrari F12</h5>
+                    <p>Ferrari</p>
                     <div class="details">
-                        <a href="#">2020</a>
+                        <a href="#">1016</a>
                         <a href="#">Automatic</a>
                         <a href="#">Full option</a>
                     </div>
                 </div>
             </div>
             <div class="box">
-                <img src="/Content/images/cars_pexels_5.jpg" alt="Range Rover 4.0">
+                <img src="/Content/images/cars_pexels_5.jpg" alt="">
                 <div class="info">
                     <div class="tag">
                         <span class="custom-pointer"></span>
-                        <p>$60/DAY</p>
+                        <p>$700/DAY</p>
                     </div>
-                    <h5>Range Rover 4.0</h5>
-                    <p>Land Rover</p>
+                    <h5>Porsche GT3</h5>
+                    <p>Porsche</p>
                     <div class="details">
-                        <a href="#">2020</a>
+                        <a href="#">2025</a>
                         <a href="#">Automatic</a>
-                        <a href="#">Full option</a>
+                        <a href="#">Middle option</a>
                     </div>
                 </div>
             </div>
             <div class="box">
-                <img src="/Content/images/cars_pexels_6.jpg" alt="Range Rover 4.0">
+                <img src="/Content/images/cars_pexels_6.jpg" alt="">
                 <div class="info">
                     <div class="tag">
                         <span class="custom-pointer"></span>
-                        <p>$60/DAY</p>
+                        <p>$2000/DAY</p>
                     </div>
-                    <h5>Range Rover 4.0</h5>
-                    <p>Land Rover</p>
+                    <h5>Pagani Huayra </h5>
+                    <p>Pagani</p>
                     <div class="details">
-                        <a href="#">2020</a>
+                        <a href="#">2024</a>
                         <a href="#">Automatic</a>
-                        <a href="#">Full option</a>
+                        <a href="#">Exclusive option</a>
                     </div>
                 </div>
             </div>
             <div class="box">
-                <img src="/Content/images/cars_pexels_7.jpg" alt="Mercedes-Benz GLS63">
+                <img src="/Content/images/cars_pexels_7.jpg" alt="">
                 <div class="info">
                     <div class="tag">
                         <span class="custom-pointer"></span>
-                        <p>$100/DAY</p>
+                        <p>$5000/DAY</p>
                     </div>
-                    <h5>Mercedes-Benz GLS63</h5>
-                    <p>Mercedes-Benz</p>
+                    <h5>Bugatti Tourbilion</h5>
+                    <p>Bugatti</p>
+                    <div class="details">
+                        <a href="#">2025</a>
+                        <a href="#">Automatic</a>
+                        <a href="#">1 OF 1</a>
+                    </div>
+                </div>
+            </div>
+            <div class="box">
+                <img src="/Content/images/cars_pexels_8.jpg" alt="">
+                <div class="info">
+                    <div class="tag">
+                        <span class="custom-pointer"></span>
+                        <p>$450/DAY</p>
+                    </div>
+                    <h5>Bentley Bentayga w12</h5>
+                    <p>Bentley</p>
                     <div class="details">
                         <a href="#">2018</a>
                         <a href="#">Automatic</a>
-                        <a href="#">Full option</a>
+                        <a href="#">Extra option</a>
                     </div>
                 </div>
             </div>
             <div class="box">
-                <img src="/Content/images/cars_pexels_8.jpg" alt="Range Rover 4.0">
+                <img src="/Content/images/cars_pexels_9.jpg" alt="">
                 <div class="info">
                     <div class="tag">
                         <span class="custom-pointer"></span>
-                        <p>$60/DAY</p>
+                        <p>$1500/DAY</p>
                     </div>
-                    <h5>Range Rover 4.0</h5>
-                    <p>Land Rover</p>
+                    <h5>Rolls-Royce Phantom</h5>
+                    <p>Rolls-Royce</p>
+                    <div class="details">
+                        <a href="#">2023</a>
+                        <a href="#">Automatic</a>
+                        <a href="#">Edition pulse </a>
+                    </div>
+                </div>
+            </div>
+            <div class="box">
+                <img src="/Content/images/cars_pexels_10.jpg" alt="">
+                <div class="info">
+                    <div class="tag">
+                        <span class="custom-pointer"></span>
+                        <p>$1000/DAY</p>
+                    </div>
+                    <h5>McLaren 720S</h5>
+                    <p>McLaren</p>
                     <div class="details">
                         <a href="#">2020</a>
+                        <a href="#">Automatic</a>
+                        <a href="#">Edition One</a>
+                    </div>
+                </div>
+            </div>
+            <div class="box">
+                <img src="/Content/images/cars_pexels_11.jpg" alt="">
+                <div class="info">
+                    <div class="tag">
+                        <span class="custom-pointer"></span>
+                        <p>$850/DAY</p>
+                    </div>
+                    <h5>BMW M5cs</h5>
+                    <p>BMW</p>
+                    <div class="details">
+                        <a href="#">2024</a>
                         <a href="#">Automatic</a>
                         <a href="#">Full option</a>
                     </div>
                 </div>
             </div>
             <div class="box">
-                <img src="/Content/images/cars_pexels_9.jpg" alt="Range Rover 4.0">
+                <img src="/Content/images/cars_pexels_12.jpg" alt="">
                 <div class="info">
                     <div class="tag">
                         <span class="custom-pointer"></span>
                         <p>$60/DAY</p>
                     </div>
-                    <h5>Range Rover 4.0</h5>
-                    <p>Land Rover</p>
+                    <h5>Lamborghini Urus</h5>
+                    <p>Lamborghini</p>
                     <div class="details">
-                        <a href="#">2020</a>
-                        <a href="#">Automatic</a>
-                        <a href="#">Full option</a>
-                    </div>
-                </div>
-            </div>
-            <div class="box">
-                <img src="/Content/images/cars_pexels_10.jpg" alt="Mercedes-Benz GLS63">
-                <div class="info">
-                    <div class="tag">
-                        <span class="custom-pointer"></span>
-                        <p>$100/DAY</p>
-                    </div>
-                    <h5>Mercedes-Benz GLS63</h5>
-                    <p>Mercedes-Benz</p>
-                    <div class="details">
-                        <a href="#">2018</a>
-                        <a href="#">Automatic</a>
-                        <a href="#">Full option</a>
-                    </div>
-                </div>
-            </div>
-            <div class="box">
-                <img src="/Content/images/cars_pexels_11.jpg" alt="Range Rover 4.0">
-                <div class="info">
-                    <div class="tag">
-                        <span class="custom-pointer"></span>
-                        <p>$60/DAY</p>
-                    </div>
-                    <h5>Range Rover 4.0</h5>
-                    <p>Land Rover</p>
-                    <div class="details">
-                        <a href="#">2020</a>
-                        <a href="#">Automatic</a>
-                        <a href="#">Full option</a>
-                    </div>
-                </div>
-            </div>
-            <div class="box">
-                <img src="/Content/images/cars_pexels_12.jpg" alt="Range Rover 4.0">
-                <div class="info">
-                    <div class="tag">
-                        <span class="custom-pointer"></span>
-                        <p>$60/DAY</p>
-                    </div>
-                    <h5>Range Rover 4.0</h5>
-                    <p>Land Rover</p>
-                    <div class="details">
-                        <a href="#">2020</a>
+                        <a href="#">2019</a>
                         <a href="#">Automatic</a>
                         <a href="#">Full option</a>
                     </div>
