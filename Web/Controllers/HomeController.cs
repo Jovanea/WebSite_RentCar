@@ -43,5 +43,9 @@ namespace Web.Controllers
         {
             return View();
         }
+        public ActionResult Registre()
+        {
+            return View();
+        }
     }
 }

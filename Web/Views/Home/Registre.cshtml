@@ -1,6 +1,5 @@
-﻿
-@{
-    ViewBag.Title = "Login";
+﻿@{
+    ViewBag.Title = "Registre";
 }
 
 <!DOCTYPE html>
@@ -12,7 +11,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.linearicons.com/free/1.0.0/icon-font.min.css">
     <link rel="stylesheet" href="~/Content/Site.css">
-    <title>Login</title>
+    <title>Registre</title>
 </head>
 <body>
     <nav>
@@ -60,42 +59,78 @@
             </div>
         </div>
     </nav>
-
-    <div class="profile-wrapper">
-        <!-- Formularul de autentificare -->
-        <div class="login-container" id="loginContainer">
-            <h2>Autentificare</h2>
-            <form action="dashboard.html" method="post">
+    <div class="container">
+        <div class="registration-container" id="registrationContainer">
+            <h2>Înregistrare DriveNow</h2>
+            <form onsubmit="event.preventDefault(); showSuccessMessage();">
+                <div class="input-group">
+                    <label for="nume">Nume și Prenume:</label>
+                    <input type="text" id="nume" name="nume" required>
+                </div>
                 <div class="input-group">
                     <label for="email">Email:</label>
                     <input type="email" id="email" name="email" required>
                 </div>
                 <div class="input-group">
-                    <label for="password">Parola:</label>
+                    <label for="telefon">Număr de Telefon:</label>
+                    <input type="tel" id="telefon" name="telefon" required>
+                </div>
+                <div class="input-group">
+                    <label for="permis">Număr Permis de Conducere:</label>
+                    <input type="text" id="permis" name="permis" required>
+                </div>
+                <div class="input-group">
+                    <label for="password">Parolă:</label>
                     <input type="password" id="password" name="password" required>
                 </div>
-                <!-- Am schimbat tipul butonului la "button" pentru a evita trimiterea formularului înaintea validării -->
-                <button type="button" class="button" onclick="showSuccessMessage()">Login</button>
-            </form>
-            <p>Nu ai cont? <a href="~/Home/Registre">Înregistrează-te</a></p>
+                <div class="input-group">
+                    <label for="confirm-password">Confirmă Parola:</label>
+                    <input type="password" id="confirm-password" name="confirm-password" required>
+                </div>
 
+                <p class="terms-text">
+                    Prin înregistrare, confirm că am citit și sunt de acord cu
+                    <a href="#">Termenii și Condițiile</a> și
+                    <a href="#">Politica de Confidențialitate</a>
+                </p>
+
+                <button type="submit" class="button">Creează Cont</button>
+            </form>
+            <p>Ai deja cont? <a href="login" class="login-link">Autentifică-te</a></p>
         </div>
 
-        <!-- Mesajul de succes -->
-        <div class="success-container" style="display: none;">
-            <span class="success-message">Autentificare reușită!</span>
-            <span class="success-text">Bun venit! Acum poți accesa toate funcționalitățile platformei.</span>
-            <button class="success-button" onclick="window.location.href='index'">Mergi la pagina principală</button>
+        <div class="success-container" id="successContainer">
+            <div class="success-message-box">
+                <span class="success-message">Înregistrare reușită!</span>
+                <span class="success-text">
+                    Contul tău a fost creat cu succes. Poți începe să închiriezi mașini!
+                </span>
+                <button class="button" onclick="window.location.href='index'">
+                    Mergi la pagina principală
+                </button>
+            </div>
         </div>
     </div>
-
-    <script>
-        function showSuccessMessage() {
-            // Ascunde formularul de autentificare și afișează mesajul de succes
-            document.getElementById('loginContainer').style.display = 'none';
-            document.querySelector('.success-container').style.display = 'block';
-        }
-    </script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
