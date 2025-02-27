@@ -47,5 +47,10 @@ namespace Web.Controllers
         {
             return View();
         }
+
+        public ActionResult Cos()
+        {
+            return View();
+        }
     }
 }
