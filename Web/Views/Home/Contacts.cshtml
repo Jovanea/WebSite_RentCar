@@ -6,14 +6,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.linearicons.com/free/1.0.0/icon-font.min.css">
+    <link rel="stylesheet" href="~/Content/Site.css">
     <title>Contact Us</title>
 </head>
 <style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
     
     body {
         font-family: Arial, sans-serif;
@@ -136,18 +137,53 @@
 
 </style>
 <body>
-
-    <header>
-        <nav>
-            <ul>
-                <li><a href="Index.cshtml">Home</a></li>
-                <li><a href="about.cshtml">About</a></li>
-                <li><a href="services.html">Services</a></li>
-                <li><a href="contact.html">Contact</a></li>
-            </ul>
-        </nav>
-    </header>
-
+    <nav>
+        <div class="nt-container">
+            <div class="container">
+                <div class="nav-top">
+                    <div>
+                        <i class="fa-solid fa-location-dot"></i>
+                        <span>Chișinău, Moldova</span>
+                    </div>
+                    <div>
+                        <i class="fa-solid fa-clock"></i>
+                        <span>24/7 Open</span>
+                    </div>
+                    <div>
+                        <i class="fa-solid fa-phone"></i>
+                        <span>069112233</span>
+                    </div>
+                    <div class="social-icons">
+                        <i class="fa-brands fa-facebook"></i>
+                        <i class="fa-brands fa-instagram"></i>
+                        <i class="fa-brands fa-twitter"></i>
+                        <i class="fa-brands fa-linkedin-in"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="nl-container">
+            <div class="container">
+                <div class="logo">
+                    <img src="~/Content/images/car-top.png" alt="">
+                </div>
+                <ul class="navlist">
+                    <li><a href="@Url.Action("Index","Home")">home</a></li>
+                    <li><a href="@Url.Action("Login","Home")">login/sign up</a></li>
+                    <li><a href="@Url.Action("About","Home")">about</a></li>
+                    <li><a href="@Url.Action("Services","Home")">services</a></li>
+                    <li><a href="@Url.Action("Carsection","Home")">car</a></li>
+                    <li><a href="@Url.Action("Blogs","Home")">blog</a></li>
+                    <li><a href="@Url.Action("Contacts","Home")">contact</a></li>
+                    <li><a href="@Url.Action("MyProfile","Home")">myprofile</a></li>
+                    <li><a href="@Url.Action("Review","Home")">reviews</a></li>
+                </ul>
+                <div class="menu-btn">
+                    <i class="fa-solid fa-bars"></i>
+                </div>
+            </div>
+        </div>
+    </nav>
     <section class="contact-section">
         <div class="container">
             <h2>Contact Us</h2>
@@ -188,10 +224,6 @@
             </div>
         </div>
     </section>
-
-    <footer>
-        <p>&copy; 2025 DriveNow. All rights reserved.</p>
-    </footer>
 
 </body>
 </html>

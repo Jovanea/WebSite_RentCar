@@ -68,6 +68,7 @@
         gap: 20px;
         text-align: center;
     }
+
     .info-grid, .mission-section, .team-section, .stats-section {
         max-width: 900px; /* Setează o lățime maximă */
         margin: 0 auto; /* Centrează panourile */
@@ -146,12 +147,12 @@
         text-align: center;
     }
 
-    .stat-item h3 {
-        font-size: 2rem;
+        .stat-item h3 {
+            font-size: 2rem;
             color: #ff6600;
             margin-bottom: 5px;
         }
-        /*butonul de inchiriere */
+    /*butonul de inchiriere */
     .cta-button {
         display: inline-block;
         background: #FFDE21;
@@ -166,6 +167,7 @@
         .cta-button:hover {
             background: #e65c00;
         }
+
     .hero-banner {
         display: flex;
         justify-content: center;
@@ -173,26 +175,71 @@
         height: 400px; /* Ajustează în funcție de nevoie */
         text-align: center;
     }
-   
-
 </style>
 <script>
-document.addEventListener("DOMContentLoaded", function() {
-    const sections = document.querySelectorAll('.info-card, .mission-section, .team-section, .stats-section');
-    function reveal() {
-        sections.forEach(section => {
-            const sectionTop = section.getBoundingClientRect().top;
-            if (sectionTop < window.innerHeight - 50) {
-                section.classList.add('show');
-            }
-        });
-    }
-    window.addEventListener('scroll', reveal);
-    reveal();
-});
+    document.addEventListener("DOMContentLoaded", function () {
+        const sections = document.querySelectorAll('.info-card, .mission-section, .team-section, .stats-section');
+        function reveal() {
+            sections.forEach(section => {
+                const sectionTop = section.getBoundingClientRect().top;
+                if (sectionTop < window.innerHeight - 50) {
+                    section.classList.add('show');
+                }
+            });
+        }
+        window.addEventListener('scroll', reveal);
+        reveal();
+    });
 </script>
 
 <body>
+    <nav>
+        <div class="nt-container">
+            <div class="container">
+                <div class="nav-top">
+                    <div>
+                        <i class="fa-solid fa-location-dot"></i>
+                        <span>Chișinău, Moldova</span>
+                    </div>
+                    <div>
+                        <i class="fa-solid fa-clock"></i>
+                        <span>24/7 Open</span>
+                    </div>
+                    <div>
+                        <i class="fa-solid fa-phone"></i>
+                        <span>069112233</span>
+                    </div>
+                    <div class="social-icons">
+                        <i class="fa-brands fa-facebook"></i>
+                        <i class="fa-brands fa-instagram"></i>
+                        <i class="fa-brands fa-twitter"></i>
+                        <i class="fa-brands fa-linkedin-in"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="nl-container">
+            <div class="container">
+                <div class="logo">
+                    <img src="~/Content/images/car-top.png" alt="">
+                </div>
+                <ul class="navlist">
+                    <li><a href="@Url.Action("Index","Home")">home</a></li>
+                    <li><a href="@Url.Action("Login","Home")">login/sign up</a></li>
+                    <li><a href="@Url.Action("About","Home")">about</a></li>
+                    <li><a href="@Url.Action("Services","Home")">services</a></li>
+                    <li><a href="@Url.Action("Carsection","Home")">car</a></li>
+                    <li><a href="@Url.Action("Blogs","Home")">blog</a></li>
+                    <li><a href="@Url.Action("Contacts","Home")">contact</a></li>
+                    <li><a href="@Url.Action("MyProfile","Home")">myprofile</a></li>
+                    <li><a href="@Url.Action("Review","Home")">reviews</a></li>
+                </ul>
+                <div class="menu-btn">
+                    <i class="fa-solid fa-bars"></i>
+                </div>
+            </div>
+        </div>
+    </nav>
 
     <div class="hero-banner">
         <div class="hero-content">
@@ -220,54 +267,54 @@ document.addEventListener("DOMContentLoaded", function() {
         </div>
     </div>
 
-        <div class="mission-section">
-            <div class="mission-content">
-                <h2>Misiunea Noastră</h2>
-                <p>Misiunea noastră este să oferim servicii de închirieri auto la standarde înalte, cu transparență și profesionalism. Ne străduim să depășim așteptările clienților noștri prin calitatea serviciilor și atenția la detalii. Oferim o flotă diversificată de vehicule moderne și bine întreținute, potrivite pentru orice nevoie – de la mașini compacte pentru oraș, până la SUV-uri spațioase și elegante pentru călătorii mai lungi.</p>
-            </div>
+    <div class="mission-section">
+        <div class="mission-content">
+            <h2>Misiunea Noastră</h2>
+            <p>Misiunea noastră este să oferim servicii de închirieri auto la standarde înalte, cu transparență și profesionalism. Ne străduim să depășim așteptările clienților noștri prin calitatea serviciilor și atenția la detalii. Oferim o flotă diversificată de vehicule moderne și bine întreținute, potrivite pentru orice nevoie – de la mașini compacte pentru oraș, până la SUV-uri spațioase și elegante pentru călătorii mai lungi.</p>
         </div>
-        
-        <div class="team-section">
-            <h2>Echipa Noastră</h2>
-            <div class="team-grid">
-                <div class="team-member">
-                    <img src="/api/placeholder/150/150" alt="Manager">
-                    <h3>Ioan Popescu</h3>
-                    <p>Director General</p>
-                </div>
-                <div class="team-member">
-                    <img src="/api/placeholder/150/150" alt="Service">
-                    <h3>Maria Ionescu</h3>
-                    <p>Manager Service</p>
-                </div>
-                <div class="team-member">
-                    <img src="/api/placeholder/150/150" alt="Customer">
-                    <h3>Andrei Popa</h3>
-                    <p>Relații Clienți</p>
-                </div>
-            </div>
-        </div>
+    </div>
 
-        <div class="stats-section">
-            <div class="stats-grid">
-                <div class="stat-item">
-                    <h3>50+</h3>
-                    <p>Vehicule în flotă</p>
-                </div>
-                <div class="stat-item">
-                    <h3>1000+</h3>
-                    <p>Clienți mulțumiți</p>
-                </div>
-                <div class="stat-item">
-                    <h3>13</h3>
-                    <p>Ani de experiență</p>
-                </div>
-                <div class="stat-item">
-                    <h3>24/7</h3>
-                    <p>Suport clienți</p>
-                </div>
+    <div class="team-section">
+        <h2>Echipa Noastră</h2>
+        <div class="team-grid">
+            <div class="team-member">
+                <img src="/api/placeholder/150/150" alt="Manager">
+                <h3>Ioan Popescu</h3>
+                <p>Director General</p>
+            </div>
+            <div class="team-member">
+                <img src="/api/placeholder/150/150" alt="Service">
+                <h3>Maria Ionescu</h3>
+                <p>Manager Service</p>
+            </div>
+            <div class="team-member">
+                <img src="/api/placeholder/150/150" alt="Customer">
+                <h3>Andrei Popa</h3>
+                <p>Relații Clienți</p>
             </div>
         </div>
+    </div>
+
+    <div class="stats-section">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <h3>50+</h3>
+                <p>Vehicule în flotă</p>
+            </div>
+            <div class="stat-item">
+                <h3>1000+</h3>
+                <p>Clienți mulțumiți</p>
+            </div>
+            <div class="stat-item">
+                <h3>13</h3>
+                <p>Ani de experiență</p>
+            </div>
+            <div class="stat-item">
+                <h3>24/7</h3>
+                <p>Suport clienți</p>
+            </div>
+        </div>
+    </div>
     </div>
 </body>
 </html>
