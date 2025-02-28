@@ -87,6 +87,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\images\avatar-1.png" />
+    <Content Include="Content\images\avatar-2.png" />
+    <Content Include="Content\images\avatar-3.png" />
+    <Content Include="Content\images\avatar-4.png" />
+    <Content Include="Content\images\avatar-5.png" />
     <Content Include="Content\images\car-top.png" />
     <Content Include="Content\images\car1.jpg" />
     <Content Include="Content\images\car2.jpg" />
@@ -106,6 +111,8 @@
     <Content Include="Content\images\fon.jpg" />
     <Content Include="Content\images\logo flaticon.png" />
     <Content Include="Content\Site.css" />
+    <Content Include="Content\site.js" />
+    <Content Include="Content\swiper-bundle.min.js" />
     <Content Include="Global.asax" />
     <Content Include="Web.config" />
   </ItemGroup>

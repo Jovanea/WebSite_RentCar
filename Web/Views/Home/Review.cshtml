@@ -46,19 +46,21 @@
         <div class="nl-container">
             <div class="container">
                 <div class="logo">
-                    <img src="car-top.png" alt="">
+                    <img src="~/Content/images/car-top.png" alt="">
                 </div>
                 <ul class="navlist">
-                    <li><a href="index.html">home</a></li>
-                    <li><a href="#about">about</a></li>
-                    <li><a href="services.html">services</a></li>
-                    <li><a href="#car">car</a></li>
-                    <li><a href="blogs.html">blog</a></li>
-                    <li><a href="#contact">contact</a></li>
-                </ul>
-                <div class="menu-btn">
-                    <i class="fa-solid fa-bars"></i>
-                </div>
+                    <li><a href="@Url.Action("Index","Home")">home</a></li>
+                    <li><a href="@Url.Action("Login","Home")">login/sign up</a></li>
+                    <li><a href="@Url.Action("About","Home")">about</a></li>
+                    <li><a href="@Url.Action("Services","Home")">services</a></li>
+                    <li><a href="@Url.Action("Carsection","Home")">car</a></li>
+                    <li><a href="@Url.Action("Blogs","Home")">blog</a></li>
+                    <li><a href="@Url.Action("Contacts","Home")">contact</a></li>
+                    <li><a href="@Url.Action("Profile","Home")">myprofile</a></li>
+                    <li><a href="@Url.Action("Review","Home")">reviews</a></li>
+                    <div class="menu-btn">
+                        <i class="fa-solid fa-bars"></i>
+                    </div>
             </div>
         </div>
     </nav>
@@ -73,7 +75,7 @@
                     <div class="swiper-wrapper">
                         <article class="card__article swiper-slide">
                             <div class="card__image">
-                                <img src="avatar-1.png" alt="image" class="card__img">
+                                <img src="~/Content/images/avatar-1.png" alt="image" class="card__img">
                                 <div class="card__shadow"></div>
                             </div>
 
@@ -93,7 +95,7 @@
 
                         <article class="card__article swiper-slide">
                             <div class="card__image">
-                                <img src="avatar-2.png" alt="image" class="card__img">
+                                <img src="~/Content/images/avatar-2.png" alt="image" class="card__img">
                                 <div class="card__shadow"></div>
                             </div>
 
@@ -114,7 +116,7 @@
 
                         <article class="card__article swiper-slide">
                             <div class="card__image">
-                                <img src="avatar-3.png" alt="image" class="card__img">
+                                <img src="~/Content/images/avatar-3.png" alt="image" class="card__img">
                                 <div class="card__shadow"></div>
                             </div>
 
@@ -133,7 +135,7 @@
 
                         <article class="card__article swiper-slide">
                             <div class="card__image">
-                                <img src="avatar-4.png" alt="image" class="card__img">
+                                <img src="~/Content/images/avatar-4.png" alt="image" class="card__img">
                                 <div class="card__shadow"></div>
                             </div>
 
@@ -152,7 +154,7 @@
 
                         <article class="card__article swiper-slide">
                             <div class="card__image">
-                                <img src="avatar-5.png" alt="image" class="card__img">
+                                <img src="~/Content/images/avatar-5.png" alt="image" class="card__img">
                                 <div class="card__shadow"></div>
                             </div>
 
@@ -171,24 +173,14 @@
                     </div>
                 </div>
 
-                <!-- Navigation buttons -->
-                <div class="swiper-button-next">
-                    <i class="ri-arrow-right-s-line"></i>
-                </div>
-
-                <div class="swiper-button-prev">
-                    <i class="ri-arrow-left-s-line"></i>
-                </div>
+                <!-- Navigation buttons (for visual purpose) -->
+                <div class="swiper-button-prev">←</div>
+                <div class="swiper-button-next">→</div>
 
                 <!-- Pagination -->
                 <div class="swiper-pagination"></div>
             </div>
+        </div>
     </section>
-
-    <!--=============== SWIPER JS ===============-->
-    <script src="swiper-bundle.min.js"></script>
-
-    <!--=============== MAIN JS ===============-->
-    <script src="main.js"></script>
 </body>
 </html>

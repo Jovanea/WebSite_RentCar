@@ -47,5 +47,15 @@ namespace Web.Controllers
         {
             return View();
         }
+
+        public ActionResult Profile()
+        {
+            return View();
+        }
+
+        public ActionResult Review()
+        {
+            return View();
+        }
     }
 }
