@@ -1,0 +1,40 @@
+﻿@{
+    ViewBag.Title = "Cos";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="~/Content/Site.css">
+    <title>Cos</title>
+</head>
+<body>
+    <nav>
+        <div class="nl-container">
+            <div class="container">
+                <div class="logo">
+                    <img src="~/Content/images/car-top.png" alt="">
+                </div>
+                <ul class="navlist">
+                    <li><a href="@Url.Action("Index","Home")">home</a></li>
+                    <li><a href="@Url.Action("Carsection","Home")">car</a></li>
+                    <li><a href="@Url.Action("Cart","Home")" class="active">cart</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <section class="cart">
+        <div class="container">
+            <h2>Coșul tău de închirieri</h2>
+            <div class="empty-cart">
+                <p>Coșul tău este gol. Adaugă o mașină pentru a începe procesul de închiriere.</p>
+                <a href="@Url.Action("Carsection","Home")" class="btn">Vezi mașinile disponibile</a>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

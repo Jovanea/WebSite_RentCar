@@ -141,6 +141,7 @@
     <Content Include="Views\Home\Login.cshtml" />
     <Content Include="Views\Home\Review.cshtml" />
     <Content Include="Views\Home\Profile.cshtml" />
+    <Content Include="Views\Home\Cos.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
