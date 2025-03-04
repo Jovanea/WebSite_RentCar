@@ -3,275 +3,214 @@
     ViewBag.Title = "Carsection";
 }
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdn.linearicons.com/free/1.0.0/icon-font.min.css">
-    <link rel="stylesheet" href="~/Content/Site.css">
-    <title>Car section</title>
-</head>
-<body>
-    <nav>
-        <div class="nt-container">
-            <div class="container">
-                <div class="nav-top">
-                    <div>
-                        <i class="fa-solid fa-location-dot"></i>
-                        <span>Chișinău, Moldova</span>
-                    </div>
-                    <div>
-                        <i class="fa-solid fa-clock"></i>
-                        <span>24/7 Open</span>
-                    </div>
-                    <div>
-                        <i class="fa-solid fa-phone"></i>
-                        <span>069112233</span>
-                    </div>
-                    <div class="social-icons">
-                        <i class="fa-brands fa-facebook"></i>
-                        <i class="fa-brands fa-instagram"></i>
-                        <i class="fa-brands fa-twitter"></i>
-                        <i class="fa-brands fa-linkedin-in"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="nl-container">
-            <div class="container">
-                <div class="logo">
-                    <img src="~/Content/images/car-top.png" alt="">
-                </div>
-                <ul class="navlist">
-                    <li><a href="@Url.Action("Index","Home")">home</a></li>
-                    <li><a href="@Url.Action("Login","Home")">login/sign up</a></li>
-                    <li><a href="@Url.Action("About","Home")">about</a></li>
-                    <li><a href="@Url.Action("Services","Home")">services</a></li>
-                    <li><a href="@Url.Action("Carsection","Home")">car</a></li>
-                    <li><a href="@Url.Action("Cos","Home")">cos</a></li>
-                    <li><a href="@Url.Action("Blogs","Home")">blog</a></li>
-                    <li><a href="@Url.Action("Contacts","Home")">contact</a></li>
-                    <li><a href="@Url.Action("Profile","Home")">myprofile</a></li>
-                    <li><a href="@Url.Action("Review","Home")">reviews</a></li>
-                </ul>
-                <div class="menu-btn">
-                    <i class="fa-solid fa-bars"></i>
-                </div>
-            </div>
-        </div>
-    </nav>
+@Html.Partial("_Header")
 
-    <section class="cars" id="cars">
-        <div class="title">
-            <h4><i class="fa-solid fa-car"></i></h4>
-            <h2><i>Alegeți mașina dorită</i></h2>
-            <p>
-                Stocul nostru de mașini de închiriat oferă o gamă variată de vehicule, adaptate nevoilor fiecărui client.
-                De la mașini economice și eficiente pentru oraș, până la SUV-uri spațioase pentru călătorii confortabile
-                și vehicule premium pentru experiențe de lux, avem opțiuni pentru orice ocazie. Toate autoturismele sunt
-                bine întreținute, asigurate și echipate cu dotările necesare pentru siguranță și confort. Indiferent dacă
-                ai nevoie de o mașină pe termen scurt sau lung, îți punem la dispoziție soluții flexibile la prețuri competitive.
-                Alege modelul potrivit și bucură-te de o experiență de închiriere fără griji!
-            </p>
-        </div>
-        <div class="container cars-container">
-            <div class="box">
-                <img src="~/Content/images/cars_pexels_1.jpg" alt="">
-                <div class="info">
-                    <div class="tag">
-                        <span class="custom-pointer"></span>
-                        <p>$60/DAY</p>
-                    </div>
-                    <h5>Range Rover 4.0</h5>
-                    <p>Land Rover</p>
-                    <div class="details">
-                        <a href="#">2020</a>
-                        <a href="#">Automatic</a>
-                        <a href="#">Middle option</a>
-                    </div>
+<section class="cars" id="cars">
+    <div class="title">
+        <h4><i class="fa-solid fa-car"></i></h4>
+        <h2><i>Alegeți mașina dorită</i></h2>
+        <p>
+            Stocul nostru de mașini de închiriat oferă o gamă variată de vehicule, adaptate nevoilor fiecărui client.
+            De la mașini economice și eficiente pentru oraș, până la SUV-uri spațioase pentru călătorii confortabile
+            și vehicule premium pentru experiențe de lux, avem opțiuni pentru orice ocazie. Toate autoturismele sunt
+            bine întreținute, asigurate și echipate cu dotările necesare pentru siguranță și confort. Indiferent dacă
+            ai nevoie de o mașină pe termen scurt sau lung, îți punem la dispoziție soluții flexibile la prețuri competitive.
+            Alege modelul potrivit și bucură-te de o experiență de închiriere fără griji!
+        </p>
+    </div>
+    <div class="container cars-container">
+        <div class="box">
+            <img src="~/Content/images/cars_pexels_1.jpg" alt="">
+            <div class="info">
+                <div class="tag">
+                    <span class="custom-pointer"></span>
+                    <p>$60/DAY</p>
                 </div>
-            </div>
-            <div class="box">
-                <img src="/Content/images/cars_pexels_2.jpg" alt="">
-                <div class="info">
-                    <div class="tag">
-                        <span class="custom-pointer"></span>
-                        <p>$100/DAY</p>
-                    </div>
-                    <h5>Mercedes-Benz Maybach</h5>
-                    <p>Mercedes-Benz</p>
-                    <div class="details">
-                        <a href="#">2018</a>
-                        <a href="#">Automatic</a>
-                        <a href="#">Full option</a>
-                    </div>
-                </div>
-            </div>
-            <div class="box">
-                <img src="/Content/images/cars_pexels_3.jpg" alt="">
-                <div class="info">
-                    <div class="tag">
-                        <span class="custom-pointer"></span>
-                        <p>$600/DAY</p>
-                    </div>
-                    <h5>Range Rover Autobiography</h5>
-                    <p>Range Rover</p>
-                    <div class="details">
-                        <a href="#">2024</a>
-                        <a href="#">Automatic</a>
-                        <a href="#">Full option</a>
-                    </div>
-                </div>
-            </div>
-            <div class="box">
-                <img src="/Content/images/cars_pexels_4.jpg" alt="">
-                <div class="info">
-                    <div class="tag">
-                        <span class="custom-pointer"></span>
-                        <p>$500/DAY</p>
-                    </div>
-                    <h5>Ferrari F12</h5>
-                    <p>Ferrari</p>
-                    <div class="details">
-                        <a href="#">1016</a>
-                        <a href="#">Automatic</a>
-                        <a href="#">Full option</a>
-                    </div>
-                </div>
-            </div>
-            <div class="box">
-                <img src="/Content/images/cars_pexels_5.jpg" alt="">
-                <div class="info">
-                    <div class="tag">
-                        <span class="custom-pointer"></span>
-                        <p>$700/DAY</p>
-                    </div>
-                    <h5>Porsche GT3</h5>
-                    <p>Porsche</p>
-                    <div class="details">
-                        <a href="#">2025</a>
-                        <a href="#">Automatic</a>
-                        <a href="#">Middle option</a>
-                    </div>
-                </div>
-            </div>
-            <div class="box">
-                <img src="/Content/images/cars_pexels_6.jpg" alt="">
-                <div class="info">
-                    <div class="tag">
-                        <span class="custom-pointer"></span>
-                        <p>$2000/DAY</p>
-                    </div>
-                    <h5>Pagani Huayra </h5>
-                    <p>Pagani</p>
-                    <div class="details">
-                        <a href="#">2024</a>
-                        <a href="#">Automatic</a>
-                        <a href="#">Exclusive option</a>
-                    </div>
-                </div>
-            </div>
-            <div class="box">
-                <img src="/Content/images/cars_pexels_7.jpg" alt="">
-                <div class="info">
-                    <div class="tag">
-                        <span class="custom-pointer"></span>
-                        <p>$5000/DAY</p>
-                    </div>
-                    <h5>Bugatti Tourbilion</h5>
-                    <p>Bugatti</p>
-                    <div class="details">
-                        <a href="#">2025</a>
-                        <a href="#">Automatic</a>
-                        <a href="#">1 OF 1</a>
-                    </div>
-                </div>
-            </div>
-            <div class="box">
-                <img src="/Content/images/cars_pexels_8.jpg" alt="">
-                <div class="info">
-                    <div class="tag">
-                        <span class="custom-pointer"></span>
-                        <p>$450/DAY</p>
-                    </div>
-                    <h5>Bentley Bentayga w12</h5>
-                    <p>Bentley</p>
-                    <div class="details">
-                        <a href="#">2018</a>
-                        <a href="#">Automatic</a>
-                        <a href="#">Extra option</a>
-                    </div>
-                </div>
-            </div>
-            <div class="box">
-                <img src="/Content/images/cars_pexels_9.jpg" alt="">
-                <div class="info">
-                    <div class="tag">
-                        <span class="custom-pointer"></span>
-                        <p>$1500/DAY</p>
-                    </div>
-                    <h5>Rolls-Royce Phantom</h5>
-                    <p>Rolls-Royce</p>
-                    <div class="details">
-                        <a href="#">2023</a>
-                        <a href="#">Automatic</a>
-                        <a href="#">Edition pulse </a>
-                    </div>
-                </div>
-            </div>
-            <div class="box">
-                <img src="/Content/images/cars_pexels_10.jpg" alt="">
-                <div class="info">
-                    <div class="tag">
-                        <span class="custom-pointer"></span>
-                        <p>$1000/DAY</p>
-                    </div>
-                    <h5>McLaren 720S</h5>
-                    <p>McLaren</p>
-                    <div class="details">
-                        <a href="#">2020</a>
-                        <a href="#">Automatic</a>
-                        <a href="#">Edition One</a>
-                    </div>
-                </div>
-            </div>
-            <div class="box">
-                <img src="/Content/images/cars_pexels_11.jpg" alt="">
-                <div class="info">
-                    <div class="tag">
-                        <span class="custom-pointer"></span>
-                        <p>$850/DAY</p>
-                    </div>
-                    <h5>BMW M5cs</h5>
-                    <p>BMW</p>
-                    <div class="details">
-                        <a href="#">2024</a>
-                        <a href="#">Automatic</a>
-                        <a href="#">Full option</a>
-                    </div>
-                </div>
-            </div>
-            <div class="box">
-                <img src="/Content/images/cars_pexels_12.jpg" alt="">
-                <div class="info">
-                    <div class="tag">
-                        <span class="custom-pointer"></span>
-                        <p>$60/DAY</p>
-                    </div>
-                    <h5>Lamborghini Urus</h5>
-                    <p>Lamborghini</p>
-                    <div class="details">
-                        <a href="#">2019</a>
-                        <a href="#">Automatic</a>
-                        <a href="#">Full option</a>
-                    </div>
+                <h5>Range Rover 4.0</h5>
+                <p>Land Rover</p>
+                <div class="details">
+                    <a href="#">2020</a>
+                    <a href="#">Automatic</a>
+                    <a href="#">Middle option</a>
                 </div>
             </div>
         </div>
-    </section>
-</body>
-</html>
+        <div class="box">
+            <img src="/Content/images/cars_pexels_2.jpg" alt="">
+            <div class="info">
+                <div class="tag">
+                    <span class="custom-pointer"></span>
+                    <p>$100/DAY</p>
+                </div>
+                <h5>Mercedes-Benz Maybach</h5>
+                <p>Mercedes-Benz</p>
+                <div class="details">
+                    <a href="#">2018</a>
+                    <a href="#">Automatic</a>
+                    <a href="#">Full option</a>
+                </div>
+            </div>
+        </div>
+        <div class="box">
+            <img src="/Content/images/cars_pexels_3.jpg" alt="">
+            <div class="info">
+                <div class="tag">
+                    <span class="custom-pointer"></span>
+                    <p>$600/DAY</p>
+                </div>
+                <h5>Range Rover Autobiography</h5>
+                <p>Range Rover</p>
+                <div class="details">
+                    <a href="#">2024</a>
+                    <a href="#">Automatic</a>
+                    <a href="#">Full option</a>
+                </div>
+            </div>
+        </div>
+        <div class="box">
+            <img src="/Content/images/cars_pexels_4.jpg" alt="">
+            <div class="info">
+                <div class="tag">
+                    <span class="custom-pointer"></span>
+                    <p>$500/DAY</p>
+                </div>
+                <h5>Ferrari F12</h5>
+                <p>Ferrari</p>
+                <div class="details">
+                    <a href="#">1016</a>
+                    <a href="#">Automatic</a>
+                    <a href="#">Full option</a>
+                </div>
+            </div>
+        </div>
+        <div class="box">
+            <img src="/Content/images/cars_pexels_5.jpg" alt="">
+            <div class="info">
+                <div class="tag">
+                    <span class="custom-pointer"></span>
+                    <p>$700/DAY</p>
+                </div>
+                <h5>Porsche GT3</h5>
+                <p>Porsche</p>
+                <div class="details">
+                    <a href="#">2025</a>
+                    <a href="#">Automatic</a>
+                    <a href="#">Middle option</a>
+                </div>
+            </div>
+        </div>
+        <div class="box">
+            <img src="/Content/images/cars_pexels_6.jpg" alt="">
+            <div class="info">
+                <div class="tag">
+                    <span class="custom-pointer"></span>
+                    <p>$2000/DAY</p>
+                </div>
+                <h5>Pagani Huayra </h5>
+                <p>Pagani</p>
+                <div class="details">
+                    <a href="#">2024</a>
+                    <a href="#">Automatic</a>
+                    <a href="#">Exclusive option</a>
+                </div>
+            </div>
+        </div>
+        <div class="box">
+            <img src="/Content/images/cars_pexels_7.jpg" alt="">
+            <div class="info">
+                <div class="tag">
+                    <span class="custom-pointer"></span>
+                    <p>$5000/DAY</p>
+                </div>
+                <h5>Bugatti Tourbilion</h5>
+                <p>Bugatti</p>
+                <div class="details">
+                    <a href="#">2025</a>
+                    <a href="#">Automatic</a>
+                    <a href="#">1 OF 1</a>
+                </div>
+            </div>
+        </div>
+        <div class="box">
+            <img src="/Content/images/cars_pexels_8.jpg" alt="">
+            <div class="info">
+                <div class="tag">
+                    <span class="custom-pointer"></span>
+                    <p>$450/DAY</p>
+                </div>
+                <h5>Bentley Bentayga w12</h5>
+                <p>Bentley</p>
+                <div class="details">
+                    <a href="#">2018</a>
+                    <a href="#">Automatic</a>
+                    <a href="#">Extra option</a>
+                </div>
+            </div>
+        </div>
+        <div class="box">
+            <img src="/Content/images/cars_pexels_9.jpg" alt="">
+            <div class="info">
+                <div class="tag">
+                    <span class="custom-pointer"></span>
+                    <p>$1500/DAY</p>
+                </div>
+                <h5>Rolls-Royce Phantom</h5>
+                <p>Rolls-Royce</p>
+                <div class="details">
+                    <a href="#">2023</a>
+                    <a href="#">Automatic</a>
+                    <a href="#">Edition pulse </a>
+                </div>
+            </div>
+        </div>
+        <div class="box">
+            <img src="/Content/images/cars_pexels_10.jpg" alt="">
+            <div class="info">
+                <div class="tag">
+                    <span class="custom-pointer"></span>
+                    <p>$1000/DAY</p>
+                </div>
+                <h5>McLaren 720S</h5>
+                <p>McLaren</p>
+                <div class="details">
+                    <a href="#">2020</a>
+                    <a href="#">Automatic</a>
+                    <a href="#">Edition One</a>
+                </div>
+            </div>
+        </div>
+        <div class="box">
+            <img src="/Content/images/cars_pexels_11.jpg" alt="">
+            <div class="info">
+                <div class="tag">
+                    <span class="custom-pointer"></span>
+                    <p>$850/DAY</p>
+                </div>
+                <h5>BMW M5cs</h5>
+                <p>BMW</p>
+                <div class="details">
+                    <a href="#">2024</a>
+                    <a href="#">Automatic</a>
+                    <a href="#">Full option</a>
+                </div>
+            </div>
+        </div>
+        <div class="box">
+            <img src="/Content/images/cars_pexels_12.jpg" alt="">
+            <div class="info">
+                <div class="tag">
+                    <span class="custom-pointer"></span>
+                    <p>$60/DAY</p>
+                </div>
+                <h5>Lamborghini Urus</h5>
+                <p>Lamborghini</p>
+                <div class="details">
+                    <a href="#">2019</a>
+                    <a href="#">Automatic</a>
+                    <a href="#">Full option</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 

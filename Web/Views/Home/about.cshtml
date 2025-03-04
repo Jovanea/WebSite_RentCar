@@ -3,18 +3,8 @@
     ViewBag.Title = "About";
 }
 
-<!DOCTYPE html>
-<html lang="ro">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdn.linearicons.com/free/1.0.0/icon-font.min.css">
-    <link rel="stylesheet" href="~/Content/Site.css">
-    <title>About</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-</head>
+@Html.Partial("_Header")
+
 <style>
 
     body {
@@ -192,130 +182,78 @@
     });
 </script>
 
-<body>
-    <nav>
-        <div class="nt-container">
-            <div class="container">
-                <div class="nav-top">
-                    <div>
-                        <i class="fa-solid fa-location-dot"></i>
-                        <span>Chișinău, Moldova</span>
-                    </div>
-                    <div>
-                        <i class="fa-solid fa-clock"></i>
-                        <span>24/7 Open</span>
-                    </div>
-                    <div>
-                        <i class="fa-solid fa-phone"></i>
-                        <span>069112233</span>
-                    </div>
-                    <div class="social-icons">
-                        <i class="fa-brands fa-facebook"></i>
-                        <i class="fa-brands fa-instagram"></i>
-                        <i class="fa-brands fa-twitter"></i>
-                        <i class="fa-brands fa-linkedin-in"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="nl-container">
-            <div class="container">
-                <div class="logo">
-                    <img src="~/Content/images/car-top.png" alt="">
-                </div>
-                <ul class="navlist">
-                    <li><a href="@Url.Action("Index","Home")">home</a></li>
-                    <li><a href="@Url.Action("Login","Home")">login/sign up</a></li>
-                    <li><a href="@Url.Action("About","Home")">about</a></li>
-                    <li><a href="@Url.Action("Services","Home")">services</a></li>
-                    <li><a href="@Url.Action("Carsection","Home")">car</a></li>
-                    <li><a href="@Url.Action("Cos","Home")">cos</a></li>
-                    <li><a href="@Url.Action("Blogs","Home")">blog</a></li>
-                    <li><a href="@Url.Action("Contacts","Home")">contact</a></li>
-                    <li><a href="@Url.Action("Profile","Home")">myprofile</a></li>
-                    <li><a href="@Url.Action("Review","Home")">reviews</a></li>
-                </ul>
-                <div class="menu-btn">
-                    <i class="fa-solid fa-bars"></i>
-                </div>
-            </div>
-        </div>
-    </nav>
+<div class="hero-banner">
+    <div class="hero-content">
+        <h1>Despre DriveNow</h1>
+        <a href="#contact" class="cta-button">Închiriază acum</a>
+    </div>
+</div>
 
-    <div class="hero-banner">
-        <div class="hero-content">
-            <h1>Despre DriveNow</h1>
-            <a href="#contact" class="cta-button">Închiriază acum</a>
-        </div>
+<div class="hero-banner">
+    <div class="hero-content">
+        <h1>Experiență și profesionalism în servicii de închirieri auto din 2010</h1>
     </div>
+</div>
 
-    <div class="hero-banner">
-        <div class="hero-content">
-            <h1>Experiență și profesionalism în servicii de închirieri auto din 2010</h1>
-        </div>
+<div class="info-grid">
+    <div class="info-card">
+        <i class="fas fa-bolt"></i> <!-- Icon pentru viteză -->
+        <h3>Servicii rapide</h3>
+        <p>Cu peste 13 ani de experiență în domeniul închirierilor auto, oferim servicii de cea mai înaltă calitate și în cel mai scurt timp.</p>
     </div>
+    <div class="info-card">
+        <i class="fas fa-handshake"></i> <!-- Icon pentru încredere -->
+        <h3>Încredere și comfort</h3>
+        <p>Ne asigurăm că fiecare client beneficiază de o experiență fără griji, oferind asistență non-stop și suport tehnic de încredere, indiferent de locație. Punem siguranța și confortul pe primul loc, astfel încât fiecare călătorie să fie plăcută și lipsită de stres.</p>
+    </div>
+</div>
 
-    <div class="info-grid">
-        <div class="info-card">
-            <i class="fas fa-bolt"></i> <!-- Icon pentru viteză -->
-            <h3>Servicii rapide</h3>
-            <p>Cu peste 13 ani de experiență în domeniul închirierilor auto, oferim servicii de cea mai înaltă calitate și în cel mai scurt timp.</p>
-        </div>
-        <div class="info-card">
-            <i class="fas fa-handshake"></i> <!-- Icon pentru încredere -->
-            <h3>Încredere și comfort</h3>
-            <p>Ne asigurăm că fiecare client beneficiază de o experiență fără griji, oferind asistență non-stop și suport tehnic de încredere, indiferent de locație. Punem siguranța și confortul pe primul loc, astfel încât fiecare călătorie să fie plăcută și lipsită de stres.</p>
-        </div>
+<div class="mission-section">
+    <div class="mission-content">
+        <h2>Misiunea Noastră</h2>
+        <p>Misiunea noastră este să oferim servicii de închirieri auto la standarde înalte, cu transparență și profesionalism. Ne străduim să depășim așteptările clienților noștri prin calitatea serviciilor și atenția la detalii. Oferim o flotă diversificată de vehicule moderne și bine întreținute, potrivite pentru orice nevoie – de la mașini compacte pentru oraș, până la SUV-uri spațioase și elegante pentru călătorii mai lungi.</p>
     </div>
+</div>
 
-    <div class="mission-section">
-        <div class="mission-content">
-            <h2>Misiunea Noastră</h2>
-            <p>Misiunea noastră este să oferim servicii de închirieri auto la standarde înalte, cu transparență și profesionalism. Ne străduim să depășim așteptările clienților noștri prin calitatea serviciilor și atenția la detalii. Oferim o flotă diversificată de vehicule moderne și bine întreținute, potrivite pentru orice nevoie – de la mașini compacte pentru oraș, până la SUV-uri spațioase și elegante pentru călătorii mai lungi.</p>
+<div class="team-section">
+    <h2>Echipa Noastră</h2>
+    <div class="team-grid">
+        <div class="team-member">
+            <img src="/api/placeholder/150/150" alt="Manager">
+            <h3>Ioan Popescu</h3>
+            <p>Director General</p>
+        </div>
+        <div class="team-member">
+            <img src="/api/placeholder/150/150" alt="Service">
+            <h3>Maria Ionescu</h3>
+            <p>Manager Service</p>
+        </div>
+        <div class="team-member">
+            <img src="/api/placeholder/150/150" alt="Customer">
+            <h3>Andrei Popa</h3>
+            <p>Relații Clienți</p>
         </div>
     </div>
+</div>
 
-    <div class="team-section">
-        <h2>Echipa Noastră</h2>
-        <div class="team-grid">
-            <div class="team-member">
-                <img src="/api/placeholder/150/150" alt="Manager">
-                <h3>Ioan Popescu</h3>
-                <p>Director General</p>
-            </div>
-            <div class="team-member">
-                <img src="/api/placeholder/150/150" alt="Service">
-                <h3>Maria Ionescu</h3>
-                <p>Manager Service</p>
-            </div>
-            <div class="team-member">
-                <img src="/api/placeholder/150/150" alt="Customer">
-                <h3>Andrei Popa</h3>
-                <p>Relații Clienți</p>
-            </div>
+<div class="stats-section">
+    <div class="stats-grid">
+        <div class="stat-item">
+            <h3>50+</h3>
+            <p>Vehicule în flotă</p>
+        </div>
+        <div class="stat-item">
+            <h3>1000+</h3>
+            <p>Clienți mulțumiți</p>
+        </div>
+        <div class="stat-item">
+            <h3>13</h3>
+            <p>Ani de experiență</p>
+        </div>
+        <div class="stat-item">
+            <h3>24/7</h3>
+            <p>Suport clienți</p>
         </div>
     </div>
-
-    <div class="stats-section">
-        <div class="stats-grid">
-            <div class="stat-item">
-                <h3>50+</h3>
-                <p>Vehicule în flotă</p>
-            </div>
-            <div class="stat-item">
-                <h3>1000+</h3>
-                <p>Clienți mulțumiți</p>
-            </div>
-            <div class="stat-item">
-                <h3>13</h3>
-                <p>Ani de experiență</p>
-            </div>
-            <div class="stat-item">
-                <h3>24/7</h3>
-                <p>Suport clienți</p>
-            </div>
-        </div>
+</div>
     </div>
-    </div>
-</body>
-</html>

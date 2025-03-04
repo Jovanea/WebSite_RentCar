@@ -3,120 +3,60 @@
     ViewBag.Title = "Blogs";
 }
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdn.linearicons.com/free/1.0.0/icon-font.min.css">
-    <link rel="stylesheet" href="~/Content/Site.css">
-    <title>Car section</title>
-</head>
-<body>
-    <nav>
-        <div class="nt-container">
-            <div class="container">
-                <div class="nav-top">
-                    <div>
-                        <i class="fa-solid fa-location-dot"></i>
-                        <span>Chișinău, Moldova</span>
-                    </div>
-                    <div>
-                        <i class="fa-solid fa-clock"></i>
-                        <span>24/7 Open</span>
-                    </div>
-                    <div>
-                        <i class="fa-solid fa-phone"></i>
-                        <span>069112233</span>
-                    </div>
-                    <div class="social-icons">
-                        <i class="fa-brands fa-facebook"></i>
-                        <i class="fa-brands fa-instagram"></i>
-                        <i class="fa-brands fa-twitter"></i>
-                        <i class="fa-brands fa-linkedin-in"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="nl-container">
-            <div class="container">
-                <div class="logo">
-                    <img src="~/Content/images/car-top.png" alt="">
-                </div>
-                <ul class="navlist">
-                    <li><a href="@Url.Action("Index","Home")">home</a></li>
-                    <li><a href="@Url.Action("Login","Home")">login/sign up</a></li>
-                    <li><a href="@Url.Action("About","Home")">about</a></li>
-                    <li><a href="@Url.Action("Services","Home")">services</a></li>
-                    <li><a href="@Url.Action("Carsection","Home")">car</a></li>
-                    <li><a href="@Url.Action("Cos","Home")">cos</a></li>
-                    <li><a href="@Url.Action("Blogs","Home")">blog</a></li>
-                    <li><a href="@Url.Action("Contacts","Home")">contact</a></li>
-                    <li><a href="@Url.Action("Profile","Home")">myprofile</a></li>
-                    <li><a href="@Url.Action("Review","Home")">reviews</a></li>
-                </ul>
-                <div class="menu-btn">
-                    <i class="fa-solid fa-bars"></i>
-                </div>
-            </div>
-        </div>
-    </nav>
-    <section class="blogs" id="blogs">
-        <div class="title">
-            <h4><i class="fa-solid fa-car"></i></h4>
-            <h2>Car articles</h2>
-            <p>khbvhn  fvkhb k kvh kvbk jvn vknhpisje fj.</p>
-        </div>
-        <div class="container blog-container">
-            <div class="card card-1">
-                <div class="image">
-                    <img src="~/Content/images/car1.jpg" alt="">
-                </div>
-                <div class="content">
-                    <p>
-                        kkkkkkkkkkkkap fhaiahf adfhai kjv vju pauv jsvpjdhfue alhfuwe
-                        aljdir onfof hdbvvjhbskn khsbk bfhkbv jsfkwe kbdk
-                        kndhbf khqhfu ghabvnhubvyrb.
-                    </p>
-                </div>
-            </div>
-            <div class="card card-2">
+@Html.Partial("_Header")
 
-                <div class="content">
-                    <p>
-                        kkkkkkkkkkkkap fhaiahf adfhai kjv vju pauv jsvpjdhfue alhfuwe
-                        aljdir onfof hdbvvjhbskn khsbk bfhkbv jsfkwe kbdk
-                        kndhbf khqhfu ghabvnhubvyrb.
-                    </p>
-                </div>
-                <div class="image">
-                    <img src="~/Content/images/car2.jpg" alt="">
-                </div>
+<section class="blogs" id="blogs">
+    <div class="title">
+        <h4><i class="fa-solid fa-car"></i></h4>
+        <h2>Car articles</h2>
+        <p>khbvhn  fvkhb k kvh kvbk jvn vknhpisje fj.</p>
+    </div>
+    <div class="container blog-container">
+        <div class="card card-1">
+            <div class="image">
+                <img src="~/Content/images/car1.jpg" alt="">
             </div>
-            <div class="card card-3">
-                <div class="image">
-                    <img src="~/Content/images/car3.jpg" alt="">
-                </div>
-                <div class="content">
-                    <p>
-                        kkkkkkkkkkkkap fhaiahf adfhai kjv vju pauv jsvpjdhfue alhfuwe
-                        aljdir onfof hdbvvjhbskn khsbk bfhkbv jsfkwe kbdk
-                        kndhbf khqhfu ghabvnhubvyrb.
-                    </p>
-                </div>
+            <div class="content">
+                <p>
+                    kkkkkkkkkkkkap fhaiahf adfhai kjv vju pauv jsvpjdhfue alhfuwe
+                    aljdir onfof hdbvvjhbskn khsbk bfhkbv jsfkwe kbdk
+                    kndhbf khqhfu ghabvnhubvyrb.
+                </p>
             </div>
         </div>
-        <div class="container">
-            <div class="pagination">
-                <li><a href="#">&#8810</a></li>
-                <li><a href="#">1</a></li>
-                <li><a href="#">2</a></li>
-                <li><a href="#">&#8811</a></li>
+        <div class="card card-2">
+
+            <div class="content">
+                <p>
+                    kkkkkkkkkkkkap fhaiahf adfhai kjv vju pauv jsvpjdhfue alhfuwe
+                    aljdir onfof hdbvvjhbskn khsbk bfhkbv jsfkwe kbdk
+                    kndhbf khqhfu ghabvnhubvyrb.
+                </p>
+            </div>
+            <div class="image">
+                <img src="~/Content/images/car2.jpg" alt="">
             </div>
         </div>
-    </section>
-</body>
-</html>
+        <div class="card card-3">
+            <div class="image">
+                <img src="~/Content/images/car3.jpg" alt="">
+            </div>
+            <div class="content">
+                <p>
+                    kkkkkkkkkkkkap fhaiahf adfhai kjv vju pauv jsvpjdhfue alhfuwe
+                    aljdir onfof hdbvvjhbskn khsbk bfhkbv jsfkwe kbdk
+                    kndhbf khqhfu ghabvnhubvyrb.
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="pagination">
+            <li><a href="#">&#8810</a></li>
+            <li><a href="#">1</a></li>
+            <li><a href="#">2</a></li>
+            <li><a href="#">&#8811</a></li>
+        </div>
+    </div>
+</section>
 

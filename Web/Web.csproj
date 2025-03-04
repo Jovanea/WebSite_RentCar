@@ -138,7 +138,7 @@
     <Content Include="Content\images\cars_pexels_7.jpg" />
     <Content Include="Content\images\cars_pexels_8.jpg" />
     <Content Include="Content\images\cars_pexels_9.jpg" />
-    <Content Include="Content\images\fon.jpg" />
+    <Content Include="Content\images\fundal.jpg" />
     <Content Include="Content\images\logo flaticon.png" />
     <Content Include="Content\Site.css" />
     <Content Include="Content\themes\base\accordion.css" />
@@ -259,7 +259,6 @@
     <Content Include="Scripts\bootstrap.esm.js.map" />
     <Content Include="Scripts\bootstrap.bundle.min.js.map" />
     <Content Include="Scripts\bootstrap.bundle.js.map" />
-    <Content Include="Views\Home\test.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

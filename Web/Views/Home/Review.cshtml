@@ -3,185 +3,116 @@
     ViewBag.Title = "Review";
 }
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/3.5.0/remixicon.css" crossorigin="">
-    <link rel="stylesheet" href="swiper-bundle.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdn.linearicons.com/free/1.0.0/icon-font.min.css">
-    <link rel="stylesheet" href="~/Content/Site.css">
+@Html.Partial("_Header")
 
-    <title>Reviews</title>
-</head>
-<body>
-    <nav>
-        <div class="nt-container">
-            <div class="container">
-                <div class="nav-top">
-                    <div>
-                        <i class="fa-solid fa-location-dot"></i>
-                        <span>Chișinău, Moldova</span>
-                    </div>
-                    <div>
-                        <i class="fa-solid fa-clock"></i>
-                        <span>24/7 Open</span>
-                    </div>
-                    <div>
-                        <i class="fa-solid fa-phone"></i>
-                        <span>069112233</span>
-                    </div>
-                    <div class="social-icons">
-                        <i class="fa-brands fa-facebook"></i>
-                        <i class="fa-brands fa-instagram"></i>
-                        <i class="fa-brands fa-twitter"></i>
-                        <i class="fa-brands fa-linkedin-in"></i>
-                    </div>
+<section class="reviews" id="reviews">
+    <div class="container light-style flex-grow-1 container-p-y">
+        <div class="title">
+            <h4><i class="fa-solid fa-car"></i></h4>
+            <h2>Reviews</h2>
+        </div>
+        <div class="card__container swiper">
+            <div class="card__content">
+                <div class="swiper-wrapper">
+                    <article class="card__article swiper-slide">
+                        <div class="card__image">
+                            <img src="~/Content/images/avatar-1.png" alt="image" class="card__img">
+                            <div class="card__shadow"></div>
+                        </div>
+
+                        <div class="card__data">
+                            <h3 class="card__name">Kell Dawx</h3>
+                            <p class="card__description">
+                                „I had an excellent experience with this car rental site!
+                                I quickly found the car I wanted at a very good price.
+                                The online booking was simple, and I received prompt service
+                                for both pick-up and drop-off. The car was in perfect condition,
+                                clean, and very comfortable. Highly recommend for any trip!”
+                            </p>
+
+                            <a href="#" class="card__button">View More</a>
+                        </div>
+                    </article>
+
+                    <article class="card__article swiper-slide">
+                        <div class="card__image">
+                            <img src="~/Content/images/avatar-2.png" alt="image" class="card__img">
+                            <div class="card__shadow"></div>
+                        </div>
+
+                        <div class="card__data">
+                            <h3 class="card__name">Lotw Fox</h3>
+                            <p class="card__description">
+                                „The website is easy to navigate and offers a wide range
+                                of cars, but I had to wait a little longer than expected
+                                for the car to be delivered. Other than that, everything was
+                                fine. The staff at the office was friendly, and the car was
+                                exactly what we wanted. Overall, I recommend this service,
+                                especially for the competitive prices.”
+                            </p>
+
+                            <a href="#" class="card__button">View More</a>
+                        </div>
+                    </article>
+
+                    <article class="card__article swiper-slide">
+                        <div class="card__image">
+                            <img src="~/Content/images/avatar-3.png" alt="image" class="card__img">
+                            <div class="card__shadow"></div>
+                        </div>
+
+                        <div class="card__data">
+                            <h3 class="card__name">Sara Mit</h3>
+                            <p class="card__description">
+                                „The best car rental site I've ever used! The process was simple,
+                                and the confirmation came almost instantly. I rented an SUV for a
+                                mountain vacation, and we had no issues at all. I highly recommend
+                                it, especially for those looking for a stress-free experience.”
+                            </p>
+
+                            <a href="#" class="card__button">View More</a>
+                        </div>
+                    </article>
+
+                    <article class="card__article swiper-slide">
+                        <div class="card__image">
+                            <img src="~/Content/images/avatar-4.png" alt="image" class="card__img">
+                            <div class="card__shadow"></div>
+                        </div>
+
+                        <div class="card__data">
+                            <h3 class="card__name">Jenny Wert</h3>
+                            <p class="card__description">
+                                „The site is pretty easy to use, but I had some issues with online payment,
+                                although the customer service team resolved it quickly. The car I rented
+                                was fine, but it didn't meet the standards I was expecting. However, the
+                                prices are great, so I'm thinking about using this service again.”
+                            </p>
+
+                            <a href="#" class="card__button">View More</a>
+                        </div>
+                    </article>
+
+                    <article class="card__article swiper-slide">
+                        <div class="card__image">
+                            <img src="~/Content/images/avatar-5.png" alt="image" class="card__img">
+                            <div class="card__shadow"></div>
+                        </div>
+
+                        <div class="card__data">
+                            <h3 class="card__name">Lexa Kin</h3>
+                            <p class="card__description">
+                                „I rented a car from this site for a weekend city trip, and I was very pleased!
+                                All the details were clear from the start, and when I arrived at the rental
+                                office, I received a spotless car. The service was quick and hassle-free.
+                                I'll definitely use this site for my future vacations!”
+                            </p>
+
+                            <a href="#" class="card__button">View More</a>
+                        </div>
+                    </article>
                 </div>
             </div>
         </div>
-        <div class="nl-container">
-            <div class="container">
-                <div class="logo">
-                    <img src="~/Content/images/car-top.png" alt="">
-                </div>
-                <ul class="navlist">
-                    <li><a href="@Url.Action("Index","Home")">home</a></li>
-                    <li><a href="@Url.Action("Login","Home")">login/sign up</a></li>
-                    <li><a href="@Url.Action("About","Home")">about</a></li>
-                    <li><a href="@Url.Action("Services","Home")">services</a></li>
-                    <li><a href="@Url.Action("Carsection","Home")">car</a></li>
-                    <li><a href="@Url.Action("Cos","Home")">cos</a></li>
-                    <li><a href="@Url.Action("Blogs","Home")">blog</a></li>
-                    <li><a href="@Url.Action("Contacts","Home")">contact</a></li>
-                    <li><a href="@Url.Action("Profile","Home")">myprofile</a></li>
-                    <li><a href="@Url.Action("Review","Home")">reviews</a></li>
-                    <div class="menu-btn">
-                        <i class="fa-solid fa-bars"></i>
-                    </div>
-</div>
-        </div>
-    </nav>
-    <section class="reviews" id="reviews">
-        <div class="container light-style flex-grow-1 container-p-y">
-            <div class="title">
-                <h4><i class="fa-solid fa-car"></i></h4>
-                <h2>Reviews</h2>
-            </div>
-            <div class="card__container swiper">
-                <div class="card__content">
-                    <div class="swiper-wrapper">
-                        <article class="card__article swiper-slide">
-                            <div class="card__image">
-                                <img src="~/Content/images/avatar-1.png" alt="image" class="card__img">
-                                <div class="card__shadow"></div>
-                            </div>
-
-                            <div class="card__data">
-                                <h3 class="card__name">Kell Dawx</h3>
-                                <p class="card__description">
-                                    I had an excellent experience with this car rental site!
-                                    I quickly found the car I wanted at a very good price.
-                                    The online booking was simple, and I received prompt service
-                                    for both pick-up and drop-off. The car was in perfect condition,
-                                    clean, and very comfortable. Highly recommend for any trip!
-                                </p>
-
-                                <a href="#" class="card__button">View More</a>
-                            </div>
-                        </article>
-
-                        <article class="card__article swiper-slide">
-                            <div class="card__image">
-                                <img src="~/Content/images/avatar-2.png" alt="image" class="card__img">
-                                <div class="card__shadow"></div>
-                            </div>
-
-                            <div class="card__data">
-                                <h3 class="card__name">Lotw Fox</h3>
-                                <p class="card__description">
-                                    The website is easy to navigate and offers a wide range
-                                    of cars, but I had to wait a little longer than expected
-                                    for the car to be delivered. Other than that, everything was
-                                    fine. The staff at the office was friendly, and the car was
-                                    exactly what we wanted. Overall, I recommend this service,
-                                    especially for the competitive prices.
-                                </p>
-
-                                <a href="#" class="card__button">View More</a>
-                            </div>
-                        </article>
-
-                        <article class="card__article swiper-slide">
-                            <div class="card__image">
-                                <img src="~/Content/images/avatar-3.png" alt="image" class="card__img">
-                                <div class="card__shadow"></div>
-                            </div>
-
-                            <div class="card__data">
-                                <h3 class="card__name">Sara Mit</h3>
-                                <p class="card__description">
-                                    The best car rental site I've ever used! The process was simple,
-                                    and the confirmation came almost instantly. I rented an SUV for a
-                                    mountain vacation, and we had no issues at all. I highly recommend
-                                    it, especially for those looking for a stress-free experience.
-                                </p>
-
-                                <a href="#" class="card__button">View More</a>
-                            </div>
-                        </article>
-
-                        <article class="card__article swiper-slide">
-                            <div class="card__image">
-                                <img src="~/Content/images/avatar-4.png" alt="image" class="card__img">
-                                <div class="card__shadow"></div>
-                            </div>
-
-                            <div class="card__data">
-                                <h3 class="card__name">Jenny Wert</h3>
-                                <p class="card__description">
-                                    The site is pretty easy to use, but I had some issues with online payment,
-                                    although the customer service team resolved it quickly. The car I rented
-                                    was fine, but it didn't meet the standards I was expecting. However, the
-                                    prices are great, so I'm thinking about using this service again.
-                                </p>
-
-                                <a href="#" class="card__button">View More</a>
-                            </div>
-                        </article>
-
-                        <article class="card__article swiper-slide">
-                            <div class="card__image">
-                                <img src="~/Content/images/avatar-5.png" alt="image" class="card__img">
-                                <div class="card__shadow"></div>
-                            </div>
-
-                            <div class="card__data">
-                                <h3 class="card__name">Lexa Kin</h3>
-                                <p class="card__description">
-                                    I rented a car from this site for a weekend city trip, and I was very pleased!
-                                    All the details were clear from the start, and when I arrived at the rental
-                                    office, I received a spotless car. The service was quick and hassle-free.
-                                    I'll definitely use this site for my future vacations!
-                                </p>
-
-                                <a href="#" class="card__button">View More</a>
-                            </div>
-                        </article>
-                    </div>
-                </div>
-
-                <!-- Navigation buttons (for visual purpose) -->
-                <div class="swiper-button-prev">←</div>
-                <div class="swiper-button-next">→</div>
-
-                <!-- Pagination -->
-                <div class="swiper-pagination"></div>
-            </div>
-        </div>
-    </section>
-</body>
-</html>
+    </div>
+</section>

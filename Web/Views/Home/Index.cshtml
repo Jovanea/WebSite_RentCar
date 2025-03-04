@@ -3,131 +3,71 @@
     ViewBag.Title = "Index";
 }
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdn.linearicons.com/free/1.0.0/icon-font.min.css">
-    <link rel="stylesheet" href="~/Content/Site.css">
-    <title>Home</title>
-</head>
-<body>
-    <nav>
-        <div class="nt-container">
-            <div class="container">
-                <div class="nav-top">
-                    <div>
-                        <i class="fa-solid fa-location-dot"></i>
-                        <span>Chișinău, Moldova</span>
-                    </div>
-                    <div>
-                        <i class="fa-solid fa-clock"></i>
-                        <span>24/7 Open</span>
-                    </div>
-                    <div>
-                        <i class="fa-solid fa-phone"></i>
-                        <span>069112233</span>
-                    </div>
-                    <div class="social-icons">
-                        <i class="fa-brands fa-facebook"></i>
-                        <i class="fa-brands fa-instagram"></i>
-                        <i class="fa-brands fa-twitter"></i>
-                        <i class="fa-brands fa-linkedin-in"></i>
-                    </div>
+@Html.Partial("_Header")
+
+<section class="home" id="home">
+    <div class="container home-container">
+        <div class="info">
+            <h1>DriveNow - Închirieri auto rapide , oricând ai nevoie!</h1>
+            <p>DriveNow îți oferă mașina perfectă exact când ai nevoie! Închiriază rapid, simplu și fără stres, cu o gamă variată de autoturisme pentru orice călătorie. Rezervă online și pornește la drum!</p>
+            <div class="booking-form">
+                <div class="form-group">
+                    <h5>Select Vehicle</h5>
+                    <select name="Car" id="">
+                        <option value="">Select</option>
+                        <option value="">Ferrari</option>
+                        <option value="">Lamborghini</option>
+                        <option value="">Pagani </option>
+                        <option value="">Bugatti </option>
+                        <option value="">Porsche</option>
+                        <option value="">Bentley</option>
+                        <option value="">Rolls-Royce</option>
+                        <option value="">Mercedes-Maybach</option>
+                        <option value="">McLaren</option>
+                        <option value="">Audi</option>
+                        <option value="">Range Rover</option>
+                        <option value="">BMW</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <h5>Pick up:</h5>
+                    <input type="date" name="Pick up"
+                           placeholder="Pick up">
+                </div>
+                <div class="form-group">
+                    <h5>Drop off:</h5>
+                    <input type="date" name="Drop off"
+                           placeholder="Drop off">
                 </div>
             </div>
+            <button class="btn">Book</button>
         </div>
-        <div class="nl-container">
-            <div class="container">
-                <div class="logo">
-                    <img src="~/Content/images/car-top.png" alt="">
-                </div>
-                <ul class="navlist">
-                    <li><a href="@Url.Action("Index","Home")">home</a></li>
-                    <li><a href="@Url.Action("Login","Home")">login/sign up</a></li>
-                    <li><a href="@Url.Action("About","Home")">about</a></li>
-                    <li><a href="@Url.Action("Services","Home")">services</a></li>
-                    <li><a href="@Url.Action("Carsection","Home")">car</a></li>
-                    <li><a href="@Url.Action("Cos","Home")">cos</a></li>
-                    <li><a href="@Url.Action("Blogs","Home")">blog</a></li>
-                    <li><a href="@Url.Action("Contacts","Home")">contact</a></li>
-                    <li><a href="@Url.Action("Profile","Home")">myprofile</a></li>
-                    <li><a href="@Url.Action("Review","Home")">reviews</a></li>
-                </ul>
-                <div class="menu-btn">
-                    <i class="fa-solid fa-bars"></i>
-                </div>
-            </div>
+    </div>
+</section>
+<section class="works">
+    <div class="title">
+        <h3> Care sunt pașii de închiriere?</h3>
+    </div>
+    <div class="container works-container">
+        <div class="step">
+            <span class="number">01</span>
+            <span class="caption">Select Vehicle</span>
         </div>
-    </nav>
-    <section class="home" id="home">
-        <div class="container home-container">
-            <div class="info">
-                <h1>DriveNow - Închirieri auto rapide , oricând ai nevoie!</h1>
-                <p>DriveNow îți oferă mașina perfectă exact când ai nevoie! Închiriază rapid, simplu și fără stres, cu o gamă variată de autoturisme pentru orice călătorie. Rezervă online și pornește la drum!</p>
-                <div class="booking-form">
-                    <div class="form-group">
-                        <h5>Select Vehicle</h5>
-                        <select name="Car" id="">
-                            <option value="">Select</option>
-                            <option value="">Ferrari</option>
-                            <option value="">Lamborghini</option>
-                            <option value="">Pagani </option>
-                            <option value="">Bugatti </option>
-                            <option value="">Porsche</option>
-                            <option value="">Bentley</option>
-                            <option value="">Rolls-Royce</option>
-                            <option value="">Mercedes-Maybach</option>
-                            <option value="">McLaren</option>
-                            <option value="">Audi</option>
-                            <option value="">Range Rover</option>
-                            <option value="">BMW</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <h5>Pick up:</h5>
-                        <input type="date" name="Pick up"
-                               placeholder="Pick up">
-                    </div>
-                    <div class="form-group">
-                        <h5>Drop off:</h5>
-                        <input type="date" name="Drop off"
-                               placeholder="Drop off">
-                    </div>
-                </div>
-                <button class="btn">Book</button>
-            </div>
+        <div class="step">
+            <span class="number">02</span>
+            <span class="caption">Time</span>
         </div>
-    </section>
-    <section class="works">
-        <div class="title">
-            <h3> Care sunt pașii de închiriere?</h3>
+        <div class="step">
+            <span class="number">03</span>
+            <span class="caption">Pick and Drop</span>
         </div>
-        <div class="container works-container">
-            <div class="step">
-                <span class="number">01</span>
-                <span class="caption">Select Vehicle</span>
-            </div>
-            <div class="step">
-                <span class="number">02</span>
-                <span class="caption">Time</span>
-            </div>
-            <div class="step">
-                <span class="number">03</span>
-                <span class="caption">Pick and Drop<span>
-            </div>
-            <div class="step">
-                <span class="number">04</span>
-                <span class="caption">Check out</span>
-            </div>
-            <div class="step">
-                <span class="number">05</span>
-                <span class="caption">Done</span>
-            </div>
+        <div class="step">
+            <span class="number">04</span>
+            <span class="caption">Check out</span>
         </div>
-    </section>
-</body>
-</html>
+        <div class="step">
+            <span class="number">05</span>
+            <span class="caption">Done</span>
+        </div>
+    </div>
+</section>
