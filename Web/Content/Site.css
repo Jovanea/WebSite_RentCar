@@ -112,9 +112,12 @@ section {
     transition: var(--transition);
 }
 
-.bnt:hover {
+.btn:hover {
     background: var(--color-primary);
     color: var(--color-secondary);
+}
+.btn:focus {
+        outline: 2px solid var(--color-secondary);
 }
 
 .social-icons {
@@ -131,7 +134,10 @@ section {
         border-radius: 50%;
         cursor: pointer;
     }
-
+.social-icons i:hover {
+            background-color: var(--color-secondary);
+            color: var(--color-primary);
+}
 .title {
     text-align: center;
     margin-bottom: 4rem;
@@ -247,8 +253,8 @@ section {
 
 /*============================HOME============================*/
 
-header {
-    background: url(images/fon.jpg);
+.home {
+    background: url(~/Content/images/fon.jpg);
     background-size: cover;
     background-position: center;
     height: 88vh;
@@ -256,7 +262,7 @@ header {
     position: relative;
 }
 
-    header::after {
+    .home::after {
         content: '';
         position: absolute;
         top: 0;
@@ -271,13 +277,13 @@ header {
     color: var(--color-primary);
 }
 
-header .info {
+.home .info {
     max-width: 444px;
     position: absolute;
     top: 20%;
 }
 
-    header .info p {
+    .home .info p {
         padding: 1rem 0;
     }
 
