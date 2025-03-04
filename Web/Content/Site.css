@@ -101,6 +101,7 @@ h5 {
 .container {
     margin: 0 auto;
     width: var(--width-lg);
+    text-align: center;
 }
 
 section {
@@ -268,7 +269,7 @@ section {
 /*============================HOME============================*/
 
 .home {
-    background: url(~Content\images\fundal.jpg);
+    background: url('/Content/images/fundal.jpg');
     background-size: cover;
     background-position: center;
     height: 88vh;
@@ -826,12 +827,12 @@ section {
     max-width: 450px;
     padding: 3rem 2rem;
     border-radius: 1rem;
-    box-shadow: var(--shadow-1);
     text-align: center;
     animation: fadeIn 0.5s ease;
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content:center;
 }
 
 .success-message {
@@ -842,8 +843,9 @@ section {
 }
 
 .success-text {
-    color: var(--color-tertiary);
+    color: black;
     margin-bottom: 2rem;
+    text-align: center;
 }
 
 .success-button {
@@ -1240,6 +1242,231 @@ section.container {
     }
 }
 
+/*==========================Contacts=======================*/
+
+.contact-section {
+    padding: 50px 0;
+    background-color: transparent;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background: url('/Content/images/contacts_foto.jpg') no-repeat center center fixed;
+    background-size: cover;
+    color: white;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+}
 
 
 
+.contact-section p {
+    font-size: 18px;
+    margin-bottom: 40px;
+}
+
+.contact-details {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 40px;
+}
+
+    .contact-details .info {
+        width: 30%;
+        text-align: left;
+    }
+
+        .contact-details .info h4 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+.contact-form {
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: left;
+}
+
+    .contact-form .form-group {
+        margin-bottom: 20px;
+    }
+
+    .contact-form label {
+        display: block;
+        font-size: 18px;
+        margin-bottom: 8px;
+    }
+
+    .contact-form input, .contact-form textarea {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    .contact-form button {
+        width: 100%;
+        padding: 15px;
+        font-size: 18px;
+        background-color: #000;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+        .contact-form button:hover {
+            background-color: #0056b3;
+        }
+
+/*==========================About=======================*/
+
+.about-section {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: url('/Content/images/about_foto.jpg') no-repeat center center fixed;
+    background-size: cover;
+    color: #333;
+}
+
+.info-card, .mission-section, .team-section, .stats-section {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+    .info-card.show, .mission-section.show, .team-section.show, .stats-section.show {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+
+/* Hero Banner */
+.hero-banner {
+    background: url('/api/placeholder/1200/400') center no-repeat;
+    color: white;
+    text-align: center;
+    padding: 80px 20px;
+}
+
+.hero-content h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+.hero-content p {
+    font-size: 1.2rem;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    text-align: center;
+}
+
+.info-grid, .mission-section, .team-section, .stats-section {
+    max-width: 900px; /* Setează o lățime maximă */
+    margin: 0 auto; /* Centrează panourile */
+    text-align: center; /* Asigură alinierea textului la centru */
+    padding: 20px; /* Oferă spațiu interior */
+}
+
+
+.info-card {
+    max-width: 400px; /* Setează o lățime maximă pentru fiecare card */
+    margin: 20px auto;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+    /*iconuri*/
+    .info-card i {
+        font-size: 2.5rem;
+        color: #ff6600;
+        margin-bottom: 10px;
+    }
+
+/* Mission Section */
+.mission-section {
+    text-align: center;
+    padding: 40px 20px;
+    background: #eaeaea;
+    margin-top: 40px;
+    border-radius: 8px;
+}
+
+/* Team Section */
+.team-section {
+    text-align: center;
+    margin-top: 50px;
+}
+
+.team-grid {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 20px;
+}
+
+.team-member {
+    text-align: center;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+    .team-member img {
+        border-radius: 50%;
+        width: 100px;
+        height: 100px;
+    }
+
+/* Stats Section */
+.stats-section {
+    text-align: center;
+    margin-top: 50px;
+    padding: 40px 20px;
+    background: #ddd;
+    border-radius: 8px;
+}
+
+.stats-grid {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+    .stat-item h3 {
+        font-size: 2rem;
+        color: #ff6600;
+        margin-bottom: 5px;
+    }
+/*butonul de inchiriere */
+.cta-button {
+    display: inline-block;
+    background: #FFDE21;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 1.2rem;
+    transition: background 0.3s;
+}
+
+    .cta-button:hover {
+        background: #e65c00;
+    }
+
+.hero-banner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 400px; /* Ajustează în funcție de nevoie */
+    text-align: center;
+}

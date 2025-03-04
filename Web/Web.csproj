@@ -117,6 +117,7 @@
     <Content Include="Content\bootstrap.rtl.min.css" />
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\font-awesome.min.css" />
+    <Content Include="Content\images\about_foto.jpg" />
     <Content Include="Content\images\avatar-1.png" />
     <Content Include="Content\images\avatar-2.png" />
     <Content Include="Content\images\avatar-3.png" />
@@ -138,6 +139,7 @@
     <Content Include="Content\images\cars_pexels_7.jpg" />
     <Content Include="Content\images\cars_pexels_8.jpg" />
     <Content Include="Content\images\cars_pexels_9.jpg" />
+    <Content Include="Content\images\contacts_foto.jpg" />
     <Content Include="Content\images\fundal.jpg" />
     <Content Include="Content\images\logo flaticon.png" />
     <Content Include="Content\Site.css" />
