@@ -5,7 +5,7 @@
 @Html.Partial("_Header")
 
 <div class="profile-wrapper">
-    <!-- Formularul de autentificare -->
+    <!-- Formularul de autentificare utilizator -->
     <div class="login-container" id="loginContainer">
         <h2>Autentificare</h2>
         <form action="dashboard.html" method="post">
@@ -17,15 +17,14 @@
                 <label for="password">Parola:</label>
                 <input type="password" id="password" name="password" required>
             </div>
-            <!-- Am schimbat tipul butonului la "button" pentru a evita trimiterea formularului înaintea validării -->
             <button type="button" class="button" onclick="showSuccessMessage()">Login</button>
         </form>
         <p>Nu ai cont? <a href="~/Home/Registre">Înregistrează-te</a></p>
-
+        <p><a href="LoginAdmin" class="admin-login">Autentificare ca Administrator</a></p>
     </div>
 
     <!-- Mesajul de succes -->
-    <div class="success-container">
+    <div class="success-container" style="display: none;">
         <span class="success-message">Autentificare reușită!</span>
         <span class="success-text">Bun venit! Acum poți accesa toate funcționalitățile platformei.</span>
         <button class="success-button" onclick="window.location.href='index'">Mergi la pagina principală</button>
@@ -34,9 +33,10 @@
 
 <script>
     function showSuccessMessage() {
-        // Ascunde formularul de autentificare și afișează mesajul de succes
         document.getElementById('loginContainer').style.display = 'none';
         document.querySelector('.success-container').style.display = 'block';
     }
 </script>
+
+
 

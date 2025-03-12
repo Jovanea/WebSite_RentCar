@@ -1,0 +1,37 @@
+﻿@{
+    ViewBag.Title = "LoginAdmin";
+}
+@Html.Partial("_Header")
+
+<div class="profile-wrapper">
+    <!-- Formularul de autentificare administrator -->
+    <div class="login-container" id="adminLoginContainer">
+        <h2>Autentificare Administrator</h2>
+        <form action="AdminManagement.html" method="post">
+            <div class="input-group">
+                <label for="admin-email">Email:</label>
+                <input type="email" id="admin-email" name="email" required>
+            </div>
+            <div class="input-group">
+                <label for="admin-password">Parola:</label>
+                <input type="password" id="admin-password" name="password" required>
+            </div>
+            <button type="button" class="button" onclick="adminLogin()">Login</button>
+        </form>
+        <p><a href="~/Home/Login">Înapoi la autentificarea utilizator</a></p>
+    </div>
+</div>
+
+<script>
+    function adminLogin() {
+        let email = document.getElementById('admin-email').value;
+        let password = document.getElementById('admin-password').value;
+
+        // Simulare autentificare reușită (poți înlocui cu un sistem de autentificare real)
+        if (email && password) {
+            window.location.href = "AdminManagment";
+        } else {
+            alert("Introduceți email și parolă valide!");
+        }
+    }
+</script>
