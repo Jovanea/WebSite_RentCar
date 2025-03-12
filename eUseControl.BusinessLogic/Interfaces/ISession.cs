@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace eUseControl.BusinessLogic.Interfaces
+namespace eUseControl.BusinessLogic
 {
-    interface ISession
+    public interface ISession
     {
     }
 }
