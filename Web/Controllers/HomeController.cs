@@ -67,5 +67,14 @@ namespace Web.Controllers
         {
             return View();
         }
+        
+        public ActionResult LoginAdmin ()
+        {
+            return View();
+        }
+        public ActionResult AdminManagment ()
+        {
+            return View();
+        }
     }
 }
