@@ -303,13 +303,14 @@ section {
     }
 
 .booking-form {
-    padding: 1rem 2rem;
+    padding: 1rem 1rem;
     background: var(--color-primary);
     border-radius: .5rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
     color: var(--color-text);
+    width: 444px;
 }
 
     .booking-form input,
@@ -380,60 +381,6 @@ section {
         display: none;
     }
 
-/*=========================About======================================*/
-
-.about .text {
-    margin-bottom: 2rem;
-}
-
-.about title p {
-    text-transform: uppercase;
-    font-size: .9rem;
-    padding-bottom: .5rem;
-}
-
-.about-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2rem;
-    position: relative;
-    padding: 0 6rem;
-}
-
-.about .content .title {
-    text-align: start;
-}
-
-    .about .content .title h2 {
-        text-align: start;
-    }
-
-.about-container .image {
-    padding: 3rem 0;
-    display: flex;
-    justify-content: flex-end;
-}
-
-    .about-container .image img {
-        max-width: 600px;
-        height: auto;
-    }
-
-.about-container .content {
-    padding: 3rem 0;
-}
-
-.about-container::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    height: 100%;
-    width: 70%;
-    background: var(--color-bg);
-    z-index: -1;
-}
 
 /*========================Services======================*/
 
@@ -656,86 +603,6 @@ section {
             line-height: 1.3rem;
             text-align: start;
         }
-
-/*============================Contact=========================*/
-
-.contact {
-    margin: 2rem 0 0;
-}
-
-.contact-container {
-    display: grid;
-    grid-template-columns: 40% 60%;
-    gap: 4rem;
-    padding: 4rem;
-    background: var(--color-bg);
-    height: 25rem;
-    margin: 7rem auto;
-    border-radius: 1rem;
-}
-
-.contact-aside {
-    background: var(--color-secondary);
-    padding: 2rem;
-    border-radius: 1rem;
-    position: relative;
-    bottom: 10rem;
-}
-
-    .contact-aside h2 {
-        margin-bottom: 1.5rem;
-        text-align: start;
-    }
-
-    .contact-aside p {
-        margin-bottom: 2rem;
-    }
-
-.contact .contact-info li {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-    margin-bottom: 1rem;
-}
-
-    .contact .contact-info li h5 {
-        font-weight: 500;
-        font-size: .9rem;
-    }
-
-.contact-social {
-    display: flex;
-    gap: 1rem;
-    margin-top: 2rem;
-}
-
-    .contact-social i:hover {
-        color: var(--color-primary);
-        cursor: pointer;
-    }
-
-.contact-form {
-    display: flex;
-    flex-direction: column;
-    gap: 1.2rem;
-    margin-right: 2rem;
-}
-
-    .contact-form .form-name {
-        display: flex;
-        gap: 1.2rem;
-    }
-
-    .contact-form input[type = 'text'] {
-        width: 50%;
-    }
-
-    .contact-form input,
-    .contact-form textarea {
-        width: 100%;
-        padding: .5rem 1rem;
-        border-radius: .2rem;
-    }
 
 /*===========================Login======================*/
 
@@ -1469,4 +1336,83 @@ section.container {
     align-items: center;
     height: 400px; /* Ajustează în funcție de nevoie */
     text-align: center;
+}
+
+
+/*=================================Pay===============================*/
+
+.pay-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 150px);
+    padding: 3rem 0;
+    background: var(--color-bg);
+}
+
+.pay-container {
+    background: var(--color-primary);
+    width: 100%;
+    max-width: 450px;
+    padding: 2.5rem;
+    border-radius: 1rem;
+    box-shadow: var(--shadow-1);
+    animation: fadeIn 0.5s ease;
+}
+
+    .pay-container h2 {
+        text-align: center;
+        margin-bottom: 2rem;
+        color: var(--color-text);
+        text-transform: uppercase;
+    }
+
+.first-row {
+    display: flex;
+}
+.owner{
+    width: 100%;
+    margin-right: 40px;
+}
+.input-field {
+    border-radius: 10px;
+    border: 1px solid #999; 
+    padding: 8px;
+    outline: none;
+}
+    .input-field input {
+        width: 100%;
+    }
+.selection {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 75%;
+}
+    .selection select {
+        padding: 10px 20px;
+        border: 1px solid #999;
+        border-radius: 10px;
+    }
+.cards {
+    width: 40px;
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    gap: 5px;
+
+}
+
+.pay-container button {
+    width: 100%;
+    background: var(--color-secondary);
+    color: var(--color-text);
+    padding: 0.8rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 40px;
 }

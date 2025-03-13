@@ -63,7 +63,7 @@ namespace Web.Controllers
             return View();
         }
 
-        public ActionResult test()
+        public ActionResult Pay()
         {
             return View();
         }
