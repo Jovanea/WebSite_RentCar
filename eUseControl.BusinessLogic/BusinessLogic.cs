@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using eUseControl.BusinessLogic;
 
 namespace eUseControl.BusinessLogic
 {
@@ -13,5 +14,14 @@ namespace eUseControl.BusinessLogic
             return new SessionBL();
         }
 
+        
+        public ICarSession GetCarSessionBL()
+        {
+            return new CarSessionBL();
+        }
+
+        
     }
 }
+
+
