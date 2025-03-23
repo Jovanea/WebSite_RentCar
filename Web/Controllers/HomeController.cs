@@ -29,6 +29,11 @@ namespace Web.Controllers
             return View();
         }
 
+        public ActionResult Cardetalies()
+        {
+            return View();
+        }
+
         public ActionResult Login()
         {
             return View();

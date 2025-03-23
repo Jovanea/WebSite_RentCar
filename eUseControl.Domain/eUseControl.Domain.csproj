@@ -41,6 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\Car\CarDetails.cs" />
+    <Compile Include="Entities\Car\CarSection.cs" />
     <Compile Include="Entities\User\Adminlogin.cs" />
     <Compile Include="Entities\User\ULoginData.cs" />
     <Compile Include="Entities\User\UserLogin.cs" />
