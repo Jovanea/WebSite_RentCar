@@ -12,3 +12,13 @@ namespace eUseControl.BusinessLogic
         UserLogin UserLogin(ULoginData data);
     }
 }
+
+
+namespace eUseControl.BusinessLogic.Interfaces
+{
+    public interface ISession
+    {
+        ULoginData UserLogin(ULoginData data);
+        ULoginData AdminLogin(ULoginData data); // Noua metodă pentru admin
+    }
+}

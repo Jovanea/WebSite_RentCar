@@ -76,5 +76,9 @@ namespace Web.Controllers
         {
             return View();
         }
+        public ActionResult Reducere ()
+        {
+            return View();
+        }
     }
 }
