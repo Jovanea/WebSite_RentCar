@@ -1,5 +1,9 @@
-﻿@{
+﻿@using eUseControl.Domain.Entities.User
+@model URegisterData
+
+@{
     ViewBag.Title = "Registre";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 @Html.Partial("_Header")
@@ -7,30 +11,32 @@
 <div class="container">
     <div class="registration-container" id="registrationContainer">
         <h2>Înregistrare DriveNow</h2>
-        <form onsubmit="event.preventDefault(); showSuccessMessage();">
+        @using (Html.BeginForm("Register", "Home", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
             <div class="input-group">
-                <label for="nume">Nume și Prenume:</label>
-                <input type="text" id="nume" name="nume" required>
+                @Html.LabelFor(m => m.Username, "Nume și Prenume:", new { @for = "nume" })
+                @Html.TextBoxFor(m => m.Username, new { @class = "form-control", id = "nume", required = "required" })
+                @Html.ValidationMessageFor(m => m.Username, "", new { @class = "text-danger" })
             </div>
+
             <div class="input-group">
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required>
+                @Html.LabelFor(m => m.Email, "Email:", new { @for = "email" })
+                @Html.TextBoxFor(m => m.Email, new { @class = "form-control", id = "email", type = "email", required = "required" })
+                @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
             </div>
+
             <div class="input-group">
-                <label for="telefon">Număr de Telefon:</label>
-                <input type="tel" id="telefon" name="telefon" required>
+                @Html.LabelFor(m => m.Password, "Parolă:", new { @for = "password" })
+                @Html.PasswordFor(m => m.Password, new { @class = "form-control", id = "password", required = "required" })
+                @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
             </div>
-            <div class="input-group">
-                <label for="permis">Număr Permis de Conducere:</label>
-                <input type="text" id="permis" name="permis" required>
-            </div>
-            <div class="input-group">
-                <label for="password">Parolă:</label>
-                <input type="password" id="password" name="password" required>
-            </div>
+
             <div class="input-group">
                 <label for="confirm-password">Confirmă Parola:</label>
-                <input type="password" id="confirm-password" name="confirm-password" required>
+                <input type="password" id="confirm-password" name="confirm-password" class="form-control" required>
             </div>
 
             <p class="terms-text">
@@ -40,40 +46,38 @@
             </p>
 
             <button type="submit" class="button">Creează Cont</button>
-        </form>
+        }
         <p>Ai deja cont? <a href="login" class="login-link">Autentifică-te</a></p>
     </div>
 
-    <div class="success-container" id="successContainer">
-        <div class="success-message-box">
-            <span class="success-message">Înregistrare reușită!</span>
-            <span class="success-text">
-                Contul tău a fost creat cu succes. Poți începe să închiriezi mașini!
-            </span>
-            <button class="button" onclick="window.location.href='index'">
-                Mergi la pagina principală
-            </button>
+    @if (ViewBag.SuccessMessage != null)
+    {
+        <div class="success-container" id="successContainer">
+            <div class="success-message-box">
+                <span class="success-message">Înregistrare reușită!</span>
+                <span class="success-text">
+                    Contul tău a fost creat cu succes. Poți începe să închiriezi mașini!
+                </span>
+                <button class="button" onclick="window.location.href='index'">
+                    Mergi la pagina principală
+                </button>
+            </div>
         </div>
-    </div>
+    }
 </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+@section Scripts {
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#confirm-password').on('keyup', function () {
+                if ($(this).val() !== $('#password').val()) {
+                    $(this).get(0).setCustomValidity('Parolele nu coincid');
+                } else {
+                    $(this).get(0).setCustomValidity('');
+                }
+            });
+        });
+    </script>
+}

@@ -1,23 +1,27 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Cardetalies";
+    var carId = ViewContext.RouteData.Values["id"] as string;
+    int id = carId != null ? int.Parse(carId) : 1;
 }
 
-    <section class="car-details">
-        <div class="container">
-            <a href="javascript:history.back()" class="back-to-cars">
-                <i class="fa-solid fa-arrow-left"></i> Înapoi la mașini
-            </a>
+<section class="car-details">
+    <div class="container">
+        <a href="@Url.Action("Carsection", "Home")" class="back-to-cars">
+            <i class="fa-solid fa-arrow-left"></i> Înapoi la mașini
+        </a>
 
-            <div class="car-details-content">
+        <div class="car-details-content">
+            <!-- Range Rover -->
+            @if (id == 1)
+            {
                 <div class="car-images">
                     <div class="main-image">
-                        <img src="car-image.jpg" alt="Range Rover" id="main-car-image">
+                        <img src="/Content/images/cars_pexels_1.jpg" alt="Range Rover" id="main-car-image">
                     </div>
                     <div class="thumbnails">
-                        <img src="car-image.jpg" alt="Range Rover - Principal" onclick="changeImage(this.src)">
-                        <img src="car-interior.jpg" alt="Range Rover - Interior" onclick="changeImage(this.src)">
-                        <img src="car-rear.jpg" alt="Range Rover - Spate" onclick="changeImage(this.src)">
+                        <img src="/Content/images/cars_pexels_1.jpg" alt="Range Rover" onclick="changeImage(this.src)">
+                        <img src="/Content/images/range_interior.jpg" alt="Range Rover Interior" onclick="changeImage(this.src)">
+                        <img src="/Content/images/range_rear.jpg" alt="Range Rover Spate" onclick="changeImage(this.src)">
                     </div>
                 </div>
 
@@ -59,103 +63,184 @@
 
                     <div class="car-description">
                         <h4>Descriere</h4>
-                        <p>Range Rover este simbolul luxului și al performanței off-road. Acest SUV de lux oferă confort excepțional, tehnologie de vârf și capacități de conducere impresionante atât în oraș, cât și în afara lui. Modelul Range 4.0 oferă o combinație perfectă între putere, confort și eleganță, fiind alegerea perfectă pentru cei care caută o experiență de conducere premium.</p>
+                        <p>Range Rover este simbolul luxului și al performanței off-road. Acest SUV de lux oferă confort excepțional, tehnologie de vârf și capacități de conducere impresionante atât în oraș, cât și în afara lui.</p>
                     </div>
 
                     <div class="specifications">
                         <h4>Specificații tehnice</h4>
                         <table>
-                            <tr>
-                                <th>Specificație</th>
-                                <th>Detalii</th>
-                            </tr>
-                            <tr>
-                                <td>Motor</td>
-                                <td>4.0L V8 Turbodiesel</td>
-                            </tr>
-                            <tr>
-                                <td>Putere</td>
-                                <td>340 CP</td>
-                            </tr>
-                            <tr>
-                                <td>Cuplu</td>
-                                <td>Cuplu</td>
-                                <td>700 Nm</td>
-                            </tr>
-                            <tr>
-                                <td>Accelerație 0-100 km/h</td>
-                                <td>6.3 secunde</td>
-                            </tr>
-                            <tr>
-                                <td>Viteza maximă</td>
-                                <td>250 km/h</td>
-                            </tr>
-                            <tr>
-                                <td>Consum mediu</td>
-                                <td>8.5 l/100 km</td>
-                            </tr>
-                            <tr>
-                                <td>Transmisie</td>
-                                <td>Automată, 8 trepte</td>
-                            </tr>
-                            <tr>
-                                <td>Tracțiune</td>
-                                <td>Integrală (4x4)</td>
-                            </tr>
+                            <tr><td>Motor</td><td>4.0L V8 Turbodiesel</td></tr>
+                            <tr><td>Putere</td><td>340 CP</td></tr>
+                            <tr><td>Cuplu</td><td>700 Nm</td></tr>
+                            <tr><td>Accelerație 0-100 km/h</td><td>6.3 secunde</td></tr>
+                            <tr><td>Viteza maximă</td><td>250 km/h</td></tr>
+                            <tr><td>Consum mediu</td><td>8.5 l/100 km</td></tr>
                         </table>
                     </div>
 
                     <div class="car-features">
                         <h4>Dotări</h4>
                         <ul>
-                            <li><i class="fa-solid fa-check"></i> Climatizare automată pe 4 zone</li>
-                            <li><i class="fa-solid fa-check"></i> Sistem audio Meridian™ Premium</li>
-                            <li><i class="fa-solid fa-check"></i> Navigație GPS</li>
-                            <li><i class="fa-solid fa-check"></i> Scaune încălzite și ventilate</li>
-                            <li><i class="fa-solid fa-check"></i> Volan încălzit</li>
-                            <li><i class="fa-solid fa-check"></i> Faruri LED adaptive</li>
-                            <li><i class="fa-solid fa-check"></i> Senzori de parcare față/spate</li>
-                            <li><i class="fa-solid fa-check"></i> Cameră video 360°</li>
-                            <li><i class="fa-solid fa-check"></i> Suspensie pneumatică adaptivă</li>
-                            <li><i class="fa-solid fa-check"></i> Plafon panoramic</li>
-                            <li><i class="fa-solid fa-check"></i> Sistem Terrain Response 2</li>
-                            <li><i class="fa-solid fa-check"></i> Apple CarPlay & Android Auto</li>
+                            <li><i class="fa-solid fa-check"></i> Scaune din piele Meridian</li>
+                            <li><i class="fa-solid fa-check"></i> Sistem audio premium</li>
+                            <li><i class="fa-solid fa-check"></i> Suspensie pneumatică</li>
                         </ul>
                     </div>
+                </div>
+            }
 
-                    <div class="booking-section">
-                        <h4>Rezervă acum</h4>
-                        <div class="date-picker">
-                            <div class="date-input">
-                                <label for="pickup-date">Data preluare:</label>
-                                <input type="date" id="pickup-date" name="pickup-date">
-                            </div>
-                            <div class="date-input">
-                                <label for="return-date">Data returnare:</label>
-                                <input type="date" id="return-date" name="return-date">
-                            </div>
-                        </div>
-
-                        <div class="booking-summary">
-                            <div class="summary-item">
-                                <span>Preț / zi:</span>
-                                <span>$60</span>
-                            </div>
-                            <div class="summary-item">
-                                <span>Zile:</span>
-                                <span id="days-count">0</span>
-                            </div>
-                            <div class="summary-item total">
-                                <span>Total:</span>
-                                <span id="total-price">$0</span>
-                            </div>
-                        </div>
-
-                        <button id="add-to-cart" class="btn-primary">
-                            <i class="fa-solid fa-cart-plus"></i> Adaugă în coș
-                        </button>
+            <!-- Mercedes -->
+            @if (id == 2)
+            {
+                <div class="car-images">
+                    <div class="main-image">
+                        <img src="/Content/images/cars_pexels_2.jpg" alt="Mercedes" id="main-car-image">
+                    </div>
+                    <div class="thumbnails">
+                        <img src="/Content/images/cars_pexels_2.jpg" alt="Mercedes" onclick="changeImage(this.src)">
+                        <img src="/Content/images/mercedes_interior.jpg" alt="Mercedes Interior" onclick="changeImage(this.src)">
                     </div>
                 </div>
+
+                <div class="car-info">
+                    <h2>Mercedes</h2>
+                    <h3>Mercedes-Benz Maybach 600</h3>
+
+                    <div class="price-tag">
+                        <span class="price">$100</span>
+                        <span class="period">/zi</span>
+                    </div>
+
+                    <div class="car-specs">
+                        <div class="spec-item">
+                            <i class="fa-solid fa-calendar"></i>
+                            <span>An: 2018</span>
+                        </div>
+                        <div class="spec-item">
+                            <i class="fa-solid fa-gears"></i>
+                            <span>Cutie: Automată</span>
+                        </div>
+                        <div class="spec-item">
+                            <i class="fa-solid fa-gas-pump"></i>
+                            <span>Combustibil: Benzină</span>
+                        </div>
+                        <div class="spec-item">
+                            <i class="fa-solid fa-gauge-high"></i>
+                            <span>Putere: 630 CP</span>
+                        </div>
+                    </div>
+
+                    <div class="car-description">
+                        <h4>Descriere</h4>
+                        <p>Mercedes-Maybach S600 reprezintă vârful luxului automobilistic, cu finisaje de excepție și tehnologie avansată.</p>
+                    </div>
+
+                    <div class="specifications">
+                        <h4>Specificații tehnice</h4>
+                        <table>
+                            <tr><td>Motor</td><td>6.0L V12 Biturbo</td></tr>
+                            <tr><td>Putere</td><td>630 CP</td></tr>
+                            <tr><td>Accelerație 0-100 km/h</td><td>4.6 secunde</td></tr>
+                        </table>
+                    </div>
+                </div>
+            }
+
+            <!-- Adaugă aici blocurile pentru celelalte 10 mașini cu același pattern -->
+            <!-- Fiecare cu if (id == x) { ... } -->
+            <!-- Pagani (exemplu pentru a 6-a mașină) -->
+            @if (id == 6)
+            {
+                <div class="car-images">
+                    <div class="main-image">
+                        <img src="/Content/images/cars_pexels_6.jpg" alt="Pagani" id="main-car-image">
+                    </div>
+                    <div class="thumbnails">
+                        <img src="/Content/images/cars_pexels_6.jpg" alt="Pagani" onclick="changeImage(this.src)">
+                        <img src="/Content/images/pagani_interior.jpg" alt="Pagani Interior" onclick="changeImage(this.src)">
+                    </div>
+                </div>
+
+                <div class="car-info">
+                    <h2>Pagani</h2>
+                    <h3>Pagani Huayra</h3>
+
+                    <div class="price-tag">
+                        <span class="price">$2000</span>
+                        <span class="period">/zi</span>
+                    </div>
+
+                    <div class="car-specs">
+                        <div class="spec-item">
+                            <i class="fa-solid fa-calendar"></i>
+                            <span>An: 2024</span>
+                        </div>
+                        <div class="spec-item">
+                            <i class="fa-solid fa-gears"></i>
+                            <span>Cutie: Automată</span>
+                        </div>
+                        <div class="spec-item">
+                            <i class="fa-solid fa-gas-pump"></i>
+                            <span>Combustibil: Benzină</span>
+                        </div>
+                        <div class="spec-item">
+                            <i class="fa-solid fa-gauge-high"></i>
+                            <span>Putere: 840 CP</span>
+                        </div>
+                    </div>
+
+                    <div class="car-description">
+                        <h4>Descriere</h4>
+                        <p>Pagani Huayra este o operă de artă pe roți, combinând performanțe extreme cu design uluitor.</p>
+                    </div>
+
+                    <div class="specifications">
+                        <h4>Specificații tehnice</h4>
+                        <table>
+                            <tr><td>Motor</td><td>6.0L V12 Twin-Turbo</td></tr>
+                            <tr><td>Putere</td><td>840 CP</td></tr>
+                            <tr><td>Accelerație 0-100 km/h</td><td>2.8 secunde</td></tr>
+                            <tr><td>Viteza maximă</td><td>383 km/h</td></tr>
+                        </table>
+                    </div>
+                </div>
+            }
+
+            <!-- Formular de rezervare comun pentru toate mașinile -->
+            <div class="booking-section">
+                <h4>Rezervă acum</h4>
+                <div class="date-picker">
+                    <div class="date-input">
+                        <label for="pickup-date">Data preluare:</label>
+                        <input type="date" id="pickup-date" name="pickup-date">
+                    </div>
+                    <div class="date-input">
+                        <label for="return-date">Data returnare:</label>
+                        <input type="date" id="return-date" name="return-date">
+                    </div>
+                </div>
+
+                <div class="booking-summary">
+                    <div class="summary-item">
+                        <span>Preț / zi:</span>
+                        <span id="daily-price">@(id == 1 ? "$60" : id == 2 ? "$100" : id == 6 ? "$2000" : "$0")</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>Zile:</span>
+                        <span id="days-count">0</span>
+                    </div>
+                    <div class="summary-item total">
+                        <span>Total:</span>
+                        <span id="total-price">$0</span>
+                    </div>
+                </div>
+
+                <button id="add-to-cart" class="btn-primary">
+                    <i class="fa-solid fa-cart-plus"></i> Rezervă acum
+                </button>
             </div>
         </div>
-    </section>
+    </div>
+</section>
+
+<script>

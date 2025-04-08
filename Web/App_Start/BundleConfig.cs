@@ -6,8 +6,8 @@ using System.Web.Optimization;
 
 namespace Web.App_Start
 {
-	public class BundleConfig
-	{
+    public class BundleConfig
+    {
         public static void RegisterBundles(BundleCollection bundles)
         {
 
@@ -20,6 +20,8 @@ namespace Web.App_Start
             bundles.Add(new ScriptBundle("~/bundles/sitejs").Include(
             "~/Content/static/site.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
+            "~/Scripts/jquery.validate*"));
 
         }
     }

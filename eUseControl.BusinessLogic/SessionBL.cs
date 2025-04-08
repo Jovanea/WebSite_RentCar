@@ -29,6 +29,7 @@ namespace eUseControl.BusinessLogic
                 Name = "BMW",
                 Price = 850,
                 ImageUrl = "/Content/images/cars_pexels_11.jpg"
+
             };
         }
 

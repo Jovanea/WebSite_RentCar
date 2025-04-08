@@ -3,11 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using eUseControl.Domain.Entities.User;
+using eUseControl.BusinessLogic;
+using eUseControl.BusinessLogic.Interfaces;
 
 namespace Web.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly IUserApi _userApi;
+
+        public HomeController()
+        {
+            _userApi = new UserApi();
+        }
+
         // GET: Home
         public ActionResult Index()
         {
@@ -53,7 +63,7 @@ namespace Web.Controllers
             return View();
         }
 
-        public ActionResult Profile()
+        public new ActionResult Profile()
         {
             return View();
         }
@@ -72,14 +82,40 @@ namespace Web.Controllers
         {
             return View();
         }
-        
-        public ActionResult LoginAdmin ()
+
+        public ActionResult LoginAdmin()
         {
             return View();
         }
-        public ActionResult AdminManagment ()
+        public ActionResult AdminManagment()
         {
             return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Register(URegisterData registerData)
+        {
+            if (ModelState.IsValid)
+            {
+                registerData.UserIp = Request.UserHostAddress;
+                registerData.LastLogin = DateTime.Now;
+                registerData.Level = 0;
+
+                var registerResponse = _userApi.UserRegister(registerData);
+
+                if (registerResponse.Status)
+                {
+                    ViewBag.SuccessMessage = true;
+                    return View("Registre");
+                }
+                else
+                {
+                    ModelState.AddModelError("", registerResponse.StatusMsg);
+                }
+            }
+
+            return View("Registre", registerData);
         }
     }
 }

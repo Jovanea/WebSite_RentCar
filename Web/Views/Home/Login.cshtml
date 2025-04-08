@@ -1,40 +1,67 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Login";
 }
+
 @Html.Partial("_Header")
 
 <div class="profile-wrapper">
-    <div class="login-container" id="loginContainer">
-        <h2>Autentificare</h2>
-        <form action="dashboard.html" method="post">
-            <div class="input-group">
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required>
-            </div>
-            <div class="input-group">
-                <label for="password">Parola:</label>
-                <input type="password" id="password" name="password" required>
-            </div>
-            <button type="button" class="button" onclick="showSuccessMessage()">Login</button>
-        </form>
-        <p>Nu ai cont? <a href="~/Home/Registre">Înregistrează-te</a></p>
-        <p><a href="LoginAdmin" class="admin-login">Autentificare ca Administrator</a></p>
+    <div class="panel panel-filled">
+        <div class="login-container" id="loginContainer">
+            @Html.ValidationSummary(true)
+            @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { @id = "LoginForm" }))
+            {
+                @Html.AntiForgeryToken()
+                <h2>Autentificare</h2>
+                <div class="input-group">
+                    @Html.Label("Username", "Email/Username", new { @class = "control-label" })
+                    @Html.TextBox("Username", null, new
+                    {
+                        @class = "input-control",
+                        placeholder = "example@gmail.com",
+                        title = "Please enter your username",
+                        id = "username"
+                    })
+                </div>
+
+                <div class="input-group">
+                    @Html.Label("Password", "Parolă", new { @class = "control-label" })
+                    @Html.Password("Password", null, new
+                    {
+                        @class = "input-control",
+                        title = "Please enter your password",
+                        placeholder = "******",
+                        id = "password"
+                    })
+                </div>
+
+                <button type="submit" class="button">Login</button>
+
+                <div class="login-links">
+                    <p>Nu ai cont? <a href="@Url.Action("Registre","Home")">Înregistrează-te</a></p>
+
+                    <p><a href="@Url.Action("LoginAdmin","Home")" class="admin-login">Autentificare ca Administrator</a></p>
+                </div>
+            }
+        </div>
     </div>
 
     <div class="success-container" style="display: none;">
         <span class="success-message">Autentificare reușită!</span>
         <span class="success-text">Bun venit! Acum poți accesa toate funcționalitățile platformei.</span>
-        <button class="success-button" onclick="window.location.href='index'">Mergi la pagina principală</button>
+        <button class="btn btn-success" onclick="window.location.href='@Url.Action("Index","Home")'">Mergi la pagina principală</button>
     </div>
 </div>
 
-<script>
-    function showSuccessMessage() {
-        document.getElementById('loginContainer').style.display = 'none';
-        document.querySelector('.success-container').style.display = 'block';
-    }
+<script type="text/javascript">
+    $(function () {
+        $("#LoginForm").validate({
+            rules: {
+                Username: { required: true },
+                Password: { required: true }
+            },
+            submitHandler: function (form) {
+                form.submit();
+            }
+        });
+    });
 </script>
-
-
-
