@@ -22,4 +22,4 @@ namespace eUseControl.Domain.Entities.User
         public DateTime LastLogin { get; set; }
         public int Level { get; set; }
     }
-}
+} 

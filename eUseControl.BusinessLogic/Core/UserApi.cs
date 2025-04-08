@@ -17,6 +17,7 @@ namespace eUseControl.BusinessLogic
         {
             using (var db = new UserContext())
             {
+                // Check if username or email already exists
                 if (db.Users.Any(u => u.Username == data.Username))
                 {
                     return new UserRegister { Status = false, StatusMsg = "Acest nume de utilizator există deja" };
@@ -27,14 +28,15 @@ namespace eUseControl.BusinessLogic
                     return new UserRegister { Status = false, StatusMsg = "Acest email există deja" };
                 }
 
+                // Create new user
                 var newUser = new UDbTable
                 {
                     Username = data.Username,
-                    Password = data.Password, 
+                    Password = data.Password, // In production, you should hash the password
                     Email = data.Email,
                     Last_Login = DateTime.Now,
                     UserIp = data.UserIp,
-                    Level = 0 
+                    Level = 0 // Default level for new users
                 };
 
                 db.Users.Add(newUser);
