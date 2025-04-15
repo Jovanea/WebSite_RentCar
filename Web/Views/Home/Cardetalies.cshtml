@@ -25,7 +25,7 @@
                     </div>
                 </div>
 
-                <div class="car-info">
+                <div class="car-basic-info">
                     <h2>Range Rover</h2>
                     <h3>Land Rover Range 4.0</h3>
 
@@ -60,32 +60,6 @@
                             <span>Categorie: SUV</span>
                         </div>
                     </div>
-
-                    <div class="car-description">
-                        <h4>Descriere</h4>
-                        <p>Range Rover este simbolul luxului și al performanței off-road. Acest SUV de lux oferă confort excepțional, tehnologie de vârf și capacități de conducere impresionante atât în oraș, cât și în afara lui.</p>
-                    </div>
-
-                    <div class="specifications">
-                        <h4>Specificații tehnice</h4>
-                        <table>
-                            <tr><td>Motor</td><td>4.0L V8 Turbodiesel</td></tr>
-                            <tr><td>Putere</td><td>340 CP</td></tr>
-                            <tr><td>Cuplu</td><td>700 Nm</td></tr>
-                            <tr><td>Accelerație 0-100 km/h</td><td>6.3 secunde</td></tr>
-                            <tr><td>Viteza maximă</td><td>250 km/h</td></tr>
-                            <tr><td>Consum mediu</td><td>8.5 l/100 km</td></tr>
-                        </table>
-                    </div>
-
-                    <div class="car-features">
-                        <h4>Dotări</h4>
-                        <ul>
-                            <li><i class="fa-solid fa-check"></i> Scaune din piele Meridian</li>
-                            <li><i class="fa-solid fa-check"></i> Sistem audio premium</li>
-                            <li><i class="fa-solid fa-check"></i> Suspensie pneumatică</li>
-                        </ul>
-                    </div>
                 </div>
             }
 
@@ -102,7 +76,7 @@
                     </div>
                 </div>
 
-                <div class="car-info">
+                <div class="car-basic-info">
                     <h2>Mercedes</h2>
                     <h3>Mercedes-Benz Maybach 600</h3>
 
@@ -129,26 +103,10 @@
                             <span>Putere: 630 CP</span>
                         </div>
                     </div>
-
-                    <div class="car-description">
-                        <h4>Descriere</h4>
-                        <p>Mercedes-Maybach S600 reprezintă vârful luxului automobilistic, cu finisaje de excepție și tehnologie avansată.</p>
-                    </div>
-
-                    <div class="specifications">
-                        <h4>Specificații tehnice</h4>
-                        <table>
-                            <tr><td>Motor</td><td>6.0L V12 Biturbo</td></tr>
-                            <tr><td>Putere</td><td>630 CP</td></tr>
-                            <tr><td>Accelerație 0-100 km/h</td><td>4.6 secunde</td></tr>
-                        </table>
-                    </div>
                 </div>
             }
 
-            <!-- Adaugă aici blocurile pentru celelalte 10 mașini cu același pattern -->
-            <!-- Fiecare cu if (id == x) { ... } -->
-            <!-- Pagani (exemplu pentru a 6-a mașină) -->
+            <!-- Pagani -->
             @if (id == 6)
             {
                 <div class="car-images">
@@ -161,7 +119,7 @@
                     </div>
                 </div>
 
-                <div class="car-info">
+                <div class="car-basic-info">
                     <h2>Pagani</h2>
                     <h3>Pagani Huayra</h3>
 
@@ -188,59 +146,110 @@
                             <span>Putere: 840 CP</span>
                         </div>
                     </div>
-
-                    <div class="car-description">
-                        <h4>Descriere</h4>
-                        <p>Pagani Huayra este o operă de artă pe roți, combinând performanțe extreme cu design uluitor.</p>
-                    </div>
-
-                    <div class="specifications">
-                        <h4>Specificații tehnice</h4>
-                        <table>
-                            <tr><td>Motor</td><td>6.0L V12 Twin-Turbo</td></tr>
-                            <tr><td>Putere</td><td>840 CP</td></tr>
-                            <tr><td>Accelerație 0-100 km/h</td><td>2.8 secunde</td></tr>
-                            <tr><td>Viteza maximă</td><td>383 km/h</td></tr>
-                        </table>
-                    </div>
                 </div>
             }
 
-            <!-- Formular de rezervare comun pentru toate mașinile -->
-            <div class="booking-section">
-                <h4>Rezervă acum</h4>
-                <div class="date-picker">
-                    <div class="date-input">
-                        <label for="pickup-date">Data preluare:</label>
-                        <input type="date" id="pickup-date" name="pickup-date">
-                    </div>
-                    <div class="date-input">
-                        <label for="return-date">Data returnare:</label>
-                        <input type="date" id="return-date" name="return-date">
-                    </div>
+            <!-- Descriere în stânga, Rezervare în dreapta -->
+            <div class="centered-content">
+                <!-- Partea stângă - Descriere și specificații -->
+                <div class="description-section">
+                    @if (id == 1)
+                    {
+                        <div class="car-description">
+                            <h4>Descriere</h4>
+                            <p>Range Rover este simbolul luxului și al performanței off-road. Acest SUV de lux oferă confort excepțional, tehnologie de vârf și capacități de conducere impresionante atât în oraș, cât și în afara lui.</p>
+                        </div>
+
+                        <div class="specifications">
+                            <h4>Specificații tehnice</h4>
+                            <table>
+                                <tr><td>Motor</td><td>4.0L V8 Turbodiesel</td></tr>
+                                <tr><td>Putere</td><td>340 CP</td></tr>
+                                <tr><td>Cuplu</td><td>700 Nm</td></tr>
+                                <tr><td>Accelerație 0-100 km/h</td><td>6.3 secunde</td></tr>
+                                <tr><td>Viteza maximă</td><td>250 km/h</td></tr>
+                                <tr><td>Consum mediu</td><td>8.5 l/100 km</td></tr>
+                            </table>
+                        </div>
+
+                        <div class="car-features">
+                            <h4>Dotări</h4>
+                            <ul>
+                                <li><i class="fa-solid fa-check"></i> Scaune din piele Meridian</li>
+                                <li><i class="fa-solid fa-check"></i> Sistem audio premium</li>
+                                <li><i class="fa-solid fa-check"></i> Suspensie pneumatică</li>
+                            </ul>
+                        </div>
+                    }
+                    @if (id == 2)
+                    {
+                        <div class="car-description">
+                            <h4>Descriere</h4>
+                            <p>Mercedes-Maybach S600 reprezintă vârful luxului automobilistic, cu finisaje de excepție și tehnologie avansată.</p>
+                        </div>
+
+                        <div class="specifications">
+                            <h4>Specificații tehnice</h4>
+                            <table>
+                                <tr><td>Motor</td><td>6.0L V12 Biturbo</td></tr>
+                                <tr><td>Putere</td><td>630 CP</td></tr>
+                                <tr><td>Accelerație 0-100 km/h</td><td>4.6 secunde</td></tr>
+                            </table>
+                        </div>
+                    }
+                    @if (id == 6)
+                    {
+                        <div class="car-description">
+                            <h4>Descriere</h4>
+                            <p>Pagani Huayra este o operă de artă pe roți, combinând performanțe extreme cu design uluitor.</p>
+                        </div>
+
+                        <div class="specifications">
+                            <h4>Specificații tehnice</h4>
+                            <table>
+                                <tr><td>Motor</td><td>6.0L V12 Twin-Turbo</td></tr>
+                                <tr><td>Putere</td><td>840 CP</td></tr>
+                                <tr><td>Accelerație 0-100 km/h</td><td>2.8 secunde</td></tr>
+                                <tr><td>Viteza maximă</td><td>383 km/h</td></tr>
+                            </table>
+                        </div>
+                    }
                 </div>
 
-                <div class="booking-summary">
-                    <div class="summary-item">
-                        <span>Preț / zi:</span>
-                        <span id="daily-price">@(id == 1 ? "$60" : id == 2 ? "$100" : id == 6 ? "$2000" : "$0")</span>
+                <!-- Partea dreaptă - Formular de rezervare -->
+                <div class="booking-section">
+                    <h4>Rezervă acum</h4>
+                    <div class="date-picker">
+                        <div class="date-input">
+                            <label for="pickup-date">Data preluare:</label>
+                            <input type="date" id="pickup-date" name="pickup-date">
+                        </div>
+                        <div class="date-input">
+                            <label for="return-date">Data returnare:</label>
+                            <input type="date" id="return-date" name="return-date">
+                        </div>
                     </div>
-                    <div class="summary-item">
-                        <span>Zile:</span>
-                        <span id="days-count">0</span>
-                    </div>
-                    <div class="summary-item total">
-                        <span>Total:</span>
-                        <span id="total-price">$0</span>
-                    </div>
-                </div>
 
-                <button id="add-to-cart" class="btn-primary">
-                    <i class="fa-solid fa-cart-plus"></i> Rezervă acum
-                </button>
+                    <div class="booking-summary">
+                        <div class="summary-item">
+                            <span>Preț / zi:</span>
+                            <span id="daily-price">@(id == 1 ? "$60" : id == 2 ? "$100" : id == 6 ? "$2000" : "$0")</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Zile:</span>
+                            <span id="days-count">0</span>
+                        </div>
+                        <div class="summary-item total">
+                            <span>Total:</span>
+                            <span id="total-price">$0</span>
+                        </div>
+                    </div>
+
+                    <button id="add-to-cart" class="btn-primary">
+                        <i class="fa-solid fa-cart-plus"></i> Rezervă acum
+                    </button>
+                </div>
             </div>
         </div>
     </div>
 </section>
-
-<script>
