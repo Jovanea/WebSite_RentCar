@@ -537,16 +537,17 @@ section {
             color: #004499;
         }
 
+    /* Structura de bază pentru conținutul paginii */
     .car-details .car-details-content {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 3rem;
+        display: flex;
+        flex-direction: column;
         background: #fff;
         border-radius: 10px;
         box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         padding: 2rem;
     }
 
+    /* Secțiunea de sus cu imagini și informații de bază */
     .car-details .car-images {
         display: flex;
         flex-direction: column;
@@ -591,19 +592,20 @@ section {
                 transform: translateY(-3px);
             }
 
-    .car-details .car-info {
+    /* Informații de bază despre mașină */
+    .car-details .car-basic-info {
         display: flex;
         flex-direction: column;
         gap: 1.5rem;
     }
 
-        .car-details .car-info h2 {
+        .car-details .car-basic-info h2 {
             font-size: 2.2rem;
             color: #222;
             margin-bottom: 0.2rem;
         }
 
-        .car-details .car-info h3 {
+        .car-details .car-basic-info h3 {
             font-size: 1.4rem;
             color: #666;
             font-weight: 400;
@@ -652,8 +654,22 @@ section {
             text-align: center;
         }
 
+    .car-details .centered-content {
+        display: grid;
+        grid-template-columns: 3fr 2fr; 
+        gap: 2rem;
+        margin-top: 2rem;
+        width: 100%;
+    }
+
+    .car-details .description-section {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+    }
+
     .car-details .car-description {
-        margin: 1.5rem 0;
+        margin-bottom: 1.5rem;
     }
 
         .car-details .car-description h4 {
@@ -668,7 +684,7 @@ section {
         }
 
     .car-details .specifications {
-        margin: 1.5rem 0;
+        margin-bottom: 1.5rem;
     }
 
         .car-details .specifications h4 {
@@ -699,7 +715,7 @@ section {
         }
 
     .car-details .car-features {
-        margin: 1.5rem 0;
+        margin-bottom: 1.5rem;
     }
 
         .car-details .car-features h4 {
@@ -728,22 +744,26 @@ section {
             font-size: 0.9rem;
         }
 
+    /* Partea dreaptă - formular de rezervare */
     .car-details .booking-section {
         background: #f5f5f5;
         padding: 1.5rem;
         border-radius: 8px;
-        margin-top: 2rem;
+        height: fit-content;
+        position: sticky;
+        top: 20px;
     }
 
         .car-details .booking-section h4 {
             font-size: 1.3rem;
             margin-bottom: 1.2rem;
             color: #444;
+            text-align: center;
         }
 
     .car-details .date-picker {
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr;
         gap: 1rem;
         margin-bottom: 1.5rem;
     }
@@ -764,6 +784,7 @@ section {
             border: 1px solid #ddd;
             border-radius: 5px;
             font-family: inherit;
+            width: 100%;
         }
 
     .car-details .booking-summary {
@@ -807,16 +828,27 @@ section {
             background: #004499;
         }
 
+/* Media queries pentru responsive design */
 @media (max-width: 992px) {
     .car-details .car-details-content {
-        grid-template-columns: 1fr;
+        display: flex;
+        flex-direction: column;
     }
 
-    .car-details .car-features ul {
+    .car-details .centered-content {
         grid-template-columns: 1fr;
+    }
+    2
+    .car-details .booking-section {
+        position: static;
+        margin-top: 2rem;
     }
 
     .car-details .date-picker {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .car-details .car-features ul {
         grid-template-columns: 1fr;
     }
 }
@@ -829,8 +861,11 @@ section {
         .car-details .car-specs {
             grid-template-columns: 1fr;
         }
-}
 
+        .car-details .date-picker {
+            grid-template-columns: 1fr;
+        }
+}
 
 /*========================Blog==================================*/
 
@@ -1105,7 +1140,7 @@ section {
         display: block;
         margin-bottom: 5px;
         font-weight: 600;
-        color: #555;
+        color: #ff6600;
     }
 
     .input-group input {
@@ -1567,15 +1602,15 @@ section.container {
 }
 
 .info-grid, .mission-section, .team-section, .stats-section {
-    max-width: 900px; /* Setează o lățime maximă */
-    margin: 0 auto; /* Centrează panourile */
-    text-align: center; /* Asigură alinierea textului la centru */
-    padding: 20px; /* Oferă spațiu interior */
+    max-width: 900px; 
+    margin: 0 auto;
+    text-align: center; 
+    padding: 20px; 
 }
 
 
 .info-card {
-    max-width: 400px; /* Setează o lățime maximă pentru fiecare card */
+    max-width: 400px; 
     margin: 20px auto;
     background: white;
     padding: 20px;

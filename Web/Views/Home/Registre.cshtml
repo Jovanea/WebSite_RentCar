@@ -17,26 +17,26 @@
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
             <div class="input-group">
-                @Html.LabelFor(m => m.Username, "Nume și Prenume:", new { @for = "nume" })
-                @Html.TextBoxFor(m => m.Username, new { @class = "form-control", id = "nume", required = "required" })
+                @Html.LabelFor(m => m.Username, "Nume și Prenume:", new { @class = "control-label" })
+                @Html.TextBoxFor(m => m.Username, new { @class = "input-control", id = "nume", required = "required" })
                 @Html.ValidationMessageFor(m => m.Username, "", new { @class = "text-danger" })
             </div>
 
             <div class="input-group">
                 @Html.LabelFor(m => m.Email, "Email:", new { @for = "email" })
-                @Html.TextBoxFor(m => m.Email, new { @class = "form-control", id = "email", type = "email", required = "required" })
+                @Html.TextBoxFor(m => m.Email, new { @class = "input-control", id = "email", type = "email", required = "required" })
                 @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
             </div>
 
             <div class="input-group">
                 @Html.LabelFor(m => m.Password, "Parolă:", new { @for = "password" })
-                @Html.PasswordFor(m => m.Password, new { @class = "form-control", id = "password", required = "required" })
+                @Html.PasswordFor(m => m.Password, new { @class = "input-control", id = "password", required = "required" })
                 @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
             </div>
 
             <div class="input-group">
                 <label for="confirm-password">Confirmă Parola:</label>
-                <input type="password" id="confirm-password" name="confirm-password" class="form-control" required>
+                <input type="password" id="confirm-password" name="confirm-password" class="input-control" required>
             </div>
 
             <p class="terms-text">
