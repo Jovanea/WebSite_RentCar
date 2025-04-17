@@ -1,71 +1,229 @@
 ﻿@model Web.Models.CardDetails
 @{
     ViewBag.Title = "Payment";
+    var cart = Session["Cart"] as List<Web.Models.Booking>;
 }
 
 @Html.Partial("_Header")
 
-<div class="pay-wrapper">
-    <div class="pay-container">
-        <h2>Complete Your Payment</h2>
+<div class="payment-page">
+    <div class="payment-container">
+        <div class="order-summary">
+            <h2>Sumarul comenzii</h2>
+            <div class="summary-content">
+                @if (cart != null && cart.Count > 0)
+                {
+                    <div class="cart-items-summary">
+                        @foreach (var booking in cart)
+                        {
+                            string carName = "Mașina";
+                            decimal pricePerDay = 0;
 
-        @using (Html.BeginForm("Process", "Payment", FormMethod.Post))
-        {
-            @Html.AntiForgeryToken()
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            switch (booking.CarId)
+                            {
+                                case 1: carName = "Range Rover"; pricePerDay = 60; break;
+                                case 2: carName = "Mercedes"; pricePerDay = 100; break;
+                                case 3: carName = "Range Rover Autobiography"; pricePerDay = 600; break;
+                                case 4: carName = "Ferrari F12"; pricePerDay = 500; break;
+                                case 5: carName = "Porsche GT3"; pricePerDay = 700; break;
+                                case 6: carName = "Pagani Huayra"; pricePerDay = 2000; break;
+                                case 7: carName = "Bugatti Tourbilion"; pricePerDay = 5000; break;
+                                case 8: carName = "Bentley Bentayga"; pricePerDay = 450; break;
+                                case 9: carName = "Rolls-Royce Phantom"; pricePerDay = 1500; break;
+                                case 10: carName = "McLaren 720S"; pricePerDay = 1000; break;
+                                case 11: carName = "BMW M5Cs"; pricePerDay = 850; break;
+                                case 12: carName = "Lamborghini Urus"; pricePerDay = 60; break;
+                            }
 
-            <div class="first-row">
-                <div class="owner">
-                    <h4>Card Holder Name</h4>
-                    <div class="input-field">
-                        @Html.TextBoxFor(m => m.CardHolderName, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.CardHolderName, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-                <div class="cvv">
-                    <h4>CVV</h4>
-                    <div class="input-field">
-                        @Html.PasswordFor(m => m.CVV, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.CVV, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-            </div>
-            <div class="second-row">
-                <div class="card-number">
-                    <h4>Card Number</h4>
-                    <div class="input-field">
-                        @Html.TextBoxFor(m => m.CardNumber, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.CardNumber, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-            </div>
-            <div class="third-row">
-                <h4>Expiry Date</h4>
-                <div class="selection">
-                    <div class="date">
-                        @Html.DropDownListFor(m => m.ExpiryMonth,
-                            new SelectList(new[] { "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12" }),
-                            "Month",
-                            new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.ExpiryMonth, "", new { @class = "text-danger" })
+                            <div class="cart-item-summary">
+                                <div class="item-details">
+                                    <h4>@carName</h4>
+                                    <p>De la: @booking.PickupDate.ToString("dd/MM/yyyy") până la: @booking.ReturnDate.ToString("dd/MM/yyyy")</p>
+                                    <p>Preț / zi: $@pricePerDay</p>
+                                </div>
+                                <div class="item-price">$@booking.TotalAmount</div>
+                            </div>
+                        }
 
-                        @Html.DropDownListFor(m => m.ExpiryYear,
-                            new SelectList(new[] { "2024", "2025", "2026", "2027", "2028", "2029", "2030" }),
-                            "Year",
-                            new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.ExpiryYear, "", new { @class = "text-danger" })
+                        <div class="cart-total-summary">
+                            <span>Total:</span>
+                            <span>$@(cart.Sum(b => b.TotalAmount))</span>
+                        </div>
                     </div>
-                    <div class="cards">
-                        <img src="~/Content/images/mc.png" alt="Mastercard">
-                        <img src="~/Content/images/pp.png" alt="PayPal">
-                        <img src="~/Content/images/vi.png" alt="Visa">
+                }
+            </div>
+        </div>
+
+        <div class="payment-form">
+            <h2>Detalii plată</h2>
+
+            @using (Html.BeginForm("Process", "Payment", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                <div class="first-row">
+                    <div class="owner">
+                        <h4>Numele deținătorului cardului</h4>
+                        <div class="input-field">
+                            @Html.TextBoxFor(m => m.CardHolderName, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.CardHolderName, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="cvv">
+                        <h4>CVV</h4>
+                        <div class="input-field">
+                            @Html.PasswordFor(m => m.CVV, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.CVV, "", new { @class = "text-danger" })
+                        </div>
                     </div>
                 </div>
-            </div>
-            <button type="submit" class="button">Confirm Payment</button>
-        }
+                <div class="second-row">
+                    <div class="card-number">
+                        <h4>Numărul cardului</h4>
+                        <div class="input-field">
+                            @Html.TextBoxFor(m => m.CardNumber, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.CardNumber, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+                <div class="third-row">
+                    <h4>Data expirării</h4>
+                    <div class="selection">
+                        <div class="date">
+                            @Html.DropDownListFor(m => m.ExpiryMonth,
+                                new SelectList(new[] { "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12" }),
+                                "Luna",
+                                new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.ExpiryMonth, "", new { @class = "text-danger" })
+
+                            @Html.DropDownListFor(m => m.ExpiryYear,
+                                new SelectList(new[] { "2024", "2025", "2026", "2027", "2028", "2029", "2030" }),
+                                "Anul",
+                                new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.ExpiryYear, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="cards">
+                            <img src="~/Content/images/mc.png" alt="Mastercard">
+                            <img src="~/Content/images/pp.png" alt="PayPal">
+                            <img src="~/Content/images/vi.png" alt="Visa">
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="btn button">Confirmă plata</button>
+            }
+        </div>
     </div>
 </div>
+
+<style>
+    .payment-page {
+        padding: 50px 0;
+        background-color: #f9f9f9;
+    }
+
+    .payment-container {
+        display: flex;
+        max-width: 1200px;
+        margin: 0 auto;
+        gap: 30px;
+    }
+
+    
+
+    .order-summary {
+        flex: 1;
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        padding: 20px;
+    }
+
+    .payment-form {
+        flex: 1;
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        padding: 20px;
+    }
+
+    .cart-item-summary {
+        display: flex;
+        justify-content: space-between;
+        padding: 15px 0;
+        border-bottom: 1px solid #eee;
+    }
+
+    .item-details h4 {
+        margin: 0 0 5px 0;
+        color: #333;
+    }
+
+    .item-details p {
+        margin: 3px 0;
+        color: #666;
+        font-size: 14px;
+    }
+
+    .item-price {
+        font-weight: bold;
+        color: #ff4500;
+        font-size: 18px;
+    }
+
+    .cart-total-summary {
+        display: flex;
+        justify-content: space-between;
+        padding: 20px 0;
+        font-size: 18px;
+        font-weight: bold;
+        margin-top: 10px;
+        border-top: 2px solid #333;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+
+    .button {
+        background-color: #ff4500;
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 4px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        width: 100%;
+        margin-top: 20px;
+    }
+
+    .button:hover {
+        background-color: #e03e00;
+    }
+
+    .text-danger {
+        color: #dc3545;
+        font-size: 14px;
+        margin-top: 5px;
+        display: block;
+    }
+
+    .cards {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        margin-top: 10px;
+    }
+
+    .cards img {
+        height: 30px;
+    }
+</style>
 
 @section Scripts {
     <script>

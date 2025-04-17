@@ -14,8 +14,8 @@ namespace Web.Models
         public string CardHolderName { get; set; }
 
         [Required(ErrorMessage = "Numărul cardului este obligatoriu")]
-        [StringLength(13, MinimumLength = 13, ErrorMessage = "Numărul cardului trebuie să aibă 13 cifre")]
-        [RegularExpression(@"^[\d\s-]+$", ErrorMessage = "Numărul cardului poate conține doar cifre, spații și cratime")]
+        [StringLength(16, MinimumLength = 16, ErrorMessage = "Numărul cardului trebuie să aibă 16 cifre")]
+        [RegularExpression(@"^[\d\s-]+$", ErrorMessage = "Numărul cardului poate conține doar cifre, spații")]
         [Display(Name = "Număr card")]
         public string CardNumber { get; set; }
 

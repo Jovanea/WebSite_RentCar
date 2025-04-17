@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using Web.Models;
 using System.Data.Entity;
+using System.Data.SqlClient;
 using eUseControl.Domain.Entities.Car;
 
 namespace Web.Controllers
@@ -55,51 +56,91 @@ namespace Web.Controllers
         // POST: Payment/Process
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Process(CardDetails cardDetails, int bookingId)
+        public ActionResult Process(CardDetails cardDetails)
         {
+            if (Session["Id"] == null)
+            {
+                return RedirectToAction("Login", "Home");
+            }
+
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var booking = db.Bookings.Find(bookingId);
-                    if (booking == null)
+                    var cart = Session["Cart"] as List<Booking>;
+                    if (cart == null || cart.Count == 0)
                     {
-                        return HttpNotFound();
+                        return RedirectToAction("Carsection", "Home");
                     }
 
-                    // Verify that the booking belongs to the current user
-                    if (booking.UserId != (int)Session["UserID"])
-                    {
-                        return new HttpStatusCodeResult(System.Net.HttpStatusCode.Forbidden);
-                    }
+                    // Calculează suma totală a comenzii
+                    decimal totalAmount = cart.Sum(b => b.TotalAmount);
 
-                    // Process payment with payment gateway
-                    bool paymentSuccessful = ProcessPaymentWithGateway(cardDetails, booking.TotalAmount);
-
+                    // Simulează procesarea plății
+                    bool paymentSuccessful = ProcessPayment(cardDetails, totalAmount);
 
                     if (paymentSuccessful)
                     {
-                        // Create payment record
-                        var payment = new Payment
+                        using (var db = new ApplicationDbContext())
                         {
-                            BookingId = bookingId,
-                            Amount = booking.TotalAmount,
-                            PaymentDate = DateTime.Now,
-                            PaymentStatus = "Completed",
-                            TransactionId = Guid.NewGuid().ToString()
-                        };
+                            // Pentru fiecare mașină din coș
+                            foreach (var booking in cart)
+                            {
+                                // Actualizează booking-ul
+                                booking.Status = "Confirmed";
 
-                        db.Payments.Add(payment);
-                        booking.Status = "Paid";
-                        db.Entry(booking).State = EntityState.Modified;
+                                // Dacă booking-ul nu există deja în baza de date, adăugă-l
+                                var existingBooking = db.Bookings.Find(booking.BookingId);
+                                if (existingBooking == null)
+                                {
+                                    // Generează un ID nou pentru booking-urile create în sesiune
+                                   
+                                        booking.BookingId = 0; // Permite bazei de date să genereze ID-ul
+                                   
+                                }
+                                else
+                                {
+                                    // Actualizează booking-ul existent
+                                    existingBooking.Status = "Confirmed";
+                                    db.Entry(existingBooking).State = EntityState.Modified;
+                                }
 
-                        db.SaveChanges();
+                                // Creează o înregistrare de plată
+                                var payment = new Payment
+                                {
+                                    BookingId = 1,
+                                    Amount = 300,
+                                    PaymentDate = DateTime.Now,
+                                    PaymentStatus = "Completed",
+                                    TransactionId = Guid.NewGuid().ToString()
+                                };
 
-                        // Clear the booking from session
-                        Session.Remove("CurrentBooking");
+                                db.Payments.Add(payment);
+                            }
 
+                            // Salvează toate modificările în baza de date
+                            db.SaveChanges();
 
-                        return RedirectToAction("Success", new { id = payment.PaymentId });
+                            // Salvează informațiile pentru pagina de succes
+                            string transactionId = Guid.NewGuid().ToString();
+                            Session["TransactionId"] = transactionId;
+                            Session["PaymentAmount"] = totalAmount;
+                            Session["PaymentDate"] = DateTime.Now;
+                            Session["PaymentDetails"] = cart.Select(b => new
+                            {
+                                CarId = b.CarId,
+                                PickupDate = b.PickupDate,
+                                ReturnDate = b.ReturnDate,
+                                TotalAmount = b.TotalAmount
+                            }).ToList();
+
+                            // Golește coșul
+                            Session.Remove("Cart");
+                            Session.Remove("CurrentBooking");
+
+                            // Redirecționează către pagina de succes
+                            return RedirectToAction("Index");
+                        }
                     }
                     else
                     {
@@ -108,46 +149,57 @@ namespace Web.Controllers
                 }
                 catch (Exception ex)
                 {
-                    // Înregistrare eroare în jurnal
                     System.Diagnostics.Debug.WriteLine($"Eroare la procesarea plății: {ex.Message}");
                     ModelState.AddModelError("", "A apărut o eroare în timpul procesării plății. Vă rugăm să încercați mai târziu.");
                 }
-
             }
 
-            ViewBag.BookingId = bookingId;
-            ViewBag.Amount = db.Bookings.Find(bookingId).TotalAmount;
+            // În caz de eroare, reafișează formularul cu datele introduse
+            var cartForError = Session["Cart"] as List<Web.Models.Booking>;
+            ViewBag.TotalAmount = cartForError != null ? cartForError.Sum(b => b.TotalAmount) : 0;
+
             return View(cardDetails);
         }
 
-        // GET: Payment/Success
-        public ActionResult Success(int id)
+        private bool ProcessPayment(CardDetails cardDetails, decimal totalAmount)
         {
-            if (Session["UserID"] == null)
+            return true;
+        }
+
+        // GET: Payment/Success
+        public ActionResult Success()
+        {
+            if (Session["Id"] == null)
             {
                 return RedirectToAction("Login", "Home");
             }
 
-            var payment = db.Payments.Find(id);
-            if (payment == null)
-            {
-                return HttpNotFound();
-            }
+            // Transmitem informațiile despre plată către pagina de succes
+            ViewBag.TransactionId = Session["TransactionId"];
+            ViewBag.PaymentAmount = Session["PaymentAmount"];
+            ViewBag.PaymentDate = Session["PaymentDate"];
+            ViewBag.PaymentDetails = Session["PaymentDetails"];
 
-            // Verify that the payment belongs to the current user
-            var booking = db.Bookings.Find(payment.BookingId);
-            if (booking == null || booking.UserId != (int)Session["UserID"])
-            {
-                return new HttpStatusCodeResult(System.Net.HttpStatusCode.Forbidden);
-            }
-
-            return View(payment);
+            return View();
         }
 
         private bool ProcessPaymentWithGateway(CardDetails cardDetails, decimal amount)
         {
+            // Simulează o procesare de plată
+            // În aplicații reale, aici ar trebui să integrezi un serviciu de plăți real
             System.Threading.Thread.Sleep(1000);
 
+            // Validare simplificată a cardului (doar pentru demonstrație)
+            if (string.IsNullOrEmpty(cardDetails.CardNumber) ||
+                string.IsNullOrEmpty(cardDetails.CardHolderName) ||
+                string.IsNullOrEmpty(cardDetails.CVV) ||
+                string.IsNullOrEmpty(cardDetails.ExpiryMonth) ||
+                string.IsNullOrEmpty(cardDetails.ExpiryYear))
+            {
+                return false;
+            }
+
+            // Returnează succes pentru demonstrație
             return true;
         }
 

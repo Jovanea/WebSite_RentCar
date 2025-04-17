@@ -1,8 +1,5 @@
-﻿@model Web.Models.Payment
-
-@{
-    ViewBag.Title = "Payment Successful";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+﻿@{
+    ViewBag.Title = "Plată finalizată cu succes";
 }
 
 @Html.Partial("_Header")
@@ -10,27 +7,146 @@
 <div class="payment-success">
     <div class="success-container">
         <div class="success-icon">
-            <i class="fa fa-check-circle"></i>
+            <i class="fa-solid fa-circle-check"></i>
         </div>
-        <h2>Payment Successful!</h2>
+        <h2>Plată finalizată cu succes!</h2>
         <div class="payment-details">
-            <p>Thank you for your payment. Your booking has been confirmed.</p>
-            <div class="detail-row">
-                <span>Payment ID:</span>
-                <span>@Model.PaymentId</span>
-            </div>
-            <div class="detail-row">
-                <span>Amount Paid:</span>
-                <span>$@Model.Amount</span>
-            </div>
-            <div class="detail-row">
-                <span>Date:</span>
-                <span>@Model.PaymentDate.ToString("MM/dd/yyyy HH:mm")</span>
-            </div>
+            <p>Vă mulțumim pentru plată. Rezervarea dumneavoastră a fost confirmată.</p>
+
+            @if (ViewBag.TransactionId != null)
+            {
+                <div class="transaction-details">
+                    <div class="detail-row">
+                        <span class="label">ID Tranzacție:</span>
+                        <span class="value">@ViewBag.TransactionId</span>
+                    </div>
+
+                    @if (ViewBag.PaymentAmount != null)
+                    {
+                        <div class="detail-row">
+                            <span class="label">Suma plătită:</span>
+                            <span class="value">$@ViewBag.PaymentAmount</span>
+                        </div>
+                    }
+
+                    @if (ViewBag.PaymentDate != null)
+                    {
+                        <div class="detail-row">
+                            <span class="label">Data plății:</span>
+                            <span class="value">@(((DateTime)ViewBag.PaymentDate).ToString("dd/MM/yyyy HH:mm"))</span>
+                        </div>
+                    }
+                </div>
+            }
+
+            <p>Veți primi în curând un email cu detaliile rezervării.</p>
         </div>
         <div class="actions">
-            <a href="@Url.Action("Index", "Home")" class="button">Return to Home</a>
-            <a href="@Url.Action("Details", "Booking", new { id = Model.BookingId })" class="button">View Booking Details</a>
+            <a href="@Url.Action("Index", "Home")" class="button button-primary">Înapoi la pagina principală</a>
+            <a href="@Url.Action("Profile", "Home")" class="button button-secondary">Vizualizare profil</a>
         </div>
     </div>
 </div>
+
+<style>
+    .payment-success {
+        padding: 80px 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #f8f9fa;
+        min-height: 70vh;
+    }
+
+    .success-container {
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        padding: 40px;
+        text-align: center;
+        max-width: 600px;
+        width: 100%;
+    }
+
+    .success-icon {
+        margin-bottom: 20px;
+    }
+
+        .success-icon i {
+            font-size: 80px;
+            color: #4CAF50;
+        }
+
+    .payment-details {
+        margin: 30px 0;
+        font-size: 16px;
+        line-height: 1.6;
+    }
+
+    .transaction-details {
+        background-color: #f8f9fa;
+        padding: 20px;
+        border-radius: 8px;
+        margin: 20px 0;
+        text-align: left;
+    }
+
+    .detail-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #eee;
+    }
+
+        .detail-row:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+    .label {
+        font-weight: bold;
+        color: #555;
+    }
+
+    .value {
+        color: #333;
+    }
+
+    .actions {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin-top: 30px;
+        flex-wrap: wrap;
+    }
+
+    .button {
+        display: inline-block;
+        padding: 12px 24px;
+        border-radius: 6px;
+        font-weight: bold;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+    .button-primary {
+        background-color: #ff4500;
+        color: white;
+    }
+
+        .button-primary:hover {
+            background-color: #e63900;
+        }
+
+    .button-secondary {
+        background-color: #f1f1f1;
+        color: #333;
+        border: 1px solid #ddd;
+    }
+
+        .button-secondary:hover {
+            background-color: #e6e6e6;
+        }
+</style>

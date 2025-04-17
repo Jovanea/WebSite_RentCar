@@ -1,5 +1,6 @@
 ﻿@{
     ViewBag.Title = "Cos";
+    var cart = Session["Cart"] as List<Web.Models.Booking>;
 }
 
 @Html.Partial("_Header")
@@ -7,9 +8,223 @@
 <section class="cart">
     <div class="container">
         <h2>Coșul tău de închirieri</h2>
-        <div class="empty-cart">
-            <p>Coșul tău este gol. Adaugă o mașină pentru a începe procesul de închiriere.</p>
-            <a href="@Url.Action("Carsection","Home")" class="btn">Vezi mașinile disponibile</a>
-        </div>
+
+        @if (cart != null && cart.Count > 0)
+        {
+            <div class="cart-items">
+                @foreach (var booking in cart)
+                {
+                    string carName = "Mașina";
+                    string carImage = "/Content/images/cars_pexels_1.jpg";
+                    decimal pricePerDay = 0;
+
+                    switch (booking.CarId)
+                    {
+                        case 1:
+                            carName = "Range Rover";
+                            carImage = "/Content/images/cars_pexels_1.jpg";
+                            pricePerDay = 60;
+                            break;
+                        case 2:
+                            carName = "Mercedes";
+                            carImage = "/Content/images/cars_pexels_2.jpg";
+                            pricePerDay = 100;
+                            break;
+                        case 3:
+                            carName = "Range Rover Autobiography";
+                            carImage = "/Content/images/cars_pexels_3.jpg";
+                            pricePerDay = 600;
+                            break;
+                        case 4:
+                            carName = "Ferrari F12";
+                            carImage = "/Content/images/cars_pexels_4.jpg";
+                            pricePerDay = 500;
+                            break;
+                        case 5:
+                            carName = "Porsche GT3";
+                            carImage = "/Content/images/cars_pexels_5.jpg";
+                            pricePerDay = 700;
+                            break;
+                        case 6:
+                            carName = "Pagani Huayra";
+                            carImage = "/Content/images/cars_pexels_6.jpg";
+                            pricePerDay = 2000;
+                            break;
+                        case 7:
+                            carName = "Bugatti Tourbilion";
+                            carImage = "/Content/images/cars_pexels_7.jpg";
+                            pricePerDay = 5000;
+                            break;
+                        case 8:
+                            carName = "Bentley Bentayga";
+                            carImage = "/Content/images/cars_pexels_8.jpg";
+                            pricePerDay = 450;
+                            break;
+                        case 9:
+                            carName = "Rolls-Royce Phantom";
+                            carImage = "/Content/images/cars_pexels_9.jpg";
+                            pricePerDay = 1500;
+                            break;
+                        case 10:
+                            carName = "McLaren 720S";
+                            carImage = "/Content/images/cars_pexels_10.jpg";
+                            pricePerDay = 1000;
+                            break;
+                        case 11:
+                            carName = "BMW M5Cs";
+                            carImage = "/Content/images/cars_pexels_11.jpg";
+                            pricePerDay = 850;
+                            break;
+                        case 12:
+                            carName = "Lamborghini Urus";
+                            carImage = "/Content/images/cars_pexels_12.jpg";
+                            pricePerDay = 60;
+                            break;
+                    }
+
+                    <div class="cart-item">
+                        <div class="cart-item-image">
+                            <img src="@carImage" alt="@carName">
+                        </div>
+                        <div class="cart-item-details">
+                            <h3>@carName</h3>
+                            <div class="booking-details">
+                                <div class="detail">
+                                    <i class="fa-solid fa-calendar-check"></i>
+                                    <span>De la: @booking.PickupDate.ToString("dd/MM/yyyy")</span>
+                                </div>
+                                <div class="detail">
+                                    <i class="fa-solid fa-calendar-xmark"></i>
+                                    <span>Până la: @booking.ReturnDate.ToString("dd/MM/yyyy")</span>
+                                </div>
+                                <div class="detail">
+                                    <i class="fa-solid fa-dollar-sign"></i>
+                                    <span>Preț / zi: $@pricePerDay</span>
+                                </div>
+                                <div class="detail total">
+                                    <i class="fa-solid fa-money-bill"></i>
+                                    <span>Total: $@booking.TotalAmount</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                <div class="cart-total">
+                    <h3>Total general: $@cart.Sum(b => b.TotalAmount)</h3>
+                    <a href="@Url.Action("Pay", "Home")" class="btn-primary">Continuă spre plată</a>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="empty-cart">
+                <p>Coșul tău este gol. Adaugă o mașină pentru a începe procesul de închiriere.</p>
+                <a href="@Url.Action("Carsection","Home")" class="btn">Vezi mașinile disponibile</a>
+            </div>
+        }
     </div>
 </section>
+
+<style>
+    .cart {
+        padding: 60px 0;
+    }
+
+    .cart-items {
+        margin-top: 30px;
+    }
+
+    .cart-item {
+        display: flex;
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        margin-bottom: 20px;
+        overflow: hidden;
+    }
+
+    .cart-item-image {
+        width: 30%;
+        min-width: 200px;
+    }
+
+        .cart-item-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+    .cart-item-details {
+        padding: 20px;
+        flex: 1;
+    }
+
+        .cart-item-details h3 {
+            margin-top: 0;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+    .booking-details {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+    }
+
+    .detail {
+        display: flex;
+        align-items: center;
+    }
+
+        .detail i {
+            margin-right: 10px;
+            color: #ff4500;
+        }
+
+    .total {
+        font-weight: bold;
+    }
+
+    .cart-total {
+        margin-top: 30px;
+        text-align: right;
+    }
+
+    .btn-primary {
+        display: inline-block;
+        background: #ff4500;
+        color: white;
+        padding: 12px 24px;
+        border-radius: 4px;
+        text-decoration: none;
+        font-weight: bold;
+        margin-top: 15px;
+        border: none;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+
+        .btn-primary:hover {
+            background: #e03e00;
+        }
+
+    .empty-cart {
+        text-align: center;
+        padding: 40px 0;
+    }
+
+        .empty-cart p {
+            margin-bottom: 20px;
+            color: #777;
+        }
+
+    .btn {
+        display: inline-block;
+        background: #333;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 4px;
+        text-decoration: none;
+    }
+</style>

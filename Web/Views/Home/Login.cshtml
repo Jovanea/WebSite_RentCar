@@ -34,6 +34,14 @@
                     })
                 </div>
 
+                if (ViewBag.RedirectToPayment != null && ViewBag.RedirectToPayment)
+                {
+                    <input type="hidden" name="redirectToPayment" value="true" />
+                    <div class="alert">
+                        <p>Pentru a continua procesul de plată, vă rugăm să vă autentificați.</p>
+                    </div>
+                }
+
                 <button type="submit" class="button">Login</button>
 
                 <div class="login-links">
@@ -65,3 +73,14 @@
         });
     });
 </script>
+
+<style>
+    .alert {
+        background-color: #f8d7da;
+        color: #721c24;
+        padding: 10px;
+        border-radius: 4px;
+        margin-bottom: 15px;
+        border: 1px solid #f5c6cb;
+    }
+</style>

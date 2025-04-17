@@ -10,9 +10,9 @@ namespace Web.Models
     public class Payment
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int PaymentId { get; set; }
 
-        [Required]
         public int BookingId { get; set; }
 
         [Required]
@@ -24,7 +24,6 @@ namespace Web.Models
         [Required]
         public string PaymentStatus { get; set; }
 
-        [Required]
         public string TransactionId { get; set; }
 
         // Navigation property
