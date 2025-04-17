@@ -13,13 +13,13 @@
                 @Html.AntiForgeryToken()
                 <h2>Autentificare</h2>
                 <div class="input-group">
-                    @Html.Label("Username", "Email/Username", new { @class = "control-label" })
-                    @Html.TextBox("Username", null, new
+                    @Html.Label("Credential", "Email/Username", new { @class = "control-label" })
+                    @Html.TextBox("Credential", null, new
                     {
                         @class = "input-control",
                         placeholder = "example@gmail.com",
                         title = "Please enter your username",
-                        id = "username"
+                        id = "credential"
                     })
                 </div>
 
@@ -56,7 +56,7 @@
     $(function () {
         $("#LoginForm").validate({
             rules: {
-                Username: { required: true },
+                Credential: { required: true },
                 Password: { required: true }
             },
             submitHandler: function (form) {

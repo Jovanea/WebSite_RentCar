@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using eUseControl.BusinessLogic;
 using eUseControl.Domain.Entities.User;
 using eUseControl.Domain.Entities.Car;
+using eUseControl.BusinessLogic.Interfaces;
 
 
 
@@ -17,10 +18,12 @@ namespace Web.Controllers
     public class LogicController : Controller
     {
         private readonly ISession _session;
+        private readonly IUserApi _userApi;
         public LogicController()
         {
             var bl = new BusinessLogic();
             _session = bl.GetSessionBL();
+            _userApi = new UserApi();
         }
 
         // GET: Logic
@@ -42,9 +45,12 @@ namespace Web.Controllers
                     LoginIp = Request.UserHostAddress,
                     LoginDateTime = DateTime.Now
                 };
-                var userLogin = _session.UserLogin(data);
+                var userLogin = _userApi.UserLogin(data);
+
                 if (userLogin.Status)
                 {
+                    // Store user information in session
+                    Session["Id"] = login.Credential;
                     return RedirectToAction("Index", "Home");
                 }
                 else

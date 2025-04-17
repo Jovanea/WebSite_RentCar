@@ -1,0 +1,36 @@
+﻿@model Web.Models.Payment
+
+@{
+    ViewBag.Title = "Payment Successful";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@Html.Partial("_Header")
+
+<div class="payment-success">
+    <div class="success-container">
+        <div class="success-icon">
+            <i class="fa fa-check-circle"></i>
+        </div>
+        <h2>Payment Successful!</h2>
+        <div class="payment-details">
+            <p>Thank you for your payment. Your booking has been confirmed.</p>
+            <div class="detail-row">
+                <span>Payment ID:</span>
+                <span>@Model.PaymentId</span>
+            </div>
+            <div class="detail-row">
+                <span>Amount Paid:</span>
+                <span>$@Model.Amount</span>
+            </div>
+            <div class="detail-row">
+                <span>Date:</span>
+                <span>@Model.PaymentDate.ToString("MM/dd/yyyy HH:mm")</span>
+            </div>
+        </div>
+        <div class="actions">
+            <a href="@Url.Action("Index", "Home")" class="button">Return to Home</a>
+            <a href="@Url.Action("Details", "Booking", new { id = Model.BookingId })" class="button">View Booking Details</a>
+        </div>
+    </div>
+</div>

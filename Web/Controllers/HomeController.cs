@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using eUseControl.Domain.Entities.User;
 using eUseControl.BusinessLogic;
 using eUseControl.BusinessLogic.Interfaces;
+using Web.Models;
 
 namespace Web.Controllers
 {
@@ -22,6 +23,37 @@ namespace Web.Controllers
         public ActionResult Index()
         {
             return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Index(UserLogin login)
+        {
+            if (ModelState.IsValid)
+            {
+                ULoginData data = new ULoginData
+                {
+                    Credential = login.Credential,
+                    Password = login.Password,
+                    LoginIp = Request.UserHostAddress,
+                    LoginDateTime = DateTime.Now
+                };
+
+                var userLogin = _userApi.UserLogin(data);
+
+                if (userLogin.Status)
+                {
+                    // Store user information in session
+                    Session["Id"] = login.Credential;
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    ModelState.AddModelError("", userLogin.StatusMsg);
+                    return View("Login");
+                }
+            }
+            return View("Login");
         }
 
         public ActionResult Services()
@@ -80,7 +112,20 @@ namespace Web.Controllers
 
         public ActionResult Pay()
         {
-            return View();
+            // Check if user is logged in
+            if (Session["Id"] == null)
+            {
+                return RedirectToAction("Login", "Home");
+            }
+
+            // Get the booking from session or create a new one
+            var booking = Session["CurrentBooking"] as Booking;
+            if (booking == null)
+            {
+                return RedirectToAction("Carsection", "Home");
+            }
+
+            return RedirectToAction("Process", "Payment", new { bookingId = booking.BookingId });
         }
 
         public ActionResult LoginAdmin()

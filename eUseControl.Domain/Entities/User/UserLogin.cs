@@ -8,8 +8,8 @@ namespace eUseControl.Domain.Entities.User
 {
     public class UserLogin
     {
-        public bool Status { get; private set;}
-        public string StatusMsg { get; private set;}
+        public bool Status { get; set; }
+        public string StatusMsg { get; set; }
         public string Credential { get; set; }
         public string Password { get; set; }
         public UserLogin() { }

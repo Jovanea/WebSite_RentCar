@@ -6,5 +6,6 @@ namespace eUseControl.BusinessLogic.Interfaces
     public interface IUserApi
     {
         UserRegister UserRegister(URegisterData data);
+        UserLogin UserLogin(ULoginData data);
     }
 }
