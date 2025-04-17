@@ -1,8 +1,9 @@
 ﻿@{
     ViewBag.Title = "Cardetalies";
-    var carId = ViewContext.RouteData.Values["id"] as string;
-    int id = carId != null ? int.Parse(carId) : 1;
+    var carId = ViewBag.CarId != null ? ViewBag.CarId : 1;
 }
+
+@Html.Partial("_Header")
 
 <section class="car-details">
     <div class="container">
@@ -12,7 +13,7 @@
 
         <div class="car-details-content">
             <!-- Range Rover -->
-            @if (id == 1)
+            @if (carId == 1)
             {
                 <div class="car-images">
                     <div class="main-image">
@@ -64,7 +65,7 @@
             }
 
             <!-- Mercedes -->
-            @if (id == 2)
+            @if (carId == 2)
             {
                 <div class="car-images">
                     <div class="main-image">
@@ -107,7 +108,7 @@
             }
 
             <!-- Pagani -->
-            @if (id == 6)
+            @if (carId == 6)
             {
                 <div class="car-images">
                     <div class="main-image">
@@ -153,7 +154,7 @@
             <div class="centered-content">
                 <!-- Partea stângă - Descriere și specificații -->
                 <div class="description-section">
-                    @if (id == 1)
+                    @if (carId == 1)
                     {
                         <div class="car-description">
                             <h4>Descriere</h4>
@@ -181,7 +182,7 @@
                             </ul>
                         </div>
                     }
-                    @if (id == 2)
+                    @if (carId == 2)
                     {
                         <div class="car-description">
                             <h4>Descriere</h4>
@@ -197,7 +198,7 @@
                             </table>
                         </div>
                     }
-                    @if (id == 6)
+                    @if (carId == 6)
                     {
                         <div class="car-description">
                             <h4>Descriere</h4>
@@ -219,37 +220,109 @@
                 <!-- Partea dreaptă - Formular de rezervare -->
                 <div class="booking-section">
                     <h4>Rezervă acum</h4>
-                    <div class="date-picker">
-                        <div class="date-input">
-                            <label for="pickup-date">Data preluare:</label>
-                            <input type="date" id="pickup-date" name="pickup-date">
-                        </div>
-                        <div class="date-input">
-                            <label for="return-date">Data returnare:</label>
-                            <input type="date" id="return-date" name="return-date">
-                        </div>
-                    </div>
+                    @using (Html.BeginForm("AddToCart", "Home", FormMethod.Post, new { id = "booking-form" }))
+                    {
+                        <input type="hidden" name="carId" id="carId" value="@carId" />
+                        <input type="hidden" name="totalAmount" id="totalAmount" value="0" />
 
-                    <div class="booking-summary">
-                        <div class="summary-item">
-                            <span>Preț / zi:</span>
-                            <span id="daily-price">@(id == 1 ? "$60" : id == 2 ? "$100" : id == 6 ? "$2000" : "$0")</span>
+                        <div class="date-picker">
+                            <div class="date-input">
+                                <label for="pickupDate">Data preluare:</label>
+                                <input type="date" id="pickupDate" name="pickupDate" required>
+                            </div>
+                            <div class="date-input">
+                                <label for="returnDate">Data returnare:</label>
+                                <input type="date" id="returnDate" name="returnDate" required>
+                            </div>
                         </div>
-                        <div class="summary-item">
-                            <span>Zile:</span>
-                            <span id="days-count">0</span>
-                        </div>
-                        <div class="summary-item total">
-                            <span>Total:</span>
-                            <span id="total-price">$0</span>
-                        </div>
-                    </div>
 
-                    <button id="add-to-cart" class="btn-primary">
-                        <i class="fa-solid fa-cart-plus"></i> Rezervă acum
-                    </button>
+                        <div class="booking-summary">
+                            <div class="summary-item">
+                                <span>Preț / zi:</span>
+                                <span id="daily-price">@(carId == 1 ? "$60" : carId == 2 ? "$100" : carId == 3 ? "$600" : carId == 4 ? "$500" : carId == 5 ? "$700" : carId == 6 ? "$2000" : carId == 7 ? "$5000" : carId == 8 ? "$450" : carId == 9 ? "$1500" : carId == 10 ? "$1000" : carId == 11 ? "$850" : carId == 12 ? "$60" : "$0")</span>
+                            </div>
+                            <div class="summary-item">
+                                <span>Zile:</span>
+                                <span id="days-count">0</span>
+                            </div>
+                            <div class="summary-item total">
+                                <span>Total:</span>
+                                <span id="total-price">$0</span>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn-primary">
+                            <i class="fa-solid fa-cart-plus"></i> Rezervă acum
+                        </button>
+                    }
                 </div>
             </div>
         </div>
     </div>
 </section>
+
+<script>
+    // Funcție pentru schimbarea imaginii principale
+    function changeImage(src) {
+        document.getElementById('main-car-image').src = src;
+    }
+
+    // Calcularea prețului total bazat pe datele selectate
+    document.addEventListener('DOMContentLoaded', function () {
+        const pickupDateInput = document.getElementById('pickupDate');
+        const returnDateInput = document.getElementById('returnDate');
+        const daysCountElement = document.getElementById('days-count');
+        const totalPriceElement = document.getElementById('total-price');
+        const totalAmountInput = document.getElementById('totalAmount');
+        const dailyPriceElement = document.getElementById('daily-price');
+        const bookingForm = document.getElementById('booking-form');
+
+        // Setează data minimă la ziua curentă
+        const today = new Date();
+        const formattedDate = today.toISOString().split('T')[0];
+        pickupDateInput.min = formattedDate;
+
+        // Funcție pentru calcularea zilelor între două date
+        function calculateDays() {
+            const pickupDate = new Date(pickupDateInput.value);
+            const returnDate = new Date(returnDateInput.value);
+
+            if (pickupDate && returnDate && returnDate >= pickupDate) {
+                const diffTime = Math.abs(returnDate - pickupDate);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                return diffDays;
+            }
+            return 0;
+        }
+
+        // Funcție pentru actualizarea sumei totale
+        function updateTotal() {
+            const days = calculateDays();
+            daysCountElement.textContent = days;
+
+            const priceString = dailyPriceElement.textContent.replace('$', '');
+            const price = parseFloat(priceString);
+            const total = days * price;
+
+            totalPriceElement.textContent = '$' + total;
+            totalAmountInput.value = total;
+        }
+
+        // Adaugă event listener pentru schimbări de date
+        pickupDateInput.addEventListener('change', function () {
+            // Setează data minimă pentru returnare la data de preluare
+            returnDateInput.min = pickupDateInput.value;
+            updateTotal();
+        });
+
+        returnDateInput.addEventListener('change', updateTotal);
+
+        // Validare formular înainte de trimitere
+        bookingForm.addEventListener('submit', function (event) {
+            if (calculateDays() <= 0) {
+                event.preventDefault();
+                alert('Vă rugăm să selectați date valide pentru rezervare.');
+            }
+        });
+    });
+</script>

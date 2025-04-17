@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -8,6 +9,7 @@ using System.Web.Routing;
 using System.Web.Security;
 using System.Web.SessionState;
 using Web.App_Start;
+using Web.Models;
 
 namespace Web
 {
@@ -15,10 +17,12 @@ namespace Web
     {
         void Application_Start(object sender, EventArgs e)
         {
-            // Code that runs on application startup
-           AreaRegistration.RegisterAllAreas();
-           RouteConfig.RegisterRoutes(RouteTable.Routes);
+            // Inițializarea bazei de date
+            Database.SetInitializer(new ApplicationDbInitializer());
 
+            // Code that runs on application startup
+            AreaRegistration.RegisterAllAreas();
+            RouteConfig.RegisterRoutes(RouteTable.Routes);
 
             //Register Bundle Table
             BundleConfig.RegisterBundles(BundleTable.Bundles);

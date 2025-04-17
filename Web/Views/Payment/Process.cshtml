@@ -10,7 +10,7 @@
     <div class="pay-container">
         <h2>Complete Your Payment</h2>
 
-        @if (ViewBag.BookingId == null)
+        @if (ViewBag.BookingId != null)
         {
             <div class="alert alert-danger">
                 <p>Eroare: ID-ul rezervării lipsește. Vă rugăm să reveniți la pagina de selecție a mașinii și să încercați din nou.</p>
