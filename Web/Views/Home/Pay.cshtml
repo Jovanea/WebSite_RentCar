@@ -1,71 +1,90 @@
-﻿
+﻿@model Web.Models.CardDetails
 @{
-    ViewBag.Title = "Pay";
+    ViewBag.Title = "Payment";
 }
 
 @Html.Partial("_Header")
 
 <div class="pay-wrapper">
-    <div class="pay-container" id="payContainer">
-        <h2>Confirm Your Payment</h2>
-        <div class="first-row">
-            <div class=" owner">
-                <h4>Owner</h4>
-                <div class="input-field">
-                    <input type="text">
+    <div class="pay-container">
+        <h2>Complete Your Payment</h2>
+
+        @using (Html.BeginForm("Process", "Payment", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            <div class="first-row">
+                <div class="owner">
+                    <h4>Card Holder Name</h4>
+                    <div class="input-field">
+                        @Html.TextBoxFor(m => m.CardHolderName, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.CardHolderName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="cvv">
+                    <h4>CVV</h4>
+                    <div class="input-field">
+                        @Html.PasswordFor(m => m.CVV, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.CVV, "", new { @class = "text-danger" })
+                    </div>
                 </div>
             </div>
-            <div class="cvv">
-                <h4>CVV</h4>
-                <div class="input-field">
-                    <input type="password">
+            <div class="second-row">
+                <div class="card-number">
+                    <h4>Card Number</h4>
+                    <div class="input-field">
+                        @Html.TextBoxFor(m => m.CardNumber, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.CardNumber, "", new { @class = "text-danger" })
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="second-row">
-            <div class="card-number">
-                <h4>Card Number</h4>
-                <div class="input-field">
-                    <input type="text">
+            <div class="third-row">
+                <h4>Expiry Date</h4>
+                <div class="selection">
+                    <div class="date">
+                        @Html.DropDownListFor(m => m.ExpiryMonth,
+                            new SelectList(new[] { "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12" }),
+                            "Month",
+                            new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.ExpiryMonth, "", new { @class = "text-danger" })
+
+                        @Html.DropDownListFor(m => m.ExpiryYear,
+                            new SelectList(new[] { "2024", "2025", "2026", "2027", "2028", "2029", "2030" }),
+                            "Year",
+                            new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.ExpiryYear, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="cards">
+                        <img src="~/Content/images/mc.png" alt="Mastercard">
+                        <img src="~/Content/images/pp.png" alt="PayPal">
+                        <img src="~/Content/images/vi.png" alt="Visa">
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="third-row">
-            <h4>Data</h4>
-            <div class="selection">
-                <div class="date">
-                    <select name="months" id="months">
-                        <option value="Jan">Jan</option>
-                        <option value="Feb">Feb</option>
-                        <option value="Mar">Mar</option>
-                        <option value="Apr">Apr</option>
-                        <option value="May">May</option>
-                        <option value="Jun">Jun</option>
-                        <option value="Jul">Jul</option>
-                        <option value="Aug">Aug</option>
-                        <option value="Sep">Sep</option>
-                        <option value="Oct">Oct</option>
-                        <option value="Nov">Nov</option>
-                        <option value="Dec">Dec</option>
-                    </select>
-                    <select name="years" id="years">
-                        <option value="2025">2025</option>
-                        <option value="2024">2024</option>
-                        <option value="2023">2023</option>
-                        <option value="2022">2022</option>
-                        <option value="2021">2021</option>
-                        <option value="2020">2020</option>
-                    </select>
-                </div>
-                <div class="cards">
-                    <img src="~/Content/images/mc.png" alt="">
-                    <img src="~/Content/images/pp.png" alt="">
-                    <img src="~/Content/images/vi.png" alt="">
-                </div>
-            </div>
-        </div>
-        <button type="button" class="button" >Confirm</button>
+            <button type="submit" class="button">Confirm Payment</button>
+        }
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Format card number input
+            $('#CardNumber').on('input', function () {
+                $(this).val(function (index, value) {
+                    return value.replace(/\W/gi, '').replace(/(.{4})/g, '$1 ');
+                });
+            });
+
+            // Format CVV input
+            $('#CVV').on('input', function () {
+                $(this).val(function (index, value) {
+                    return value.replace(/\D/g, '');
+                });
+            });
+        });
+    </script>
+}
 
 

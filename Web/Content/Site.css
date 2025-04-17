@@ -1786,3 +1786,73 @@ section.container {
     letter-spacing: 1px;
     margin-top: 40px;
 }
+
+/*========================Success Payment======================*/
+
+
+.payment-success {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 150px);
+    padding: 3rem 0;
+    background: var(--color-bg);
+}
+
+.success-container {
+    background: var(--color-primary);
+    width: 100%;
+    max-width: 500px;
+    padding: 2.5rem;
+    border-radius: 1rem;
+    box-shadow: var(--shadow-1);
+    text-align: center;
+}
+
+.success-icon {
+    font-size: 4rem;
+    color: #28a745;
+    margin-bottom: 1rem;
+}
+
+.payment-details {
+    margin: 2rem 0;
+    text-align: left;
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #eee;
+}
+
+.actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+.button {
+    padding: 0.8rem 1.5rem;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    font-weight: 600;
+    transition: var(--transition);
+}
+
+    .button:first-child {
+        background: var(--color-secondary);
+        color: var(--color-text);
+    }
+
+    .button:last-child {
+        background: var(--color-primary);
+        color: var(--color-text);
+        border: 1px solid var(--color-secondary);
+    }
+
+    .button:hover {
+        opacity: 0.9;
+    }

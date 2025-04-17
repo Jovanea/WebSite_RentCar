@@ -45,5 +45,40 @@ namespace eUseControl.BusinessLogic
                 return new UserRegister { Status = true, StatusMsg = "Înregistrare reușită" };
             }
         }
+
+        public UserLogin UserLogin(ULoginData data)
+        {
+            using (var db = new UserContext())
+            {
+                // Check if user exists with the given credentials (username/email and password)
+                var user = db.Users.FirstOrDefault(u =>
+                    (u.Username == data.Credential || u.Email == data.Credential) &&
+                    u.Password == data.Password);
+
+                if (user != null)
+                {
+                    // Update last login time and IP
+                    user.Last_Login = DateTime.Now;
+                    user.UserIp = data.LoginIp;
+                    db.SaveChanges();
+
+                    return new UserLogin
+                    {
+                        Status = true,
+                        StatusMsg = "Autentificare reușită!",
+                        Credential = data.Credential,
+                        Password = data.Password
+                    };
+                }
+
+                return new UserLogin
+                {
+                    Status = false,
+                    StatusMsg = "Credențiale incorecte. Vă rugăm să verificați username-ul/email-ul și parola.",
+                    Credential = data.Credential,
+                    Password = data.Password
+                };
+            }
+        }
     }
 }
