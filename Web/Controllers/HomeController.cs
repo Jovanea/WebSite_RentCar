@@ -20,7 +20,6 @@ namespace Web.Controllers
             _userApi = new UserApi();
         }
 
-        // GET: Home
         public ActionResult Index()
         {
             return View();
@@ -44,19 +43,16 @@ namespace Web.Controllers
 
                 if (userLogin.Status)
                 {
-                    // Store user information in session
                     Session["Id"] = userLogin.Id;
                     Session["UserName"] = userLogin.Credential;
                     Session["Email"] = login.Credential;
                     Session["Phone"] = userLogin.Phone;
 
-                    // Verifică dacă există un URL de retur
                     if (Request.Form["returnUrl"] != null)
                     {
                         return Redirect(Request.Form["returnUrl"]);
                     }
 
-                    // Verifică dacă trebuie să redirecționeze către plată
                     if (Request.Form["redirectToPayment"] != null && Request.Form["redirectToPayment"].ToString() == "true")
                     {
                         return RedirectToAction("Pay", "Home");
@@ -96,19 +92,16 @@ namespace Web.Controllers
 
         public ActionResult Login()
         {
-            // Dacă utilizatorul este deja autentificat
             if (Session["Id"] != null)
             {
                 return RedirectToAction("Index");
             }
 
-            // Verifică dacă utilizatorul vine de la pagina de coș (pentru plată)
             if (TempData["RedirectToPayment"] != null && (bool)TempData["RedirectToPayment"])
             {
                 ViewBag.RedirectToPayment = true;
             }
 
-            // Salvează URL-ul anterior pentru redirecționare după login
             if (TempData["ReturnUrl"] != null)
             {
                 ViewBag.ReturnUrl = TempData["ReturnUrl"].ToString();
@@ -153,7 +146,6 @@ namespace Web.Controllers
                 return RedirectToAction("Login");
             }
 
-            // Ia coșul din sesiune și pune-l în ViewBag
             var cart = Session["Cart"] as List<Web.Models.Booking>;
             ViewBag.CartBookings = cart;
 
@@ -162,24 +154,20 @@ namespace Web.Controllers
 
         public ActionResult Pay()
         {
-            // Check if user is logged in
             if (Session["Id"] == null)
             {
-                // Setează flag pentru redirecționare după login
                 TempData["RedirectToPayment"] = true;
                 return RedirectToAction("Login", "Home");
             }
 
-            // Get the booking from session or create a new one
             var cart = Session["Cart"] as List<Web.Models.Booking>;
             if (cart == null || cart.Count == 0)
             {
                 return RedirectToAction("Carsection", "Home");
             }
 
-            // Pregătește datele pentru plată
             ViewBag.TotalAmount = cart.Sum(b => b.TotalAmount);
-            ViewBag.Username = Session["UserName"]; // Adăugăm username-ul pentru afișare
+            ViewBag.Username = Session["UserName"];
 
             return View();
         }
@@ -203,32 +191,25 @@ namespace Web.Controllers
                         return RedirectToAction("Carsection", "Home");
                     }
 
-                    // Calculează suma totală a comenzii
                     decimal totalAmount = cart.Sum(b => b.TotalAmount);
 
-                    // Simulează procesarea plății
                     bool paymentSuccessful = ProcessPayment(cardDetails, totalAmount);
 
                     if (paymentSuccessful)
                     {
                         using (var db = new ApplicationDbContext())
                         {
-                            // Pentru fiecare booking din coș
                             foreach (var booking in cart)
                             {
-                                // Actualizează booking-ul
                                 booking.Status = "Confirmed";
 
-                                // Dacă booking-ul nu există deja în baza de date, adăugă-l
                                 var existingBooking = db.Bookings.Find(booking.BookingId);
 
                                 if (existingBooking != null)
                                 {
-                                    // Actualizează booking-ul existent
                                     existingBooking.Status = "Confirmed";
                                     db.Entry(existingBooking).State = System.Data.Entity.EntityState.Modified;
 
-                                    // Creează o înregistrare de plată
                                     var payment = new Payment
                                     {
                                         BookingId = booking.BookingId,
@@ -241,10 +222,8 @@ namespace Web.Controllers
                                 }
                             }
 
-                            // Salvează toate modificările în baza de date
                             db.SaveChanges();
 
-                            // Salvează informațiile pentru pagina de succes
                             string transactionId = Guid.NewGuid().ToString();
                             Session["TransactionId"] = transactionId;
                             Session["PaymentAmount"] = totalAmount;
@@ -257,11 +236,9 @@ namespace Web.Controllers
                                 TotalAmount = b.TotalAmount
                             }).ToList();
 
-                            // Golește coșul
                             Session.Remove("Cart");
                             Session.Remove("CurrentBooking");
 
-                            // Redirecționează către pagina de succes
                             return RedirectToAction("Index");
                         }
                     }
@@ -281,11 +258,8 @@ namespace Web.Controllers
 
         private bool ProcessPayment(CardDetails cardDetails, decimal amount)
         {
-            // Simulează o procesare de plată
-            // În aplicații reale, aici ar trebui să integrezi un serviciu de plăți real
             System.Threading.Thread.Sleep(1000);
 
-            // Validare simplificată a cardului (doar pentru demonstrație)
             if (string.IsNullOrEmpty(cardDetails.CardNumber) ||
                 string.IsNullOrEmpty(cardDetails.CardHolderName) ||
                 string.IsNullOrEmpty(cardDetails.CVV) ||
@@ -295,7 +269,6 @@ namespace Web.Controllers
                 return false;
             }
 
-            // Returnează succes pentru demonstrație
             return true;
         }
 
@@ -322,7 +295,6 @@ namespace Web.Controllers
 
                 if (registerResponse.Status)
                 {
-                    // Setăm datele în sesiune după înregistrare reușită
                     Session["Id"] = registerData.UserName;
                     Session["UserName"] = registerData.UserName;
                     Session["Email"] = registerData.Email;
@@ -350,7 +322,6 @@ namespace Web.Controllers
                 return RedirectToAction("Login");
             }
 
-            // Validări pentru datele de rezervare
             if (returnDate <= pickupDate)
             {
                 ModelState.AddModelError("", "Data de returnare trebuie să fie mai mare decât data de împrumutare.");
@@ -370,7 +341,6 @@ namespace Web.Controllers
                 return View("Cardetalies");
             }
 
-            // Obține prețul pe zi pentru mașina selectată
             decimal pricePerDay = 0;
             switch (carId)
             {
@@ -391,10 +361,8 @@ namespace Web.Controllers
                     return RedirectToAction("Carsection");
             }
 
-            // Calculează suma totală
             decimal calculatedTotal = pricePerDay * (returnDate - pickupDate).Days;
 
-            // Verifică dacă suma totală calculată se potrivește cu cea primită
             if (Math.Abs(calculatedTotal - totalAmount) > 0.01m)
             {
                 TempData["Error"] = "Suma totală calculată nu se potrivește cu cea așteptată.";
@@ -403,7 +371,6 @@ namespace Web.Controllers
 
             try
             {
-                // Creez un nou booking și îl salvez în baza de date
                 using (var db = new ApplicationDbContext())
                 {
                     var booking = new Web.Models.Booking
@@ -419,7 +386,6 @@ namespace Web.Controllers
                     db.Bookings.Add(booking);
                     db.SaveChanges();
 
-                    // Adaug în coș după ce am salvat în baza de date pentru a avea BookingId
                     List<Web.Models.Booking> cart = Session["Cart"] as List<Web.Models.Booking>;
                     if (cart == null)
                     {
@@ -428,7 +394,6 @@ namespace Web.Controllers
                     cart.Add(booking);
                     Session["Cart"] = cart;
 
-                    // Redirect către pagina Coș
                     return RedirectToAction("Cos", "Home");
                 }
             }
@@ -461,36 +426,29 @@ namespace Web.Controllers
                         return RedirectToAction("Profile");
                     }
 
-                    // Verifică dacă noul username există deja (dacă s-a schimbat)
                     if (UserName != currentUsername && db.Users.Any(u => u.UserName == UserName))
                     {
                         TempData["ErrorMessage"] = "Acest nume de utilizator există deja.";
                         return RedirectToAction("Profile");
                     }
-
-                    // Verifică dacă noul email există deja (dacă s-a schimbat)
                     if (Email != user.Email && db.Users.Any(u => u.Email == Email))
                     {
                         TempData["ErrorMessage"] = "Acest email există deja.";
                         return RedirectToAction("Profile");
                     }
 
-                    // Verifică dacă noul numar există deja (dacă s-a schimbat)
                     if (Phone != user.Phone && db.Users.Any(u => u.Phone == Phone))
                     {
                         TempData["ErrorMessage"] = "Acest telefon există deja.";
                         return RedirectToAction("Profile");
                     }
 
-                    // Actualizează datele în baza de date
                     user.UserName = UserName;
                     user.Email = Email;
                     user.Phone = Phone;
 
-                    // Salvează modificările în baza de date
                     db.SaveChanges();
 
-                    // Actualizează sesiunea
                     Session["Id"] = UserName;
                     Session["UserName"] = UserName;
                     Session["Email"] = Email;
@@ -528,7 +486,6 @@ namespace Web.Controllers
                 using (var db = new eUseControl.BusinessLogic.Core.DBModel.UserContext())
                 {
                     string username = Session["Id"].ToString();
-                    // Get the user by username (stored in Session["Id"])
                     var user = db.Users.FirstOrDefault(u => u.UserName == username);
 
                     if (user == null)
@@ -537,19 +494,16 @@ namespace Web.Controllers
                         return RedirectToAction("Profile");
                     }
 
-                    // Verify current password
                     if (user.Password != CurrentPassword)
                     {
                         TempData["ErrorMessage"] = "Parola curentă este incorectă.";
                         return RedirectToAction("Profile");
                     }
 
-                    // Update password
                     user.Password = NewPassword;
 
                     try
                     {
-                        // Save changes to database
                         db.SaveChanges();
                         TempData["SuccessMessage"] = "Parola a fost schimbată cu succes!";
                     }
@@ -573,11 +527,9 @@ namespace Web.Controllers
 
         public ActionResult Logout()
         {
-            // Clear all session variables
             Session.Clear();
             Session.Abandon();
 
-            // Redirect to login page
             return RedirectToAction("Login");
         }
 

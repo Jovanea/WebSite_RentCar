@@ -73,21 +73,18 @@
 @section Scripts {
     <script>
         $(document).ready(function () {
-            // Format card number input
             $('#CardNumber').on('input', function () {
                 $(this).val(function (index, value) {
                     return value.replace(/\W/gi, '').replace(/(.{4})/g, '$1 ').trim();
                 });
             });
 
-            // Format CVV input
             $('#CVV').on('input', function () {
                 $(this).val(function (index, value) {
                     return value.replace(/\D/g, '');
                 });
             });
 
-            // Format expiry month
             $('#ExpiryMonth').on('input', function () {
                 $(this).val(function (index, value) {
                     value = value.replace(/\D/g, '');
@@ -100,14 +97,12 @@
                 });
             });
 
-            // Format expiry year
             $('#ExpiryYear').on('input', function () {
                 $(this).val(function (index, value) {
                     return value.replace(/\D/g, '');
                 });
             });
 
-            // Validare formular
             $('.payment-form').on('submit', function (e) {
                 var cardNumber = $('#CardNumber').val().replace(/\s/g, '');
                 var cvv = $('#CVV').val();

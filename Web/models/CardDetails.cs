@@ -39,7 +39,7 @@ namespace Web.Models
             if (string.IsNullOrEmpty(ExpiryMonth) || string.IsNullOrEmpty(ExpiryYear))
                 return false;
 
-            int currentYear = DateTime.Now.Year % 100; // Obține ultimele 2 cifre ale anului curent
+            int currentYear = DateTime.Now.Year % 100; 
             int currentMonth = DateTime.Now.Month;
             int expiryYear = int.Parse(ExpiryYear);
             int expiryMonth = int.Parse(ExpiryMonth);

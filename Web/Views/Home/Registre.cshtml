@@ -8,8 +8,8 @@
 
 @Html.Partial("_Header")
 
-<div class="container">
-    <div class="registration-container" id="registrationContainer">
+<div class="container11">
+    <div class="registration-container" id="registrationContainer" style="display: @(ViewBag.SuccessMessage == null ? "fixed" : "none")">
         <h2>Înregistrare DriveNow</h2>
         @using (Html.BeginForm("Register", "Home", FormMethod.Post))
         {
@@ -55,8 +55,8 @@
         <p>Ai deja cont? <a href="login" class="login-link">Autentifică-te</a></p>
     </div>
 
-    <div class="success-container" id="successContainer" style="display: @(ViewBag.SuccessMessage != null ? "flex" : "none")">
-        <div class="success-message-box">
+    <div class="successReg-container" id="successContainer" style="display: @(ViewBag.SuccessMessage != null ? "flex" : "none"); justify-content: center; align-items: center; margin-top: 128px;">
+        <div class="successReg-message-box">
             <span class="success-message">Înregistrare reușită!</span>
             <span class="success-text">
                 Contul tău a fost creat cu succes. Poți începe să închiriezi mașini!
@@ -66,7 +66,13 @@
             </button>
         </div>
     </div>
+
+
 </div>
+
+
+
+
 
 @section Scripts {
     <script src="~/Scripts/jquery.validate.min.js"></script>

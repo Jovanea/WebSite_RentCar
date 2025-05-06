@@ -124,7 +124,6 @@
         <button class="add-button" onclick="toggleAddVehicleForm()">+ Adaugă Vehicul</button>
         <button class="view-available-button" onclick="viewAvailableVehicles()">Vezi Vehicule Disponibile</button>
 
-        <!-- Formular pentru adăugare vehicul -->
         <div id="addVehicleForm">
             <h3>Adaugă Detalii Vehicul</h3>
             <div class="form-group">
@@ -210,7 +209,6 @@
                     <td><button class="delete-btn" onclick="deleteVehicle(this)">Șterge</button></td>
                 `;
 
-            // Resetează formularul și ascunde-l după adăugarea vehiculului
             document.getElementById("carBrand").value = "BMW";
             document.getElementById("carModel").value = "";
             document.getElementById("carYear").value = "";
@@ -223,7 +221,7 @@
         }
 
         function viewAvailableVehicles() {
-            window.location.href = "Carsection"; // Redirect to the carsection page
+            window.location.href = "Carsection"; 
         }
     </script>
 </body>

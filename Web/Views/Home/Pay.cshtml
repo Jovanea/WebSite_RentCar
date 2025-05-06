@@ -107,14 +107,12 @@
 @section Scripts {
     <script>
         $(document).ready(function () {
-            // Format card number input
             $('#CardNumber').on('input', function () {
                 $(this).val(function (index, value) {
                     return value.replace(/\W/gi, '').replace(/(.{4})/g, '$1 ');
                 });
             });
 
-            // Format CVV input
             $('#CVV').on('input', function () {
                 $(this).val(function (index, value) {
                     return value.replace(/\D/g, '');

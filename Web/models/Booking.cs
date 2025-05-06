@@ -30,7 +30,6 @@ namespace Web.Models
         [Required]
         public string Status { get; set; }
 
-        // Navigation property
         public virtual Payment Payment { get; set; }
     }
 }

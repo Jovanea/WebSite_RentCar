@@ -26,7 +26,6 @@ namespace eUseControl.Domain.Entities.User
                 return;
             }
 
-            // Constructor gol - logica de autentificare este în UserApi
             Status = false;
             StatusMsg = "Necesită autentificare.";
             Credential = data.Credential;

@@ -26,42 +26,10 @@ namespace Web.Controllers
             _userApi = new UserApi();
         }
 
-        // GET: Logic
         public ActionResult Index()
         {
             return View();
         }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Index(UserLogin login)
-        {
-            if (ModelState.IsValid)
-            {
-                ULoginData data = new ULoginData
-                {
-                    Credential = login.Credential,
-                    Password = login.Password,
-                    LoginIp = Request.UserHostAddress,
-                    LoginDateTime = DateTime.Now
-                };
-                var userLogin = _userApi.UserLogin(data);
-
-                if (userLogin.Status)
-                {
-                    // Store user information in session
-                    Session["Id"] = login.Credential;
-                    return RedirectToAction("Index", "Home");
-                }
-                else
-                {
-                    ModelState.AddModelError("", userLogin.StatusMsg);
-                    return View();
-                }
-            }
-            return View();
-        }
-
 
         public class CarController : Controller
         {
@@ -117,7 +85,6 @@ namespace Web.Controllers
                 return View(carDetails);
             }
 
-            // POST: Car/Edit/5
             [HttpPost]
             [ValidateAntiForgeryToken]
             public ActionResult Edit(int id, CarDetails carDetails)
@@ -131,7 +98,6 @@ namespace Web.Controllers
                 return View(carDetails);
             }
 
-            // GET: Car/Delete/5
             public ActionResult Delete(int id)
             {
                 var carDetails = _carSession.GetCarDetails(id);
@@ -142,7 +108,7 @@ namespace Web.Controllers
                 return View(carDetails);
             }
 
-            // POST: Car/Delete/5
+
             [HttpPost, ActionName("Delete")]
             [ValidateAntiForgeryToken]
             public ActionResult DeleteConfirmed(int id)

@@ -26,7 +26,6 @@ namespace Web.Models
 
         public string TransactionId { get; set; }
 
-        // Navigation property
         public virtual Booking Booking { get; set; }
     }
 }

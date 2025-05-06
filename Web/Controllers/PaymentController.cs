@@ -14,7 +14,6 @@ namespace Web.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        // GET: Payment/Process
         public ActionResult Process()
         {
             if (Session["Id"] == null)
@@ -22,14 +21,12 @@ namespace Web.Controllers
                 return RedirectToAction("Login", "Home");
             }
 
-            // Get the cart from session
             var cart = Session["Cart"] as List<Booking>;
             if (cart == null || cart.Count == 0)
             {
                 return RedirectToAction("Carsection", "Home");
             }
 
-            // Calculate total amount from all bookings
             decimal totalAmount = cart.Sum(b => b.TotalAmount);
 
 
@@ -40,7 +37,6 @@ namespace Web.Controllers
             return View(model);
         }
 
-        // POST: Payment/Process
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Process(CardDetails cardDetails)
@@ -65,7 +61,6 @@ namespace Web.Controllers
             }
 
 
-            // Validare suplimentară pentru numărul cardului
             if (!cardDetails.IsNumberValid())
             {
                 ModelState.AddModelError("", "Numărul cardului este invalid. Vă rugăm să introduceți un număr valid de 16 cifre.");
@@ -73,7 +68,6 @@ namespace Web.Controllers
                 return View(cardDetails);
             }
 
-            // Validare suplimentară pentru data de expirare
             if (!cardDetails.IsExpiryDateValid())
             {
                 ModelState.AddModelError("", "Data de expirare a cardului este invalidă sau a expirat.");
@@ -104,7 +98,7 @@ namespace Web.Controllers
                 ViewBag.Amount = totalAmount;
                 return View(cardDetails);
             }
-            // Simulate payment processing
+            
             bool paymentSuccessful = ProcessPayment(cardDetails, totalAmount);
 
             if (paymentSuccessful)
@@ -115,7 +109,7 @@ namespace Web.Controllers
                     {
                         foreach (var booking in cart)
                         {
-                            // Update booking status
+                        
                             booking.Status = "Confirmed";
                             db.Entry(booking).State = EntityState.Modified;
 
@@ -123,7 +117,6 @@ namespace Web.Controllers
 
                         transaction.Commit();
 
-                        // Set session data for success page
                         Session["TransactionId"] = Guid.NewGuid().ToString();
                         Session["PaymentAmount"] = totalAmount;
                         Session["PaymentDate"] = DateTime.Now;
@@ -135,7 +128,6 @@ namespace Web.Controllers
                             TotalAmount = b.TotalAmount
                         }).ToList();
 
-                        // Clear cart
                         Session.Remove("Cart");
                         Session.Remove("CurrentBooking");
 
@@ -210,8 +202,7 @@ namespace Web.Controllers
                     return false;
                 }
 
-                //System.Threading.Thread.Sleep(1000); // Simulăm o mică întârziere
-                return true; // Forțează succesul pentru testare
+                return true;
             }
             catch (Exception ex)
             {
@@ -220,7 +211,6 @@ namespace Web.Controllers
             }
         }
 
-        // GET: Payment/Success
         public ActionResult Success()
         {
             if (Session["Id"] == null)
@@ -228,7 +218,6 @@ namespace Web.Controllers
                 return RedirectToAction("Login", "Home");
             }
 
-            // Transmitem informațiile despre plată către pagina de succes
             ViewBag.TransactionId = Session["TransactionId"];
             ViewBag.PaymentAmount = Session["PaymentAmount"];
             ViewBag.PaymentDate = Session["PaymentDate"];
@@ -239,11 +228,8 @@ namespace Web.Controllers
 
         private bool ProcessPaymentWithGateway(CardDetails cardDetails, decimal amount)
         {
-            // Simulează o procesare de plată
-            // În aplicații reale, aici ar trebui să integrezi un serviciu de plăți real
             System.Threading.Thread.Sleep(1000);
 
-            // Validare simplificată a cardului (doar pentru demonstrație)
             if (string.IsNullOrEmpty(cardDetails.CardNumber) ||
                 string.IsNullOrEmpty(cardDetails.CardHolderName) ||
                 string.IsNullOrEmpty(cardDetails.CVV) ||
@@ -253,7 +239,6 @@ namespace Web.Controllers
                 return false;
             }
 
-            // Returnează succes pentru demonstrație
             return true;
         }
 

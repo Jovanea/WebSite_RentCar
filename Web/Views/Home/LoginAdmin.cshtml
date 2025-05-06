@@ -4,7 +4,6 @@
 @Html.Partial("_Header")
 
 <div class="profile-wrapper">
-    <!-- Formularul de autentificare administrator -->
     <div class="login-container" id="adminLoginContainer">
         <h2>Autentificare Administrator</h2>
         <form action="AdminManagement.html" method="post">
@@ -27,7 +26,6 @@
         let email = document.getElementById('admin-email').value;
         let password = document.getElementById('admin-password').value;
 
-        // Simulare autentificare reușită (poți înlocui cu un sistem de autentificare real)
         if (email && password) {
             window.location.href = "AdminManagment";
         } else {

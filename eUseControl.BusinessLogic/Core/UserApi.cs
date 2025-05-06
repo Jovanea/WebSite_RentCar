@@ -16,7 +16,6 @@ namespace eUseControl.BusinessLogic
             {
                 using (var db = new UserContext())
                 {
-                    // Check if username or email already exists
                     if (db.Users.Any(u => u.Email == data.Email))
                     {
                         return new UserRegister { Status = false, StatusMsg = "Acest email există deja" };
@@ -27,7 +26,6 @@ namespace eUseControl.BusinessLogic
                         return new UserRegister { Status = false, StatusMsg = "Acest nume de utilizator există deja" };
                     }
 
-                    // Create new user
                     var newUser = new UDbTable
                     {
                         UserName = data.UserName,
@@ -36,7 +34,7 @@ namespace eUseControl.BusinessLogic
                         Phone = data.Phone,
                         Last_Login = DateTime.Now,
                         UserIp = data.UserIp,
-                        Level = 0 // Default level for new users
+                        Level = 0 
                     };
 
                     db.Users.Add(newUser);
@@ -66,19 +64,16 @@ namespace eUseControl.BusinessLogic
             {
                 using (var db = new UserContext())
                 {
-                    // Check if user exists with the given credentials (email and password)
                     var user = db.Users.FirstOrDefault(u =>
                     (u.Email == data.Credential || u.UserName == data.Credential) &&
                      u.Password == data.Password);
 
                     if (user != null)
                     {
-                        // Update last login time and IP
                         user.Last_Login = DateTime.Now;
                         user.UserIp = data.LoginIp;
                         db.SaveChanges();
 
-                        // Create a new UserLogin object with all user information
                         var userLogin = new UserLogin(data)
                         {
                             Status = true,

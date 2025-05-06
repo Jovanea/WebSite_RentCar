@@ -10,41 +10,86 @@
         <div class="info">
             <h1>DriveNow - Închirieri auto rapide , oricând ai nevoie!</h1>
             <p>DriveNow îți oferă mașina perfectă exact când ai nevoie! Închiriază rapid, simplu și fără stres, cu o gamă variată de autoturisme pentru orice călătorie. Rezervă online și pornește la drum!</p>
-            <div class="booking-form">
-                <div class="form-group">
-                    <h5>Select Vehicle</h5>
-                    <select name="Car" id="">
-                        <option value="">Select</option>
-                        <option value="">Ferrari</option>
-                        <option value="">Lamborghini</option>
-                        <option value="">Pagani </option>
-                        <option value="">Bugatti </option>
-                        <option value="">Porsche</option>
-                        <option value="">Bentley</option>
-                        <option value="">Rolls-Royce</option>
-                        <option value="">Mercedes-Maybach</option>
-                        <option value="">McLaren</option>
-                        <option value="">Audi</option>
-                        <option value="">Range Rover</option>
-                        <option value="">BMW</option>
-                    </select>
+            <form id="booking-form" method="post" action="@Url.Action("AddToCart", "Home")">
+                @Html.AntiForgeryToken()
+                <div class="booking-form">
+                    <div class="form-group">
+                        <h5>Select Vehicle</h5>
+                        <select name="carId" id="carId" required>
+                            <option value="">Select</option>
+                            <option value="1">Range Rover - $60/zi</option>
+                            <option value="2">Mercedes - $100/zi</option>
+                            <option value="3">Range Rover Autobiography - $600/zi</option>
+                            <option value="4">Ferrari F12 - $500/zi</option>
+                            <option value="5">Porsche GT3 - $700/zi</option>
+                            <option value="6">Pagani Huayra - $2000/zi</option>
+                            <option value="7">Bugatti Tourbilion - $5000/zi</option>
+                            <option value="8">Bentley Bentayga - $450/zi</option>
+                            <option value="9">Rolls-Royce Phantom - $1500/zi</option>
+                            <option value="10">McLaren 720S - $1000/zi</option>
+                            <option value="11">BMW M5Cs - $850/zi</option>
+                            <option value="12">Lamborghini Urus - $60/zi</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="flex:1;">
+                        <h5>Pick up:</h5>
+                        <input type="date" name="pickupDate" id="pickupDate" required>
+                    </div>
+                    <div class="form-group" style="flex:1;">
+                        <h5>Drop off:</h5>
+                        <input type="date" name="returnDate" id="returnDate" required>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <h5>Pick up:</h5>
-                    <input type="date" name="Pick up"
-                           placeholder="Pick up">
-                </div>
-                <div class="form-group">
-                    <h5>Drop off:</h5>
-                    <input type="date" name="Drop off"
-                           placeholder="Drop off">
-                </div>
-            </div>
-            <button class="btn" onclick="window.location.href='@Url.Action("Carsection", "Home")'">Book</button>
-
+                <input type="hidden" name="totalAmount" id="totalAmount" value="0" />
+                <button type="submit" class="btn">Book</button>
+            </form>
         </div>
     </div>
 </section>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const carSelect = document.getElementById('carId');
+        const pickupDateInput = document.getElementById('pickupDate');
+        const returnDateInput = document.getElementById('returnDate');
+        const totalAmountInput = document.getElementById('totalAmount');
+
+        function updateTotal() {
+            const carId = carSelect.value;
+            const pickupDate = new Date(pickupDateInput.value);
+            const returnDate = new Date(returnDateInput.value);
+
+            if (carId && pickupDate && returnDate && !isNaN(pickupDate) && !isNaN(returnDate)) {
+                const diffTime = Math.abs(returnDate - pickupDate);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+                if (diffDays > 0) {
+                    let pricePerDay = 0;
+                    switch (parseInt(carId)) {
+                        case 1: pricePerDay = 60; break;
+                        case 2: pricePerDay = 100; break;
+                        case 3: pricePerDay = 600; break;
+                        case 4: pricePerDay = 500; break;
+                        case 5: pricePerDay = 700; break;
+                        case 6: pricePerDay = 2000; break;
+                        case 7: pricePerDay = 5000; break;
+                        case 8: pricePerDay = 450; break;
+                        case 9: pricePerDay = 1500; break;
+                        case 10: pricePerDay = 1000; break;
+                        case 11: pricePerDay = 850; break;
+                        case 12: pricePerDay = 60; break;
+                    }
+                    const total = diffDays * pricePerDay;
+                    totalAmountInput.value = total;
+                }
+            }
+        }
+
+        carSelect.addEventListener('change', updateTotal);
+        pickupDateInput.addEventListener('change', updateTotal);
+        returnDateInput.addEventListener('change', updateTotal);
+    });
+</script>
+
 <section class="works">
     <div class="title">
         <h3> Care sunt pașii de închiriere?</h3>
