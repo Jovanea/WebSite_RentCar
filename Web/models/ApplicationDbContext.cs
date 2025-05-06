@@ -23,7 +23,6 @@ namespace Web.Models
             Database.SetInitializer(new ApplicationDbInitializer());
         }
 
-        public DbSet<Payment> Payments { get; set; }
         public DbSet<Booking> Bookings { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

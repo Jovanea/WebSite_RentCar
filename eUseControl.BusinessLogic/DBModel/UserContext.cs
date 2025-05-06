@@ -12,7 +12,7 @@ namespace eUseControl.BusinessLogic.Core.DBModel
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<UDbTable>()
-                .Property(e => e.Username)
+                .Property(e => e.UserName)
                 .IsUnicode(false);
 
             modelBuilder.Entity<UDbTable>()

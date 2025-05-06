@@ -17,9 +17,9 @@
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
             <div class="input-group">
-                @Html.LabelFor(m => m.Username, "Nume și Prenume:", new { @class = "control-label" })
-                @Html.TextBoxFor(m => m.Username, new { @class = "input-control", id = "nume", required = "required" })
-                @Html.ValidationMessageFor(m => m.Username, "", new { @class = "text-danger" })
+                @Html.LabelFor(m => m.UserName, "UserName:", new { @class = "control-label" })
+                @Html.TextBoxFor(m => m.UserName, new { @class = "input-control", id = "UserName", required = "required" })
+                @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger" })
             </div>
 
             <div class="input-group">
@@ -39,6 +39,11 @@
                 <input type="password" id="confirm-password" name="confirm-password" class="input-control" required>
             </div>
 
+            <div class="input-group">
+                <label for="phone">Număr de telefon:</label>
+                <input type="tel" id="phone" name="Phone" class="input-control" required>
+            </div>
+
             <p class="terms-text">
                 Prin înregistrare, confirm că am citit și sunt de acord cu
                 <a href="#">Termenii și Condițiile</a> și
@@ -50,20 +55,17 @@
         <p>Ai deja cont? <a href="login" class="login-link">Autentifică-te</a></p>
     </div>
 
-    @if (ViewBag.SuccessMessage != null)
-    {
-        <div class="success-container" id="successContainer">
-            <div class="success-message-box">
-                <span class="success-message">Înregistrare reușită!</span>
-                <span class="success-text">
-                    Contul tău a fost creat cu succes. Poți începe să închiriezi mașini!
-                </span>
-                <button class="button" onclick="window.location.href='index'">
-                    Mergi la pagina principală
-                </button>
-            </div>
+    <div class="success-container" id="successContainer" style="display: @(ViewBag.SuccessMessage != null ? "flex" : "none")">
+        <div class="success-message-box">
+            <span class="success-message">Înregistrare reușită!</span>
+            <span class="success-text">
+                Contul tău a fost creat cu succes. Poți începe să închiriezi mașini!
+            </span>
+            <button class="button" onclick="window.location.href='index'">
+                Mergi la pagina principală
+            </button>
         </div>
-    }
+    </div>
 </div>
 
 @section Scripts {

@@ -2,6 +2,7 @@
 @{
     ViewBag.Title = "Payment";
     var cart = Session["Cart"] as List<Web.Models.Booking>;
+
 }
 
 @Html.Partial("_Header")
@@ -46,7 +47,7 @@
                         }
 
                         <div class="cart-total-summary">
-                            <span>Total:</span>
+                            <span>Total comandă:</span>
                             <span>$@(cart.Sum(b => b.TotalAmount))</span>
                         </div>
                     </div>
@@ -62,59 +63,67 @@
                 @Html.AntiForgeryToken()
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-                <div class="first-row">
-                    <div class="owner">
-                        <h4>Numele deținătorului cardului</h4>
-                        <div class="input-field">
-                            @Html.TextBoxFor(m => m.CardHolderName, new { @class = "form-control" })
-                            @Html.ValidationMessageFor(m => m.CardHolderName, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-                    <div class="cvv">
-                        <h4>CVV</h4>
-                        <div class="input-field">
-                            @Html.PasswordFor(m => m.CVV, new { @class = "form-control" })
-                            @Html.ValidationMessageFor(m => m.CVV, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-                </div>
-                <div class="second-row">
-                    <div class="card-number">
-                        <h4>Numărul cardului</h4>
-                        <div class="input-field">
-                            @Html.TextBoxFor(m => m.CardNumber, new { @class = "form-control" })
-                            @Html.ValidationMessageFor(m => m.CardNumber, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-                </div>
-                <div class="third-row">
-                    <h4>Data expirării</h4>
-                    <div class="selection">
-                        <div class="date">
-                            @Html.DropDownListFor(m => m.ExpiryMonth,
-                                new SelectList(new[] { "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12" }),
-                                "Luna",
-                                new { @class = "form-control" })
-                            @Html.ValidationMessageFor(m => m.ExpiryMonth, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(m => m.CardHolderName)
+            @Html.TextBoxFor(m => m.CardHolderName, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.CardHolderName, "", new { @class = "text-danger" })
+           
+        </div>
 
-                            @Html.DropDownListFor(m => m.ExpiryYear,
-                                new SelectList(new[] { "2024", "2025", "2026", "2027", "2028", "2029", "2030" }),
-                                "Anul",
-                                new { @class = "form-control" })
-                            @Html.ValidationMessageFor(m => m.ExpiryYear, "", new { @class = "text-danger" })
-                        </div>
-                        <div class="cards">
-                            <img src="~/Content/images/mc.png" alt="Mastercard">
-                            <img src="~/Content/images/pp.png" alt="PayPal">
-                            <img src="~/Content/images/vi.png" alt="Visa">
-                        </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.CardNumber)
+                    @Html.TextBoxFor(m => m.CardNumber, new { @class = "form-control", placeholder = "XXXX XXXX XXXX XXXX" })
+                    @Html.ValidationMessageFor(m => m.CardNumber, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        @Html.LabelFor(m => m.ExpiryMonth)
+                        @Html.TextBoxFor(m => m.ExpiryMonth, new { @class = "form-control", placeholder = "MM" })
+                        @Html.ValidationMessageFor(m => m.ExpiryMonth, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        @Html.LabelFor(m => m.ExpiryYear)
+                        @Html.TextBoxFor(m => m.ExpiryYear, new { @class = "form-control", placeholder = "YY" })
+                        @Html.ValidationMessageFor(m => m.ExpiryYear, "", new { @class = "text-danger" })
                     </div>
                 </div>
-                <button type="submit" class="btn button">Confirmă plata</button>
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.CVV)
+                    @Html.TextBoxFor(m => m.CVV, new { @class = "form-control", placeholder = "XXX" })
+                    @Html.ValidationMessageFor(m => m.CVV, "", new { @class = "text-danger" })
+                </div>
+
+                <button type="submit" class="btn-primary">
+                    <i class="fa-solid fa-lock"></i> Plătește $@(cart?.Sum(b => b.TotalAmount) ?? 0)
+                </button>
             }
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Format card number input
+            $('#CardNumber').on('input', function () {
+                $(this).val(function (index, value) {
+                    return value.replace(/\W/gi, '').replace(/(.{4})/g, '$1 ');
+                });
+            });
+
+            // Format CVV input
+            $('#CVV').on('input', function () {
+                $(this).val(function (index, value) {
+                    return value.replace(/\D/g, '');
+                });
+            });
+        });
+    </script>
+}
+
 
 <style>
     .payment-page {
@@ -129,7 +138,7 @@
         gap: 30px;
     }
 
-    
+
 
     .order-summary {
         flex: 1;
@@ -202,9 +211,9 @@
         margin-top: 20px;
     }
 
-    .button:hover {
-        background-color: #e03e00;
-    }
+        .button:hover {
+            background-color: #e03e00;
+        }
 
     .text-danger {
         color: #dc3545;
@@ -220,29 +229,9 @@
         margin-top: 10px;
     }
 
-    .cards img {
-        height: 30px;
-    }
+        .cards img {
+            height: 30px;
+        }
 </style>
-
-@section Scripts {
-    <script>
-        $(document).ready(function () {
-            // Format card number input
-            $('#CardNumber').on('input', function () {
-                $(this).val(function (index, value) {
-                    return value.replace(/\W/gi, '').replace(/(.{4})/g, '$1 ');
-                });
-            });
-
-            // Format CVV input
-            $('#CVV').on('input', function () {
-                $(this).val(function (index, value) {
-                    return value.replace(/\D/g, '');
-                });
-            });
-        });
-    </script>
-}
 
 

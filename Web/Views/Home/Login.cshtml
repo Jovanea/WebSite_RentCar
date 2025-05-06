@@ -7,20 +7,23 @@
 <div class="profile-wrapper">
     <div class="panel panel-filled">
         <div class="login-container" id="loginContainer">
-            @Html.ValidationSummary(true)
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { @id = "LoginForm" }))
             {
                 @Html.AntiForgeryToken()
                 <h2>Autentificare</h2>
                 <div class="input-group">
-                    @Html.Label("Credential", "Email/Username", new { @class = "control-label" })
+                    @Html.Label("Credential", "Email", new { @class = "control-label" })
                     @Html.TextBox("Credential", null, new
                     {
                         @class = "input-control",
                         placeholder = "example@gmail.com",
-                        title = "Please enter your username",
-                        id = "credential"
+                        title = "Please enter your email",
+                        id = "credential",
+                        type = "email",
+                        required = "required"
                     })
+                    <span class="text-danger" id="credential-error"></span>
                 </div>
 
                 <div class="input-group">
@@ -30,8 +33,11 @@
                         @class = "input-control",
                         title = "Please enter your password",
                         placeholder = "******",
-                        id = "password"
+                        id = "password",
+                        required = "required",
+                        minlength = "8"
                     })
+                    <span class="text-danger" id="password-error"></span>
                 </div>
 
                 if (ViewBag.RedirectToPayment != null && ViewBag.RedirectToPayment)
@@ -42,11 +48,15 @@
                     </div>
                 }
 
+                if (ViewBag.ReturnUrl != null)
+                {
+                    <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
+                }
+
                 <button type="submit" class="button">Login</button>
 
                 <div class="login-links">
                     <p>Nu ai cont? <a href="@Url.Action("Registre","Home")">Înregistrează-te</a></p>
-
                     <p><a href="@Url.Action("LoginAdmin","Home")" class="admin-login">Autentificare ca Administrator</a></p>
                 </div>
             }
@@ -60,27 +70,37 @@
     </div>
 </div>
 
-<script type="text/javascript">
-    $(function () {
-        $("#LoginForm").validate({
-            rules: {
-                Credential: { required: true },
-                Password: { required: true }
-            },
-            submitHandler: function (form) {
-                form.submit();
-            }
+@section Scripts {
+    <script>
+        $(function () {
+            $("#LoginForm").validate({
+                rules: {
+                    Credential: {
+                        required: true,
+                        email: true
+                    },
+                    Password: {
+                        required: true,
+                        minlength: 8
+                    }
+                },
+                messages: {
+                    Credential: {
+                        required: "Email-ul este obligatoriu",
+                        email: "Introduceți un email valid"
+                    },
+                    Password: {
+                        required: "Parola este obligatorie",
+                        minlength: "Parola trebuie să aibă cel puțin 8 caractere"
+                    }
+                },
+                errorPlacement: function (error, element) {
+                    error.appendTo(element.siblings(".text-danger"));
+                },
+                submitHandler: function (form) {
+                    form.submit();
+                }
+            });
         });
-    });
-</script>
-
-<style>
-    .alert {
-        background-color: #f8d7da;
-        color: #721c24;
-        padding: 10px;
-        border-radius: 4px;
-        margin-bottom: 15px;
-        border: 1px solid #f5c6cb;
-    }
-</style>
+    </script>
+}

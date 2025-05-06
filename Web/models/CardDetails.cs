@@ -14,24 +14,51 @@ namespace Web.Models
         public string CardHolderName { get; set; }
 
         [Required(ErrorMessage = "Numărul cardului este obligatoriu")]
-        [StringLength(16, MinimumLength = 16, ErrorMessage = "Numărul cardului trebuie să aibă 16 cifre")]
-        [RegularExpression(@"^[\d\s-]+$", ErrorMessage = "Numărul cardului poate conține doar cifre, spații")]
+        
         [Display(Name = "Număr card")]
         public string CardNumber { get; set; }
 
         [Required(ErrorMessage = "CVV-ul este obligatoriu")]
-        [StringLength(3, MinimumLength = 3, ErrorMessage = "CVV-ul trebuie să aibă 3 cifre")]
-        [RegularExpression(@"^\d+$", ErrorMessage = "CVV-ul poate conține doar cifre")]
         [Display(Name = "CVV")]
         public string CVV { get; set; }
 
         [Required(ErrorMessage = "Luna expirării este obligatorie")]
+        [RegularExpression(@"^(0[1-9]|1[0-2])$", ErrorMessage = "Luna expirării trebuie să fie între 01 și 12")]
         [Display(Name = "Lună expirare")]
         public string ExpiryMonth { get; set; }
 
         [Required(ErrorMessage = "Anul expirării este obligatoriu")]
+        [RegularExpression(@"^\d{2}$", ErrorMessage = "Anul expirării trebuie să fie format din 2 cifre")]
         [Display(Name = "An expirare")]
         public string ExpiryYear { get; set; }
-    }
 
+        public int BookingId { get; set; }
+
+        public bool IsExpiryDateValid()
+        {
+            if (string.IsNullOrEmpty(ExpiryMonth) || string.IsNullOrEmpty(ExpiryYear))
+                return false;
+
+            int currentYear = DateTime.Now.Year % 100; // Obține ultimele 2 cifre ale anului curent
+            int currentMonth = DateTime.Now.Month;
+            int expiryYear = int.Parse(ExpiryYear);
+            int expiryMonth = int.Parse(ExpiryMonth);
+
+            if (expiryYear < currentYear)
+                return false;
+
+            if (expiryYear == currentYear && expiryMonth < currentMonth)
+                return false;
+
+            return true;
+        }
+
+        public bool IsNumberValid()
+        {
+            if (string.IsNullOrEmpty(CardNumber) || CardNumber.Replace(" ", "").Length != 16)
+                return false;
+
+            return true;
+        }
+    }
 }

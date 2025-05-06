@@ -2,83 +2,69 @@
 
 @{
     ViewBag.Title = "Process Payment";
+    decimal amount = 0;
+    if (ViewBag.Amount != null)
+    {
+        decimal.TryParse(ViewBag.Amount.ToString(), out amount);
+    }
 }
 
 @Html.Partial("_Header")
 
 <div class="pay-wrapper">
     <div class="pay-container">
-        <h2>Complete Your Payment</h2>
+        <h2>Completează plata</h2>
 
-        @if (ViewBag.BookingId != null)
+        @if (amount <= 0)
         {
             <div class="alert alert-danger">
-                <p>Eroare: ID-ul rezervării lipsește. Vă rugăm să reveniți la pagina de selecție a mașinii și să încercați din nou.</p>
+                <p>Eroare: Suma de plată este invalidă. Vă rugăm să reveniți la pagina de selecție a mașinii și să încercați din nou.</p>
                 <a href="@Url.Action("Carsection", "Home")" class="button">Revenire la selecția mașinii</a>
             </div>
         }
         else
         {
+            @Html.ValidationSummary(true, "", new { @class = "alert alert-danger" })
+
             using (Html.BeginForm("Process", "Payment", FormMethod.Post, new { @class = "payment-form" }))
             {
                 @Html.AntiForgeryToken()
-                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                <input type="hidden" name="bookingId" value="@ViewBag.BookingId" />
-                <div class="payment-amount">
-                    <h4>Suma de plată</h4>
-                    <p class="amount">$@ViewBag.Amount</p>
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.CardHolderName)
+                    @Html.TextBoxFor(m => m.CardHolderName, new { @class = "form-control", placeholder = "Numele de pe card" })
+                    @Html.ValidationMessageFor(m => m.CardHolderName, "", new { @class = "text-danger" })
+                 </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.CardNumber)
+                    @Html.TextBoxFor(m => m.CardNumber, new { @class = "form-control", placeholder = "XXXX XXXX XXXX XXXX", maxlength = "19" })
+                    @Html.ValidationMessageFor(m => m.CardNumber, "", new { @class = "text-danger" })
                 </div>
 
-                <div class="first-row">
-                    <div class="owner">
-                        <h4>Numele deținătorului cardului</h4>
-                        <div class="input-field">
-                            @Html.TextBoxFor(m => m.CardHolderName, new { @class = "form-control" })
-                            @Html.ValidationMessageFor(m => m.CardHolderName, "", new { @class = "text-danger" })
-                        </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        @Html.LabelFor(m => m.ExpiryMonth)
+                        @Html.TextBoxFor(m => m.ExpiryMonth, new { @class = "form-control", placeholder = "MM", maxlength = "2" })
+                        @Html.ValidationMessageFor(m => m.ExpiryMonth, "", new { @class = "text-danger" })
                     </div>
-                    <div class="cvv">
-                        <h4>CVV</h4>
-                        <div class="input-field">
-                            @Html.PasswordFor(m => m.CVV, new { @class = "form-control" })
-                            @Html.ValidationMessageFor(m => m.CVV, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-                </div>
 
-                <div class="second-row">
-                    <div class="card-number">
-                        <h4>Numărul cardului</h4>
-                        <div class="input-field">
-                            @Html.TextBoxFor(m => m.CardNumber, new { @class = "form-control" })
-                            @Html.ValidationMessageFor(m => m.CardNumber, "", new { @class = "text-danger" })
-                        </div>
+                    <div class="form-group col-md-6">
+                        @Html.LabelFor(m => m.ExpiryYear)
+                        @Html.TextBoxFor(m => m.ExpiryYear, new { @class = "form-control", placeholder = "YY", maxlength = "2" })
+                        @Html.ValidationMessageFor(m => m.ExpiryYear, "", new { @class = "text-danger" })
                     </div>
                 </div>
 
-                <div class="third-row">
-                    <h4>Data expirării</h4>
-                    <div class="selection">
-                        <div class="date">
-                            @Html.DropDownListFor(m => m.ExpiryMonth,
-                               new SelectList(new[] { "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12" }),
-                               "Luna",
-                                new { @class = "form-control" })
-
-                           @Html.DropDownListFor(m => m.ExpiryYear,
-                               new SelectList(new[] { "2024", "2025", "2026", "2027", "2028", "2029", "2030" }),
-                               "Anul",
-                               new { @class = "form-control" })
-                        </div>
-                        <div class="cards">
-                            <img src="~/Content/images/mc.png" alt="Mastercard">
-                            <img src="~/Content/images/pp.png" alt="PayPal">
-                            <img src="~/Content/images/vi.png" alt="Visa">
-                        </div>
-                    </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.CVV)
+                    @Html.TextBoxFor(m => m.CVV, new { @class = "form-control", placeholder = "XXX", maxlength = "3" })
+                    @Html.ValidationMessageFor(m => m.CVV, "", new { @class = "text-danger" })
                 </div>
 
-                <button type="submit" class="button">Confirmă plata</button>
+                <button type="submit" class="btn-primary">
+                    <i class="fa-solid fa-lock"></i> Plătește $@amount
+                </button>
             }
         }
     </div>
@@ -90,7 +76,7 @@
             // Format card number input
             $('#CardNumber').on('input', function () {
                 $(this).val(function (index, value) {
-                    return value.replace(/\W/gi, '').replace(/(.{4})/g, '$1 ');
+                    return value.replace(/\W/gi, '').replace(/(.{4})/g, '$1 ').trim();
                 });
             });
 
@@ -99,6 +85,46 @@
                 $(this).val(function (index, value) {
                     return value.replace(/\D/g, '');
                 });
+            });
+
+            // Format expiry month
+            $('#ExpiryMonth').on('input', function () {
+                $(this).val(function (index, value) {
+                    value = value.replace(/\D/g, '');
+                    if (value.length > 0) {
+                        var month = parseInt(value);
+                        if (month > 12) value = '12';
+                        if (month < 0) value = '01';
+                    }
+                    return value;
+                });
+            });
+
+            // Format expiry year
+            $('#ExpiryYear').on('input', function () {
+                $(this).val(function (index, value) {
+                    return value.replace(/\D/g, '');
+                });
+            });
+
+            // Validare formular
+            $('.payment-form').on('submit', function (e) {
+                var cardNumber = $('#CardNumber').val().replace(/\s/g, '');
+                var cvv = $('#CVV').val();
+                var expiryMonth = $('#ExpiryMonth').val();
+                var expiryYear = $('#ExpiryYear').val();
+
+                
+
+                
+
+                if (expiryMonth.length !== 2 || expiryYear.length !== 2) {
+                    alert('Data de expirare trebuie să fie completată corect (MM/YY).');
+                    e.preventDefault();
+                    return false;
+                }
+
+                return true;
             });
         });
     </script>

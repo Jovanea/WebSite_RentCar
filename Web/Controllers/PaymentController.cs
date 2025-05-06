@@ -15,42 +15,29 @@ namespace Web.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Payment/Process
-        public ActionResult Process(int? bookingId)
+        public ActionResult Process()
         {
-            if (Session["UserID"] == null)
+            if (Session["Id"] == null)
             {
                 return RedirectToAction("Login", "Home");
             }
 
-            // If bookingId is not provided, try to get it from session
-            if (!bookingId.HasValue)
+            // Get the cart from session
+            var cart = Session["Cart"] as List<Booking>;
+            if (cart == null || cart.Count == 0)
             {
-                var booking = Session["CurrentBooking"] as Booking;
-                if (booking != null)
-                {
-                    bookingId = booking.BookingId;
-                }
-                else
-                {
-                    return RedirectToAction("Carsection", "Home");
-                }
+                return RedirectToAction("Carsection", "Home");
             }
 
-            var bookingFromDb = db.Bookings.Find(bookingId);
-            if (bookingFromDb == null)
-            {
-                return HttpNotFound();
-            }
+            // Calculate total amount from all bookings
+            decimal totalAmount = cart.Sum(b => b.TotalAmount);
 
-            // Verify that the booking belongs to the current user
-            if (bookingFromDb.UserId != (int)Session["UserID"])
-            {
-                return new HttpStatusCodeResult(System.Net.HttpStatusCode.Forbidden);
-            }
 
-            ViewBag.BookingId = bookingId;
-            ViewBag.Amount = bookingFromDb.TotalAmount;
-            return View(new CardDetails());
+            ViewBag.Amount = totalAmount;
+            System.Diagnostics.Debug.WriteLine($"DEBUG: Total Amount={totalAmount} ({totalAmount.GetType()})");
+
+            var model = new CardDetails();
+            return View(model);
         }
 
         // POST: Payment/Process
@@ -63,107 +50,174 @@ namespace Web.Controllers
                 return RedirectToAction("Login", "Home");
             }
 
-            if (ModelState.IsValid)
+            var cart = Session["Cart"] as List<Booking>;
+            if (cart == null || cart.Count == 0)
             {
-                try
-                {
-                    var cart = Session["Cart"] as List<Booking>;
-                    if (cart == null || cart.Count == 0)
-                    {
-                        return RedirectToAction("Carsection", "Home");
-                    }
-
-                    // Calculează suma totală a comenzii
-                    decimal totalAmount = cart.Sum(b => b.TotalAmount);
-
-                    // Simulează procesarea plății
-                    bool paymentSuccessful = ProcessPayment(cardDetails, totalAmount);
-
-                    if (paymentSuccessful)
-                    {
-                        using (var db = new ApplicationDbContext())
-                        {
-                            // Pentru fiecare mașină din coș
-                            foreach (var booking in cart)
-                            {
-                                // Actualizează booking-ul
-                                booking.Status = "Confirmed";
-
-                                // Dacă booking-ul nu există deja în baza de date, adăugă-l
-                                var existingBooking = db.Bookings.Find(booking.BookingId);
-                                if (existingBooking == null)
-                                {
-                                    // Generează un ID nou pentru booking-urile create în sesiune
-                                   
-                                        booking.BookingId = 0; // Permite bazei de date să genereze ID-ul
-                                   
-                                }
-                                else
-                                {
-                                    // Actualizează booking-ul existent
-                                    existingBooking.Status = "Confirmed";
-                                    db.Entry(existingBooking).State = EntityState.Modified;
-                                }
-
-                                // Creează o înregistrare de plată
-                                var payment = new Payment
-                                {
-                                    BookingId = 1,
-                                    Amount = 300,
-                                    PaymentDate = DateTime.Now,
-                                    PaymentStatus = "Completed",
-                                    TransactionId = Guid.NewGuid().ToString()
-                                };
-
-                                db.Payments.Add(payment);
-                            }
-
-                            // Salvează toate modificările în baza de date
-                            db.SaveChanges();
-
-                            // Salvează informațiile pentru pagina de succes
-                            string transactionId = Guid.NewGuid().ToString();
-                            Session["TransactionId"] = transactionId;
-                            Session["PaymentAmount"] = totalAmount;
-                            Session["PaymentDate"] = DateTime.Now;
-                            Session["PaymentDetails"] = cart.Select(b => new
-                            {
-                                CarId = b.CarId,
-                                PickupDate = b.PickupDate,
-                                ReturnDate = b.ReturnDate,
-                                TotalAmount = b.TotalAmount
-                            }).ToList();
-
-                            // Golește coșul
-                            Session.Remove("Cart");
-                            Session.Remove("CurrentBooking");
-
-                            // Redirecționează către pagina de succes
-                            return RedirectToAction("Index");
-                        }
-                    }
-                    else
-                    {
-                        ModelState.AddModelError("", "Procesarea plății a eșuat. Vă rugăm să verificați detaliile cardului și să încercați din nou.");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    System.Diagnostics.Debug.WriteLine($"Eroare la procesarea plății: {ex.Message}");
-                    ModelState.AddModelError("", "A apărut o eroare în timpul procesării plății. Vă rugăm să încercați mai târziu.");
-                }
+                return RedirectToAction("Carsection", "Home");
             }
 
-            // În caz de eroare, reafișează formularul cu datele introduse
-            var cartForError = Session["Cart"] as List<Web.Models.Booking>;
-            ViewBag.TotalAmount = cartForError != null ? cartForError.Sum(b => b.TotalAmount) : 0;
+            decimal totalAmount = cart.Sum(b => b.TotalAmount);
 
-            return View(cardDetails);
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Amount = totalAmount;
+                return View(cardDetails);
+            }
+
+
+            // Validare suplimentară pentru numărul cardului
+            if (!cardDetails.IsNumberValid())
+            {
+                ModelState.AddModelError("", "Numărul cardului este invalid. Vă rugăm să introduceți un număr valid de 16 cifre.");
+                ViewBag.Amount = totalAmount;
+                return View(cardDetails);
+            }
+
+            // Validare suplimentară pentru data de expirare
+            if (!cardDetails.IsExpiryDateValid())
+            {
+                ModelState.AddModelError("", "Data de expirare a cardului este invalidă sau a expirat.");
+                ViewBag.Amount = totalAmount;
+                return View(cardDetails);
+            }
+
+            if (cardDetails.CardNumber.Length != 19)
+            {
+
+                ModelState.AddModelError("", "Numărul cardului trebuie să conțină exact 16 cifre.");
+                ViewBag.Amount = totalAmount;
+                return View(cardDetails);
+            }
+
+            if (verificNume(cardDetails.CardHolderName) == false)
+            {
+
+                ModelState.AddModelError("", "Numele cardului este invalid");
+                ViewBag.Amount = totalAmount;
+                return View(cardDetails);
+            }
+
+            if (cardDetails.CVV.Length != 3)
+            {
+
+                ModelState.AddModelError("", "CVV-ul trebuie să conțină exact 3 cifre.");
+                ViewBag.Amount = totalAmount;
+                return View(cardDetails);
+            }
+            // Simulate payment processing
+            bool paymentSuccessful = ProcessPayment(cardDetails, totalAmount);
+
+            if (paymentSuccessful)
+            {
+                using (var transaction = db.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        foreach (var booking in cart)
+                        {
+                            // Update booking status
+                            booking.Status = "Confirmed";
+                            db.Entry(booking).State = EntityState.Modified;
+
+                        }
+
+                        transaction.Commit();
+
+                        // Set session data for success page
+                        Session["TransactionId"] = Guid.NewGuid().ToString();
+                        Session["PaymentAmount"] = totalAmount;
+                        Session["PaymentDate"] = DateTime.Now;
+                        Session["PaymentDetails"] = cart.Select(b => new
+                        {
+                            CarId = b.CarId,
+                            PickupDate = b.PickupDate,
+                            ReturnDate = b.ReturnDate,
+                            TotalAmount = b.TotalAmount
+                        }).ToList();
+
+                        // Clear cart
+                        Session.Remove("Cart");
+                        Session.Remove("CurrentBooking");
+
+                        return RedirectToAction("Success");
+                    }
+                    catch
+                    {
+                        transaction.Rollback();
+                        ViewBag.Amount = totalAmount;
+                        ModelState.AddModelError("", "A apărut o eroare în timpul procesării plății. Vă rugăm să încercați din nou.");
+                        return View(cardDetails);
+                    }
+                }
+            }
+            else
+            {
+                ViewBag.Amount = totalAmount;
+                ModelState.AddModelError("", "Procesarea plății a eșuat. Vă rugăm să verificați detaliile cardului și să încercați din nou.");
+                return View(cardDetails);
+            }
         }
 
-        private bool ProcessPayment(CardDetails cardDetails, decimal totalAmount)
+        private bool verificNume(string card)
         {
+            if (card[card.Length - 1] == 32)
+                return false;
+            int a = 0;
+            for(int i = 0; i < card.Length; i++)
+            {
+                if (card[i] == 32 && a == 1)
+                {
+                    return false;
+                } else if (card[i] == 32  && a == 0)
+                {
+                    a = 1;
+                }
+            }
+            if (a == 0)
+                return false;
+
             return true;
+        }
+
+        private bool ProcessPayment(CardDetails cardDetails, decimal amount)
+        {
+            try
+            {
+                if (amount <= 0)
+                {
+                    System.Diagnostics.Debug.WriteLine("Eroare: amount <= 0");
+                    return false;
+                }
+
+                if (!cardDetails.IsExpiryDateValid())
+                {
+                    System.Diagnostics.Debug.WriteLine("Eroare: CardNumber invalid");
+                    return false;
+                }
+                if (!cardDetails.IsExpiryDateValid())
+                {
+                    System.Diagnostics.Debug.WriteLine("Eroare: ExpiryDate invalid");
+                    return false;
+                }
+                if (string.IsNullOrEmpty(cardDetails.CVV) || cardDetails.CVV.Length != 3 || !cardDetails.CVV.All(char.IsDigit))
+                {
+                    System.Diagnostics.Debug.WriteLine("Eroare: CVV invalid");
+                    return false;
+                }
+                if (string.IsNullOrEmpty(cardDetails.CardHolderName) || !cardDetails.CardHolderName.All(c => char.IsLetter(c) || char.IsWhiteSpace(c)))
+                {
+                    System.Diagnostics.Debug.WriteLine("Eroare: CardHolderName invalid");
+                    return false;
+                }
+
+                //System.Threading.Thread.Sleep(1000); // Simulăm o mică întârziere
+                return true; // Forțează succesul pentru testare
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Exceptie: " + ex.Message);
+                return false;
+            }
         }
 
         // GET: Payment/Success

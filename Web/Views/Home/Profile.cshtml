@@ -19,8 +19,9 @@
                            href="#account-general">General</a>
                         <a class="list-group-item list-group-item-action" data-toggle="list"
                            href="#account-change-password">Change password</a>
-                        <a class="list-group-item list-group-item-action" data-toggle="list"
-                           href="#account-info">Info</a>
+                        <a class="list-group-item list-group-item-action text-danger" href="@Url.Action("Logout", "Home")">
+                            <i class="fa-solid fa-right-from-bracket"></i> Logout
+                        </a>
                     </div>
                 </div>
                 <div class="col-md-9">
@@ -38,84 +39,55 @@
                                     <div class="text-light small mt-1">Allowed JPG, GIF or PNG. Max size of 800K</div>
                                 </div>
                             </div>
+                            <hr class="border-light m-0">
                             <div class="card-body">
-                                <div class="form-group">
-                                    <label class="form-label">Username</label>
-                                    <input type="text" class="form-control mb-1" value="John">
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">Name</label>
-                                    <input type="text" class="form-control" value="Ion">
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">E-mail</label>
-                                    <input type="text" class="form-control mb-1" value="john@gmail.com">
-                                    <div class="alert alert-warning mt-3">
-                                        Your email is not confirmed. Please check your inbox.<br>
-                                        <a href="javascript:void(0)">Resend confirmation</a>
+                                @using (Html.BeginForm("UpdateProfile", "Home", FormMethod.Post))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    <div class="form-group">
+                                        <label class="form-label">UserName</label>
+                                        <input type="text" class="form-control mb-1" name="UserName" value="@Session["UserName"]">
                                     </div>
-                                </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Email</label>
+                                        <input type="text" class="form-control mb-1" name="Email" value="@Session["Email"]">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Telefon</label>
+                                        <input type="text" class="form-control" name="Phone" value="@Session["Phone"]">
+                                    </div>
+                                    <div class="text-right mt-3">
+                                        <button type="submit" class="btn btn-primary">Salvează modificările</button>
+                                    </div>
+                                }
                             </div>
                         </div>
                         <div class="tab-pane fade" id="account-change-password">
                             <div class="card-body pb-2">
-                                <div class="form-group">
-                                    <label class="form-label">Current password</label>
-                                    <input type="password" class="form-control">
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">New password</label>
-                                    <input type="password" class="form-control">
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">Repeat new password</label>
-                                    <input type="password" class="form-control">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="tab-pane fade" id="account-info">
-                            <div class="card-body pb-2">
-                                <div class="form-group">
-                                    <label class="form-label">Bio</label>
-                                    <textarea class="form-control"
-                                              rows="5">Jhifjdid fjdni kj dkdf kdfhdkoo fwofn iwm.</textarea>
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">Birthday</label>
-                                    <input type="text" class="form-control" value="May 5, 1995">
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">City</label>
-                                    <select class="custom-select">
-                                        <option selected>Chisinau</option>
-                                        <option>Balti</option>
-                                        <option>Orhei</option>
-                                        <option>Cahul</option>
-                                        <option>Drochia</option>
-                                        <option>Ungheni</option>
-                                        <option>Soroca</option>
-                                        <option>Dubasari</option>
-                                        <option>Edinet</option>
-                                        <option>Hancesti</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <hr class="border-light m-0">
-                            <div class="card-body pb-2">
-                                <h6 class="mb-4">Contacts</h6>
-                                <div class="form-group">
-                                    <label class="form-label">Phone</label>
-                                    <input type="text" class="form-control" value="+37368649733">
-                                </div>
+                                @using (Html.BeginForm("ChangePassword", "Home", FormMethod.Post))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    <div class="form-group">
+                                        <label class="form-label">Parola curentă</label>
+                                        <input type="password" class="form-control" name="CurrentPassword">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Parola nouă</label>
+                                        <input type="password" class="form-control" name="NewPassword">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Confirmă parola nouă</label>
+                                        <input type="password" class="form-control" name="ConfirmPassword">
+                                    </div>
+                                    <div class="text-right mt-3">
+                                        <button type="submit" class="btn btn-primary">Schimbă parola</button>
+                                    </div>
+                                }
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="text-right mt-3">
-            <button type="button" class="btn btn-primary">Save changes</button>&nbsp;
-            <button type="button" class="btn btn-default">Cancel</button>
         </div>
     </div>
 </section>

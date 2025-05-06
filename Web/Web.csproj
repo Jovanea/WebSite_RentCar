@@ -226,6 +226,11 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202505031449181_UpdateUserTable.cs" />
+    <Compile Include="Migrations\202505031449181_UpdateUserTable.Designer.cs">
+      <DependentUpon>202505031449181_UpdateUserTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
     <Compile Include="Models\Booking.cs" />
     <Compile Include="Models\CardDetails.cs" />
@@ -278,7 +283,6 @@
     <Content Include="Scripts\bootstrap.esm.js.map" />
     <Content Include="Scripts\bootstrap.bundle.min.js.map" />
     <Content Include="Scripts\bootstrap.bundle.js.map" />
-    <Content Include="Views\Home\reducere.cshtml" />
     <Content Include="Views\Home\Cardetalies.cshtml" />
     <Content Include="Views\Payment\Process.cshtml" />
     <Content Include="Views\Payment\Success.cshtml" />
@@ -305,6 +309,11 @@
       <Project>{e80c9e43-4caa-4315-a93c-1691bda94937}</Project>
       <Name>eUseControl.Domain</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\202505031449181_UpdateUserTable.resx">
+      <DependentUpon>202505031449181_UpdateUserTable.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

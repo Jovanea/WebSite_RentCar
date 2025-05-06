@@ -1,6 +1,7 @@
 ﻿@{
     ViewBag.Title = "Cos";
-    var cart = Session["Cart"] as List<Web.Models.Booking>;
+    var cart = ViewBag.CartBookings as List<Web.Models.Booking>;
+    var firstBooking = cart?.FirstOrDefault();
 }
 
 @Html.Partial("_Header")
@@ -105,15 +106,28 @@
                                     <i class="fa-solid fa-money-bill"></i>
                                     <span>Total: $@booking.TotalAmount</span>
                                 </div>
+                                <div class="detail">
+                                    @using (Html.BeginForm("RemoveFromCart", "Home", FormMethod.Post))
+                                    {
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="bookingId" value="@booking.BookingId" />
+                                        <button type="submit" class="remove-btn">
+                                            <i class="fa-solid fa-trash"></i> Șterge din coș
+                                        </button>
+                                    }
+                                </div>
                             </div>
                         </div>
                     </div>
                 }
 
-                <div class="cart-total">
-                    <h3>Total general: $@cart.Sum(b => b.TotalAmount)</h3>
-                    <a href="@Url.Action("Pay", "Home")" class="btn-primary">Continuă spre plată</a>
-                </div>
+            <div class="cart-total">
+                <h3>Total general: $@cart.Sum(b => b.TotalAmount)</h3>
+                @if (firstBooking != null)
+                {
+                    <a href="@Url.Action("Process", "Payment")" class="btn-primary">Continuă spre plată</a>
+                }
+            </div>
             </div>
         }
         else
@@ -227,4 +241,25 @@
         border-radius: 4px;
         text-decoration: none;
     }
+
+    .remove-btn {
+        background: #dc3545;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 4px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: background-color 0.3s;
+    }
+
+        .remove-btn:hover {
+            background: #c82333;
+        }
+
+        .remove-btn i {
+            margin-right: 5px;
+        }
 </style>

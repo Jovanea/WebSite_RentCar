@@ -11,7 +11,7 @@ namespace eUseControl.BusinessLogic
 {
     public class SessionBL : UserApi, ISession
     {
-        public UserLogin UserLogin(ULoginData data)
+        public new UserLogin UserLogin(ULoginData data)
         {
             return new UserLogin(data);
         }

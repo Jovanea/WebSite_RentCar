@@ -838,7 +838,7 @@ section {
     .car-details .centered-content {
         grid-template-columns: 1fr;
     }
-    2
+
     .car-details .booking-section {
         position: static;
         margin-top: 2rem;
@@ -1069,23 +1069,27 @@ section {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content:center;
+    justify-content: center;
+    margin: 40px auto;
+    box-shadow: var(--shadow-1);
 }
 
-.success-message {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #2ecc71;
-    margin-bottom: 1rem;
+.success-message-box {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
 }
 
 .success-text {
-    color: black;
+    color: var(--color-text);
     margin-bottom: 2rem;
     text-align: center;
+    line-height: 1.5;
 }
 
-.success-button {
+.success-container .button {
     background: var(--color-secondary);
     color: var(--color-text);
     padding: 0.8rem 1.5rem;
@@ -1093,10 +1097,13 @@ section {
     font-weight: 600;
     cursor: pointer;
     transition: var(--transition);
+    text-decoration: none;
+    border: none;
+    width: auto;
 }
 
-    .success-button:hover {
-        background: #ffd000;
+    .success-container .button:hover {
+        background: #e6bc00;
         transform: translateY(-3px);
     }
 
@@ -1113,9 +1120,22 @@ section {
     }
 }
 
+.alert {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    border: 1px solid #f5c6cb;
+}
+
+.text-danger {
+    color: #dc3545;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
 
 /*=======================Registre======================*/
-
 .registration-container {
     background: white;
     border-radius: 8px;
@@ -1787,9 +1807,8 @@ section.container {
     margin-top: 40px;
 }
 
+
 /*========================Success Payment======================*/
-
-
 .payment-success {
     display: flex;
     justify-content: center;
@@ -1856,3 +1875,9 @@ section.container {
     .button:hover {
         opacity: 0.9;
     }
+
+
+
+
+/*========================Cart Styles======================*/
+

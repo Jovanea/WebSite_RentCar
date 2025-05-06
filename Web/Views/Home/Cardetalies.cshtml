@@ -974,6 +974,7 @@
                     <h4>Rezervă acum</h4>
                     @using (Html.BeginForm("AddToCart", "Home", FormMethod.Post, new { id = "booking-form" }))
                     {
+                        @Html.AntiForgeryToken()
                         <input type="hidden" name="carId" id="carId" value="@carId" />
                         <input type="hidden" name="totalAmount" id="totalAmount" value="0" />
 
@@ -1006,6 +1007,7 @@
                         <button type="submit" class="btn-primary">
                             <i class="fa-solid fa-cart-plus"></i> Rezervă acum
                         </button>
+                        @Html.ValidationSummary(false, "", new { @class = "text-danger", style = "margin-top: 10px;" })
                     }
                 </div>
             </div>
@@ -1019,62 +1021,39 @@
         document.getElementById('main-car-image').src = src;
     }
 
-    // Calcularea prețului total bazat pe datele selectate
     document.addEventListener('DOMContentLoaded', function () {
         const pickupDateInput = document.getElementById('pickupDate');
         const returnDateInput = document.getElementById('returnDate');
-        const daysCountElement = document.getElementById('days-count');
-        const totalPriceElement = document.getElementById('total-price');
+        const daysCountSpan = document.getElementById('days-count');
+        const totalPriceSpan = document.getElementById('total-price');
         const totalAmountInput = document.getElementById('totalAmount');
-        const dailyPriceElement = document.getElementById('daily-price');
-        const bookingForm = document.getElementById('booking-form');
+        const dailyPriceSpan = document.getElementById('daily-price');
 
-        // Setează data minimă la ziua curentă
-        const today = new Date();
-        const formattedDate = today.toISOString().split('T')[0];
-        pickupDateInput.min = formattedDate;
+        // Get the daily price from the span
+        const dailyPrice = parseFloat(dailyPriceSpan.textContent.replace('$', ''));
 
-        // Funcție pentru calcularea zilelor între două date
-        function calculateDays() {
+        function updateTotal() {
             const pickupDate = new Date(pickupDateInput.value);
             const returnDate = new Date(returnDateInput.value);
 
-            if (pickupDate && returnDate && returnDate >= pickupDate) {
+            if (pickupDate && returnDate && !isNaN(pickupDate) && !isNaN(returnDate)) {
                 const diffTime = Math.abs(returnDate - pickupDate);
                 const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                return diffDays;
+
+                if (diffDays > 0) {
+                    const total = diffDays * dailyPrice;
+                    daysCountSpan.textContent = diffDays;
+                    totalPriceSpan.textContent = '$' + total.toFixed(2);
+                    totalAmountInput.value = total;
+                } else {
+                    daysCountSpan.textContent = '0';
+                    totalPriceSpan.textContent = '$0';
+                    totalAmountInput.value = '0';
+                }
             }
-            return 0;
         }
 
-        // Funcție pentru actualizarea sumei totale
-        function updateTotal() {
-            const days = calculateDays();
-            daysCountElement.textContent = days;
-
-            const priceString = dailyPriceElement.textContent.replace('$', '');
-            const price = parseFloat(priceString);
-            const total = days * price;
-
-            totalPriceElement.textContent = '$' + total;
-            totalAmountInput.value = total;
-        }
-
-        // Adaugă event listener pentru schimbări de date
-        pickupDateInput.addEventListener('change', function () {
-            // Setează data minimă pentru returnare la data de preluare
-            returnDateInput.min = pickupDateInput.value;
-            updateTotal();
-        });
-
+        pickupDateInput.addEventListener('change', updateTotal);
         returnDateInput.addEventListener('change', updateTotal);
-
-        // Validare formular înainte de trimitere
-        bookingForm.addEventListener('submit', function (event) {
-            if (calculateDays() <= 0) {
-                event.preventDefault();
-                alert('Vă rugăm să selectați date valide pentru rezervare.');
-            }
-        });
     });
 </script>
