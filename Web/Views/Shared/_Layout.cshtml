@@ -12,11 +12,78 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/Scripts/jquery.validate.min.js"></script>
     <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/Scripts/cookies.js"></script>
 
     <title>BarterZone / @ViewBag.Title</title>
 </head>
 <body class="min-h-screen overflow-x-hidden flex flex-col gap-4">
+    <div class="language-selector" style="position: fixed; top: 10px; right: 10px; z-index: 1000;">
+        <select id="languageSelect" onchange="changeLanguage(this.value)">
+            <option value="ro">Română</option>
+            <option value="en">English</option>
+        </select>
+    </div>
+
     @RenderBody()
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const currentLang = CookieManager.getLanguage();
+            document.getElementById('languageSelect').value = currentLang;
+            updatePageLanguage(currentLang);
+
+            const lastUser = CookieManager.getLastUser();
+            if (lastUser && !document.cookie.includes('user_session')) {
+                if (window.location.pathname.includes('/Home/Login')) {
+                    document.getElementById('credential').value = lastUser.Email;
+                }
+            }
+        });
+
+        function changeLanguage(lang) {
+            CookieManager.setLanguage(lang);
+            updatePageLanguage(lang);
+        }
+
+        function updatePageLanguage(lang) {
+            const translations = {
+                'ro': {
+                    'home': 'Acasă',
+                    'login': 'Autentificare',
+                    'about': 'Despre Noi',
+                    'services': 'Servicii',
+                    'cars': 'Mașini',
+                    'cart': 'Coș',
+                    'blog': 'Blog',
+                    'contact': 'Contact',
+                    'profile': 'Profilul Meu',
+                    'reviews': 'Recenzii',
+                    'payment': 'Plată'
+                },
+                'en': {
+                    'home': 'Home',
+                    'login': 'Login/SignUp',
+                    'about': 'About',
+                    'services': 'Services',
+                    'cars': 'Cars',
+                    'cart': 'Cart',
+                    'blog': 'Blog',
+                    'contact': 'Contact',
+                    'profile': 'MyProfile',
+                    'reviews': 'Reviews',
+                    'payment': 'Payment'
+                }
+            };
+
+            const menuItems = document.querySelectorAll('.navlist a');
+            menuItems.forEach(item => {
+                const key = item.getAttribute('data-lang-key');
+                if (key && translations[lang][key]) {
+                    item.textContent = translations[lang][key];
+                }
+            });
+        }
+    </script>
 
     @RenderSection("Scripts", required: false)
 </body>

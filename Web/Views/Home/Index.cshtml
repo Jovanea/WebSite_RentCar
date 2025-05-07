@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Index";
 }
 
@@ -46,6 +45,16 @@
         </div>
     </div>
 </section>
+
+<section class="recently-viewed" id="recently-viewed">
+    <div class="container">
+        <h2 data-lang-key="recently-viewed">Ultimele mașini vizualizate</h2>
+        <div class="recently-viewed-cars" id="recently-viewed-cars">
+         
+        </div>
+    </div>
+</section>
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const carSelect = document.getElementById('carId');
@@ -88,6 +97,45 @@
         pickupDateInput.addEventListener('change', updateTotal);
         returnDateInput.addEventListener('change', updateTotal);
     });
+
+    document.addEventListener('DOMContentLoaded', function () {
+   
+        const viewedCars = CookieManager.getLastViewedCars();
+
+        if (viewedCars.length > 0) {
+            const container = document.getElementById('recently-viewed-cars');
+
+            const carDetails = {
+                1: { name: 'Range Rover', price: '$60/zi', image: 'car1.jpg' },
+                2: { name: 'Mercedes', price: '$100/zi', image: 'car2.jpg' },
+                3: { name: 'Range Rover Autobiography', price: '$600/zi', image: 'car3.jpg' },
+                4: { name: 'Ferrari F12', price: '$500/zi', image: 'car1.jpg' },
+                5: { name: 'Porsche GT3', price: '$700/zi', image: 'car2.jpg' },
+                6: { name: 'Pagani Huayra', price: '$2000/zi', image: 'car3.jpg' },
+                7: { name: 'Bugatti Tourbilion', price: '$5000/zi', image: 'car1.jpg' },
+                8: { name: 'Bentley Bentayga', price: '$450/zi', image: 'car2.jpg' },
+                9: { name: 'Rolls-Royce Phantom', price: '$1500/zi', image: 'car3.jpg' },
+                10: { name: 'McLaren 720S', price: '$1000/zi', image: 'car1.jpg' },
+                11: { name: 'BMW M5Cs', price: '$850/zi', image: 'car2.jpg' },
+                12: { name: 'Lamborghini Urus', price: '$60/zi', image: 'car3.jpg' }
+            };
+
+            viewedCars.forEach(carId => {
+                const car = carDetails[carId];
+                if (car) {
+                    const carElement = document.createElement('div');
+                    carElement.className = 'car-card';
+                    carElement.innerHTML = `
+                        <img src="/Content/images/${car.image}" alt="${car.name}">
+                        <h3>${car.name}</h3>
+                        <p>${car.price}</p>
+                        <a href="/Home/Cardetalies/${carId}" class="btn">Vezi detalii</a>
+                    `;
+                    container.appendChild(carElement);
+                }
+            });
+        }
+    });
 </script>
 
 <section class="works">
@@ -117,3 +165,5 @@
         </div>
     </div>
 </section>
+
+@Html.Partial("_Footer")

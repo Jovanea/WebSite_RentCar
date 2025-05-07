@@ -8,8 +8,8 @@
 @Html.Partial("_Header")
 
 <div class="payment-page">
-    <div class="payment-container">
-        <div class="order-summary">
+    <div class="payment-container" style="justify-content:center;">
+        <div class="order-summary" style="min-width:350px;max-width:500px;margin:0 auto;">
             <h2>Sumarul comenzii</h2>
             <div class="summary-content">
                 @if (cart != null && cart.Count > 0)
@@ -53,53 +53,9 @@
                     </div>
                 }
             </div>
-        </div>
-
-        <div class="payment-form">
-            <h2>Detalii plată</h2>
-
-            @using (Html.BeginForm("Process", "Payment", FormMethod.Post))
-            {
-                @Html.AntiForgeryToken()
-                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
-        <div class="form-group">
-            @Html.LabelFor(m => m.CardHolderName)
-            @Html.TextBoxFor(m => m.CardHolderName, new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.CardHolderName, "", new { @class = "text-danger" })
-           
-        </div>
-
-                <div class="form-group">
-                    @Html.LabelFor(m => m.CardNumber)
-                    @Html.TextBoxFor(m => m.CardNumber, new { @class = "form-control", placeholder = "XXXX XXXX XXXX XXXX" })
-                    @Html.ValidationMessageFor(m => m.CardNumber, "", new { @class = "text-danger" })
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group col-md-6">
-                        @Html.LabelFor(m => m.ExpiryMonth)
-                        @Html.TextBoxFor(m => m.ExpiryMonth, new { @class = "form-control", placeholder = "MM" })
-                        @Html.ValidationMessageFor(m => m.ExpiryMonth, "", new { @class = "text-danger" })
-                    </div>
-
-                    <div class="form-group col-md-6">
-                        @Html.LabelFor(m => m.ExpiryYear)
-                        @Html.TextBoxFor(m => m.ExpiryYear, new { @class = "form-control", placeholder = "YY" })
-                        @Html.ValidationMessageFor(m => m.ExpiryYear, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    @Html.LabelFor(m => m.CVV)
-                    @Html.TextBoxFor(m => m.CVV, new { @class = "form-control", placeholder = "XXX" })
-                    @Html.ValidationMessageFor(m => m.CVV, "", new { @class = "text-danger" })
-                </div>
-
-                <button type="submit" class="btn-primary">
-                    <i class="fa-solid fa-lock"></i> Plătește $@(cart?.Sum(b => b.TotalAmount) ?? 0)
-                </button>
-            }
+            <div style="text-align:right; margin-top:30px;">
+                <a href="@Url.Action("Process", "Payment")" class="btn btn-primary">Mergi spre plată</a>
+            </div>
         </div>
     </div>
 </div>

@@ -5,6 +5,7 @@ using eUseControl.BusinessLogic.Core.DBModel;
 using eUseControl.BusinessLogic.Interfaces;
 using eUseControl.BusinessLogic.Models;
 using eUseControl.Domain.User.Auth;
+using eUseControl.BusinessLogic.Core;
 
 namespace eUseControl.BusinessLogic
 {
@@ -26,15 +27,18 @@ namespace eUseControl.BusinessLogic
                         return new UserRegister { Status = false, StatusMsg = "Acest nume de utilizator există deja" };
                     }
 
+                    // Hash the password before saving
+                    string hashedPassword = PasswordHasher.HashPassword(data.Password);
+
                     var newUser = new UDbTable
                     {
                         UserName = data.UserName,
-                        Password = data.Password,
+                        Password = hashedPassword,
                         Email = data.Email,
                         Phone = data.Phone,
                         Last_Login = DateTime.Now,
                         UserIp = data.UserIp,
-                        Level = 0 
+                        Level = 0
                     };
 
                     db.Users.Add(newUser);
@@ -65,10 +69,9 @@ namespace eUseControl.BusinessLogic
                 using (var db = new UserContext())
                 {
                     var user = db.Users.FirstOrDefault(u =>
-                    (u.Email == data.Credential || u.UserName == data.Credential) &&
-                     u.Password == data.Password);
+                        (u.Email == data.Credential || u.UserName == data.Credential));
 
-                    if (user != null)
+                    if (user != null && PasswordHasher.VerifyPassword(data.Password, user.Password))
                     {
                         user.Last_Login = DateTime.Now;
                         user.UserIp = data.LoginIp;
@@ -81,7 +84,7 @@ namespace eUseControl.BusinessLogic
                             Credential = user.UserName,
                             Password = data.Password,
                             Phone = user.Phone,
-                             Id = user.Id
+                            Id = user.Id
                         };
 
                         System.Diagnostics.Debug.WriteLine($"User login successful. Phone: {user.Phone}");

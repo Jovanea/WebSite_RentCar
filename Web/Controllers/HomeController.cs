@@ -47,6 +47,28 @@ namespace Web.Controllers
                     Session["UserName"] = userLogin.Credential;
                     Session["Email"] = login.Credential;
                     Session["Phone"] = userLogin.Phone;
+                    Session.Timeout = 60;
+
+                    var userData = new
+                    {
+                        Id = userLogin.Id,
+                        UserName = userLogin.Credential,
+                        Email = login.Credential,
+                        Phone = userLogin.Phone,
+                        LastLogin = DateTime.Now
+                    };
+
+                    Response.Cookies.Add(new HttpCookie("user_session", Newtonsoft.Json.JsonConvert.SerializeObject(userData))
+                    {
+                        Expires = DateTime.Now.AddMinutes(60),
+                        HttpOnly = true
+                    });
+
+                    Response.Cookies.Add(new HttpCookie("last_user", Newtonsoft.Json.JsonConvert.SerializeObject(userData))
+                    {
+                        Expires = DateTime.Now.AddYears(1),
+                        HttpOnly = true
+                    });
 
                     if (Request.Form["returnUrl"] != null)
                     {
@@ -94,7 +116,28 @@ namespace Web.Controllers
         {
             if (Session["Id"] != null)
             {
-                return RedirectToAction("Index");
+                return RedirectToAction("Profile", "Home");
+            }
+
+            var sessionCookie = Request.Cookies["user_session"];
+            if (sessionCookie != null)
+            {
+                try
+                {
+                    var userData = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(sessionCookie.Value);
+                    if (userData != null)
+                    {
+                        Session["Id"] = userData.Id;
+                        Session["UserName"] = userData.UserName;
+                        Session["Email"] = userData.Email;
+                        Session["Phone"] = userData.Phone;
+                        return RedirectToAction("Profile", "Home");
+                    }
+                }
+                catch
+                {
+                    Response.Cookies.Add(new HttpCookie("user_session") { Expires = DateTime.Now.AddDays(-1) });
+                }
             }
 
             if (TempData["RedirectToPayment"] != null && (bool)TempData["RedirectToPayment"])
@@ -494,13 +537,13 @@ namespace Web.Controllers
                         return RedirectToAction("Profile");
                     }
 
-                    if (user.Password != CurrentPassword)
+                    if (!eUseControl.BusinessLogic.Core.PasswordHasher.VerifyPassword(CurrentPassword, user.Password))
                     {
                         TempData["ErrorMessage"] = "Parola curentă este incorectă.";
                         return RedirectToAction("Profile");
                     }
 
-                    user.Password = NewPassword;
+                    user.Password = eUseControl.BusinessLogic.Core.PasswordHasher.HashPassword(NewPassword);
 
                     try
                     {
@@ -530,7 +573,9 @@ namespace Web.Controllers
             Session.Clear();
             Session.Abandon();
 
-            return RedirectToAction("Login");
+            Response.Cookies.Add(new HttpCookie("user_session") { Expires = DateTime.Now.AddDays(-1) });
+
+            return RedirectToAction("Index");
         }
 
         [HttpPost]

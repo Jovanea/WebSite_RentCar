@@ -54,6 +54,7 @@
     <Compile Include="BusinessLogic.cs" />
     <Compile Include="Core\AdminApi.cs" />
     <Compile Include="Core\CarApi.cs" />
+    <Compile Include="Core\PasswordHasher.cs" />
     <Compile Include="DBModel\UserContext.cs" />
     <Compile Include="Core\UserApi.cs" />
     <Compile Include="Interfaces\IUserApi.cs" />
