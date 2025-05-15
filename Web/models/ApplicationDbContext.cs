@@ -22,6 +22,8 @@ namespace Web.Models
         }
 
         public DbSet<Booking> Bookings { get; set; }
+        public DbSet<Car> Cars { get; set; }
+        public DbSet<Payment> Payments { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -30,6 +32,10 @@ namespace Web.Models
             modelBuilder.Entity<Booking>()
                 .HasOptional(b => b.Payment)
                 .WithRequired(p => p.Booking);
+            modelBuilder.Entity<Car>()
+                .HasMany(c => c.Bookings)
+                .WithRequired(b => b.Car)
+                .HasForeignKey(b => b.CarId);
         }
     }
 }
