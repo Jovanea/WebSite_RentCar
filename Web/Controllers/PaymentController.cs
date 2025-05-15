@@ -60,7 +60,6 @@ namespace Web.Controllers
                 return View(cardDetails);
             }
 
-
             if (!cardDetails.IsNumberValid())
             {
                 ModelState.AddModelError("", "Numărul cardului este invalid. Vă rugăm să introduceți un număr valid de 16 cifre.");
@@ -77,7 +76,6 @@ namespace Web.Controllers
 
             if (cardDetails.CardNumber.Length != 19)
             {
-
                 ModelState.AddModelError("", "Numărul cardului trebuie să conțină exact 16 cifre.");
                 ViewBag.Amount = totalAmount;
                 return View(cardDetails);
@@ -85,7 +83,6 @@ namespace Web.Controllers
 
             if (verificNume(cardDetails.CardHolderName) == false)
             {
-
                 ModelState.AddModelError("", "Numele cardului este invalid");
                 ViewBag.Amount = totalAmount;
                 return View(cardDetails);
@@ -93,12 +90,11 @@ namespace Web.Controllers
 
             if (cardDetails.CVV.Length != 3)
             {
-
                 ModelState.AddModelError("", "CVV-ul trebuie să conțină exact 3 cifre.");
                 ViewBag.Amount = totalAmount;
                 return View(cardDetails);
             }
-            
+
             bool paymentSuccessful = ProcessPayment(cardDetails, totalAmount);
 
             if (paymentSuccessful)
@@ -109,12 +105,13 @@ namespace Web.Controllers
                     {
                         foreach (var booking in cart)
                         {
-                        
+
                             booking.Status = "Confirmed";
-                            db.Entry(booking).State = EntityState.Modified;
+                            db.Bookings.Add(booking);
 
                         }
 
+                        db.SaveChanges();
                         transaction.Commit();
 
                         Session["TransactionId"] = Guid.NewGuid().ToString();
@@ -155,12 +152,13 @@ namespace Web.Controllers
             if (card[card.Length - 1] == 32)
                 return false;
             int a = 0;
-            for(int i = 0; i < card.Length; i++)
+            for (int i = 0; i < card.Length; i++)
             {
                 if (card[i] == 32 && a == 1)
                 {
                     return false;
-                } else if (card[i] == 32  && a == 0)
+                }
+                else if (card[i] == 32 && a == 0)
                 {
                     a = 1;
                 }

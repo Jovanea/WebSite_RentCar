@@ -127,7 +127,7 @@ namespace Web.Controllers
                     var userData = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(sessionCookie.Value);
                     if (userData != null)
                     {
-                        Session["Id"] = userData.Id;
+                        Session["Id"] = Convert.ToInt32(userData.Id);
                         Session["UserName"] = userData.UserName;
                         Session["Email"] = userData.Email;
                         Session["Phone"] = userData.Phone;
@@ -414,35 +414,29 @@ namespace Web.Controllers
 
             try
             {
-                using (var db = new ApplicationDbContext())
+                var booking = new Web.Models.Booking
                 {
-                    var booking = new Web.Models.Booking
-                    {
-                        CarId = carId,
-                        UserId = (int)Session["Id"],
-                        PickupDate = pickupDate,
-                        ReturnDate = returnDate,
-                        TotalAmount = calculatedTotal,
-                        Status = "Confirm"
-                    };
+                    CarId = carId,
+                    UserId = (int)Session["Id"],
+                    PickupDate = pickupDate,
+                    ReturnDate = returnDate,
+                    TotalAmount = calculatedTotal,
+                    Status = "Pending"
+                };
 
-                    db.Bookings.Add(booking);
-                    db.SaveChanges();
-
-                    List<Web.Models.Booking> cart = Session["Cart"] as List<Web.Models.Booking>;
-                    if (cart == null)
-                    {
-                        cart = new List<Web.Models.Booking>();
-                    }
-                    cart.Add(booking);
-                    Session["Cart"] = cart;
-
-                    return RedirectToAction("Cos", "Home");
+                List<Web.Models.Booking> cart = Session["Cart"] as List<Web.Models.Booking>;
+                if (cart == null)
+                {
+                    cart = new List<Web.Models.Booking>();
                 }
+                cart.Add(booking);
+                Session["Cart"] = cart;
+
+                return RedirectToAction("Cos", "Home");
             }
             catch (Exception ex)
             {
-                TempData["Error"] = "A apărut o eroare la salvarea rezervării: " + ex.Message;
+                TempData["Error"] = "A apărut o eroare la adăugarea în coș: " + ex.Message;
                 return RedirectToAction("Carsection");
             }
         }
