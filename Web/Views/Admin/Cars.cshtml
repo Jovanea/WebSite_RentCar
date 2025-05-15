@@ -1,0 +1,89 @@
+﻿@@model IEnumerable<Web.Models.Car>
+
+    @{
+        ViewBag.Title = "Manage Cars";
+    }
+
+    <div class="admin-container">
+        <h2>Manage Cars</h2>
+
+        <p>
+            @Html.ActionLink("Add New Car", "Create", null, new { @class = "btn btn-primary" })
+        </p>
+
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Brand</th>
+                        <th>Model</th>
+                        <th>Year</th>
+                        <th>Price/Day</th>
+                        <th>Category</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                <img src="@item.MainImageUrl" alt="@item.Brand @item.Model" style="width: 100px; height: 60px; object-fit: cover;" />
+                            </td>
+                            <td>@item.Brand</td>
+                            <td>@item.Model</td>
+                            <td>@item.Year</td>
+                            <td>$@item.PricePerDay</td>
+                            <td>@item.Category</td>
+                            <td>
+                                @if (item.IsAvailable)
+                                {
+                                    <span class="badge badge-success">Available</span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-danger">Not Available</span>
+                                }
+                            </td>
+                            <td>
+                                <div class="btn-group">
+                                    @Html.ActionLink("Edit", "Edit", new { id = item.CarId }, new { @class = "btn btn-sm btn-warning" })
+                                    @Html.ActionLink("Details", "Details", new { id = item.CarId }, new { @class = "btn btn-sm btn-info" })
+                                    @Html.ActionLink("Delete", "Delete", new { id = item.CarId }, new { @class = "btn btn-sm btn-danger" })
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <style>
+        .admin-container {
+            padding: 20px;
+        }
+
+        .table {
+            margin-top: 20px;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 5px;
+        }
+
+        .badge {
+            padding: 5px 10px;
+        }
+
+        .badge-success {
+            background-color: #28a745;
+        }
+
+        .badge-danger {
+            background-color: #dc3545;
+        }
+    </style>
