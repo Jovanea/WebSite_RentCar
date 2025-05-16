@@ -510,7 +510,7 @@ section {
 /*========================Cardetalies===================================*/
 
 .car-details {
-    padding: 4rem 0;
+    padding: 0rem ;
     background-color: #f8f9fa;
     color: #333;
     font-family: 'Roboto', sans-serif;
@@ -552,13 +552,16 @@ section {
     .car-details .car-images {
         display: flex;
         flex-direction: column;
+        align-items:center;
         gap: 1rem;
     }
 
     .car-details .main-image {
         border-radius: 8px;
         overflow: hidden;
-        height: 400px;
+        width: 100%; /* Se adaptează la lățimea containerului */
+        max-width: 800px; /* Limitează lățimea maximă */
+        height: auto; /* Se adaptează proporțional */
         background: #f0f0f0;
     }
 
@@ -569,12 +572,14 @@ section {
             transition: transform 0.3s;
         }
 
+
         .car-details .main-image:hover img {
             transform: scale(1.02);
         }
 
     .car-details .thumbnails {
         display: flex;
+        align-self: flex-start;
         gap: 10px;
     }
 

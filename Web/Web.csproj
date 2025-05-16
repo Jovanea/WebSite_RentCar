@@ -106,6 +106,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\images\cars_pexels_100.jpg" />
+    <Content Include="Content\images\cars_pexels_101.png" />
+    <Content Include="Content\images\cars_pexels_102.jpg" />
+    <Content Include="Content\images\cars_pexels_103.jpg" />
     <Content Include="Content\images\mc.png" />
     <Content Include="Content\bootstrap-grid.css" />
     <Content Include="Content\bootstrap-grid.min.css" />
