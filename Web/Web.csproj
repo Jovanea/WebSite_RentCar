@@ -225,6 +225,7 @@
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LogicController.cs" />
     <Compile Include="Controllers\PaymentController.cs" />
@@ -238,6 +239,7 @@
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
     <Compile Include="Models\Booking.cs" />
+    <Compile Include="Models\Car.cs" />
     <Compile Include="Models\CardDetails.cs" />
     <Compile Include="Models\Payment.cs" />
     <Compile Include="Models\UserData.cs" />
@@ -294,6 +296,10 @@
     <Content Include="Views\Home\Pay.cshtml" />
     <Content Include="Views\Home\LoginAdmin.cshtml" />
     <Content Include="Views\Home\AdminManagment.cshtml" />
+    <Content Include="Views\Admin\Cars.cshtml" />
+    <Content Include="Views\Admin\Create.cshtml" />
+    <Content Include="Views\Admin\Delete.cshtml" />
+    <Content Include="Views\Admin\Edit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -303,6 +309,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Car\" />
     <Folder Include="Views\Logic\" />
   </ItemGroup>
   <ItemGroup>

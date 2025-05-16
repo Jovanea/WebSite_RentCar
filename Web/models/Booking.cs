@@ -29,6 +29,8 @@ namespace Web.Models
 
         [Required]
         public string Status { get; set; }
+        [ForeignKey("CarId")]
+        public virtual Car Car { get; set; }
 
         public virtual Payment Payment { get; set; }
     }

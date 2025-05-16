@@ -127,7 +127,7 @@ namespace Web.Controllers
                     var userData = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(sessionCookie.Value);
                     if (userData != null)
                     {
-                        Session["Id"] = userData.Id;
+                        Session["Id"] = Convert.ToInt32(userData.Id);
                         Session["UserName"] = userData.UserName;
                         Session["Email"] = userData.Email;
                         Session["Phone"] = userData.Phone;
@@ -414,35 +414,29 @@ namespace Web.Controllers
 
             try
             {
-                using (var db = new ApplicationDbContext())
+                var booking = new Web.Models.Booking
                 {
-                    var booking = new Web.Models.Booking
-                    {
-                        CarId = carId,
-                        UserId = (int)Session["Id"],
-                        PickupDate = pickupDate,
-                        ReturnDate = returnDate,
-                        TotalAmount = calculatedTotal,
-                        Status = "Confirm"
-                    };
+                    CarId = carId,
+                    UserId = (int)Session["Id"],
+                    PickupDate = pickupDate,
+                    ReturnDate = returnDate,
+                    TotalAmount = calculatedTotal,
+                    Status = "Pending"
+                };
 
-                    db.Bookings.Add(booking);
-                    db.SaveChanges();
-
-                    List<Web.Models.Booking> cart = Session["Cart"] as List<Web.Models.Booking>;
-                    if (cart == null)
-                    {
-                        cart = new List<Web.Models.Booking>();
-                    }
-                    cart.Add(booking);
-                    Session["Cart"] = cart;
-
-                    return RedirectToAction("Cos", "Home");
+                List<Web.Models.Booking> cart = Session["Cart"] as List<Web.Models.Booking>;
+                if (cart == null)
+                {
+                    cart = new List<Web.Models.Booking>();
                 }
+                cart.Add(booking);
+                Session["Cart"] = cart;
+
+                return RedirectToAction("Cos", "Home");
             }
             catch (Exception ex)
             {
-                TempData["Error"] = "A apărut o eroare la salvarea rezervării: " + ex.Message;
+                TempData["Error"] = "A apărut o eroare la adăugarea în coș: " + ex.Message;
                 return RedirectToAction("Carsection");
             }
         }
@@ -593,6 +587,91 @@ namespace Web.Controllers
                 }
             }
             return RedirectToAction("Cos");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult LoginAdmin(AdminLogin login)
+        {
+            if (ModelState.IsValid)
+            {
+                using (var db = new eUseControl.BusinessLogic.Core.DBModel.UserContext())
+                {
+                    var admin = db.Users.FirstOrDefault(u =>
+                        (u.Email == login.Username || u.UserName == login.Username) &&
+                        u.Level == 1); // Level 1 pentru administrator
+
+                    if (admin != null && eUseControl.BusinessLogic.Core.PasswordHasher.VerifyPassword(login.Password, admin.Password))
+                    {
+                        Session["Id"] = admin.Id;
+                        Session["UserName"] = admin.UserName;
+                        Session["Email"] = admin.Email;
+                        Session["IsAdmin"] = true;
+                        Session.Timeout = 60;
+
+                        return RedirectToAction("Cars", "Admin");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "Credențiale incorecte sau nu aveți drepturi de administrator.");
+                    }
+                }
+            }
+            return View(login);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateAdmin(URegisterData registerData)
+        {
+            if (ModelState.IsValid)
+            {
+                registerData.UserIp = Request.UserHostAddress;
+                registerData.LastLogin = DateTime.Now;
+                registerData.Level = 1; // Setăm nivelul la 1 pentru administrator
+
+                var registerResponse = _userApi.UserRegister(registerData);
+
+                if (registerResponse.Status)
+                {
+                    TempData["SuccessMessage"] = "Cont de administrator creat cu succes!";
+                    return RedirectToAction("LoginAdmin");
+                }
+                else
+                {
+                    ModelState.AddModelError("", registerResponse.StatusMsg);
+                }
+            }
+
+            return View("Registre", registerData);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult UpdateUserToAdmin(string email)
+        {
+            try
+            {
+                using (var db = new eUseControl.BusinessLogic.Core.DBModel.UserContext())
+                {
+                    var user = db.Users.FirstOrDefault(u => u.Email == email);
+                    if (user != null)
+                    {
+                        user.Level = 1; // Setăm nivelul la 1 pentru administrator
+                        db.SaveChanges();
+                        TempData["SuccessMessage"] = "Utilizatorul a fost promovat la administrator cu succes!";
+                    }
+                    else
+                    {
+                        TempData["ErrorMessage"] = "Utilizatorul nu a fost găsit.";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = "A apărut o eroare: " + ex.Message;
+            }
+            return RedirectToAction("LoginAdmin");
         }
     }
 }
