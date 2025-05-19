@@ -17,6 +17,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        overflow: hidden;
     }
 
     .hero-banner::before {
@@ -29,11 +30,74 @@
         background: inherit;
         filter: blur(8px);
         z-index: 1;
+        background-color: rgba(0, 0, 0, 0.5);
+        transition: background-color 3s ease;
+    }
+
+    .hero-banner:hover::before {
+        background-color: rgba(0, 0, 0, 0.6);
     }
 
     .hero-content {
         position: relative;
         z-index: 2;
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 1s ease, transform 1s ease;
+    }
+
+    .hero-content.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .hero-content h1 {
+        font-size: 3.5em;
+        margin-bottom: 30px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .cta-button {
+        display: inline-block;
+        padding: 15px 40px;
+        background-color: #007bff;
+        color: white;
+        text-decoration: none;
+        border-radius: 30px;
+        font-size: 1.2em;
+        font-weight: bold;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+        position: relative;
+        overflow: hidden;
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    .cta-button.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .cta-button::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+        transition: 0.5s;
+    }
+
+    .cta-button:hover::before {
+        left: 100%;
+    }
+
+    .cta-button:hover {
+        background-color: #0056b3;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
     }
 
     .scroll-indicator {
@@ -43,9 +107,112 @@
         transform: translateX(-50%);
         z-index: 2;
         color: white;
-        animation: bounce 2s infinite;
+        transition: transform 0.3s ease;
     }
 
+    .scroll-indicator:hover {
+        transform: translateX(-50%) translateY(-10px);
+    }
+
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 30px;
+        max-width: 1200px;
+        margin: 40px auto;
+        padding: 20px;
+        text-align: center;
+    }
+
+    .info-card {
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        text-align: center;
+    }
+
+    .info-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: #007bff;
+        transform: scaleX(0);
+        transition: transform 0.3s ease;
+    }
+
+    .info-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .info-card:hover::before {
+        transform: scaleX(1);
+    }
+
+    .info-card i {
+        font-size: 2.5em;
+        color: #007bff;
+        margin-bottom: 20px;
+        transition: transform 0.3s ease;
+    }
+
+    .info-card:hover i {
+        transform: scale(1.1);
+    }
+
+    .mission-section {
+        background-color: #f8f9fa;
+        padding: 60px 20px;
+        margin: 40px auto;
+        position: relative;
+        overflow: hidden;
+        max-width: 1000px;
+        text-align: center;
+    }
+
+    .mission-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(45deg, rgba(0,123,255,0.05) 0%, rgba(0,123,255,0) 100%);
+        pointer-events: none;
+    }
+
+    .mission-content {
+        max-width: 800px;
+        margin: 0 auto;
+        position: relative;
+        z-index: 1;
+        text-align: center;
+    }
+
+    .mission-content h2 {
+        color: #333;
+        font-size: 2.5em;
+        margin-bottom: 30px;
+        text-align: center;
+        position: relative;
+    }
+
+    .mission-content h2::after {
+        content: '';
+        display: block;
+        width: 80px;
+        height: 4px;
+        background: #007bff;
+        margin: 20px auto;
+        border-radius: 2px;
+    }
 
     .team-section {
         background-color: rgba(255, 255, 255, 0.95);
@@ -55,16 +222,70 @@
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         max-width: 1200px;
         width: 90%;
+        text-align: center;
     }
 
-        .team-section h2 {
-            color: #007bff;
-            font-size: 2.5em;
-            margin-bottom: 40px;
-            text-align: center;
-            font-weight: bold;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
-        }
+    .team-section h2 {
+        color: #007bff;
+        font-size: 2.5em;
+        margin-bottom: 40px;
+        text-align: center;
+        font-weight: bold;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        position: relative;
+    }
+
+    .team-section h2::after {
+        content: '';
+        display: block;
+        width: 80px;
+        height: 4px;
+        background: #007bff;
+        margin: 20px auto;
+        border-radius: 2px;
+    }
+
+    .team-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 30px;
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 20px;
+        text-align: center;
+    }
+
+    .team-member {
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        text-align: center;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .team-member::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: #007bff;
+        transform: scaleX(0);
+        transition: transform 0.3s ease;
+    }
+
+    .team-member:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .team-member:hover::before {
+        transform: scaleX(1);
+    }
 
     .team-member img {
         width: 150px;
@@ -72,25 +293,120 @@
         border-radius: 50%;
         object-fit: cover;
         border: 3px solid #007bff;
+        transition: transform 0.3s ease;
     }
 
-    .about-content {
-        opacity: 0;
-        transform: translateY(50px);
-        transition: opacity 0.5s ease, transform 0.5s ease;
+    .team-member:hover img {
+        transform: scale(1.05);
     }
 
-    .about-content.visible {
-        opacity: 1;
-        transform: translateY(0);
+    .team-member h3 {
+        color: #007bff;
+        margin: 15px 0 5px;
+        font-size: 1.4em;
+        transition: color 0.3s ease;
     }
+
+    .team-member p {
+        color: #666;
+        font-size: 1.1em;
+    }
+
+    .stats-section {
+        background-color: #f8f9fa;
+        padding: 60px 20px;
+        margin: 40px auto;
+        position: relative;
+        overflow: hidden;
+        max-width: 1200px;
+        text-align: center;
+    }
+
+    .stats-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(45deg, rgba(0,123,255,0.05) 0%, rgba(0,123,255,0) 100%);
+        pointer-events: none;
+    }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 30px;
+        max-width: 1000px;
+        margin: 0 auto;
+        position: relative;
+        z-index: 1;
+        text-align: center;
+    }
+
+    .stat-item {
+        text-align: center;
+        padding: 20px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+
+    .stat-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .stat-item h3 {
+        color: #007bff;
+        font-size: 2.5em;
+        margin-bottom: 10px;
+    }
+
+    .stat-item p {
+        color: #666;
+        font-size: 1.1em;
+    }
+
+    .right-aligned {
+        text-align: right;
+        margin: 40px auto;
+        max-width: 600px;
+        padding: 20px;
+        background-color: #f8f9fa;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .right-aligned h3 {
+        color: #007bff;
+        font-size: 1.8em;
+        margin-bottom: 15px;
+        text-align: right;
+    }
+
+    .right-aligned p {
+        color: #666;
+        line-height: 1.6;
+        margin-bottom: 20px;
+        text-align: right;
+    }
+
+    
+    
 </style>
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const sections = document.querySelectorAll('.info-card, .mission-section, .team-section, .stats-section');
-        const aboutContent = document.querySelector('.about-content');
-        
+        const heroContent = document.querySelector('.hero-content');
+        const ctaButton = document.querySelector('.cta-button');
+
+        // Show hero content and button immediately
+        heroContent.classList.add('visible');
+        ctaButton.classList.add('visible');
+
         function reveal() {
             sections.forEach(section => {
                 const sectionTop = section.getBoundingClientRect().top;
@@ -98,15 +414,8 @@
                     section.classList.add('show');
                 }
             });
-
-            // Reveal about content when scrolled
-            if (window.scrollY > 100) {
-                aboutContent.classList.add('visible');
-            } else {
-                aboutContent.classList.remove('visible');
-            }
         }
-        
+
         window.addEventListener('scroll', reveal);
         reveal();
     });
@@ -122,7 +431,6 @@
             <i class="fas fa-chevron-down"></i>
         </div>
     </div>
-
 
     <div class="about-content">
         <div class="hero-banner">
@@ -151,6 +459,11 @@
             </div>
         </div>
 
+        <div class="right-aligned">
+            <h3>De ce să ne alegeți?</h3>
+            <p>Cu peste un deceniu de experiență în domeniu, am construit o reputație solidă bazată pe încredere și calitate. Flota noastră diversificată și serviciile personalizate ne fac partenerul ideal pentru orice nevoie de mobilitate.</p>
+        </div>
+
         <div class="team-section">
             <h2>Echipa Noastră</h2>
             <div class="team-grid">
@@ -170,6 +483,11 @@
                     <p>Relații Clienți</p>
                 </div>
             </div>
+        </div>
+
+        <div class="right-aligned">
+            <h3>Valorile Noastre</h3>
+            <p>Ne concentrăm eforturile pe calitate, inovație și satisfacția clientului. Fiecare membru al echipei noastre este dedicat să ofere cea mai bună experiență posibilă.</p>
         </div>
 
         <div class="stats-section">
@@ -195,4 +513,3 @@
     </div>
 </section>
 
- 
