@@ -1,59 +1,166 @@
-﻿
-@{
-    ViewBag.Title = "Services";
+﻿@{
+    ViewBag.Title = "Servicii";
 }
 
 @Html.Partial("_Header")
 
+<style>
+    .services {
+        padding: 80px 0;
+        background-color: #f8f9fa;
+    }
+
+    .title {
+        text-align: center;
+        margin-bottom: 50px;
+    }
+
+        .title h4 {
+            color: #007bff;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+
+        .title h2 {
+            color: #333;
+            font-size: 2.2em;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .title p {
+            color: #666;
+            font-size: 1.1em;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+    .services-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 30px;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    .card {
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+    }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card div {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .card span {
+            font-size: 2em;
+            color: #007bff;
+            margin-right: 15px;
+        }
+
+        .card h4 {
+            color: #333;
+            font-size: 1.4em;
+            margin: 0;
+        }
+
+        .card p {
+            color: #666;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+    .cta-section {
+        text-align: center;
+        margin-top: 60px;
+        padding: 20px;
+    }
+
+    .cta-button {
+        display: inline-block;
+        padding: 15px 40px;
+        background-color: #007bff;
+        color: white;
+        text-decoration: none;
+        border-radius: 30px;
+        font-size: 1.2em;
+        font-weight: bold;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+    }
+
+        .cta-button:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
+            color: white;
+            text-decoration: none;
+        }
+</style>
+
 <section class="services" id="services">
     <div class="title">
         <h4><i class="fa-solid fa-car"></i></h4>
-        <h2>What Services we offer to our clients</h2>
-        <p>Loren djhf kdfod djfdi knd sknsie dfjoo.</p>
+        <h2>Serviciile Noastre</h2>
+        <p>Oferim o gamă completă de servicii pentru a vă asigura cea mai bună experiență de închiriere auto</p>
     </div>
     <div class="container services-container">
         <div class="card">
             <div>
                 <span class="lnr lnr-rocket"></span>
-                <h4>Car accesories</h4>
+                <h4>Accesorii Auto</h4>
             </div>
-            <p>fndjnf jnfndk slckoj sjd jd nsjvi vjsnvi jisfjn jsnin.</p>
+            <p>Oferim o gamă largă de accesorii pentru mașina dumneavoastră închiriată, de la navigație GPS până la scaune pentru copii, pentru a vă asigura că aveți tot ce aveți nevoie pentru călătoria dumneavoastră.</p>
         </div>
         <div class="card">
             <div>
                 <span class="lnr lnr-license"></span>
-                <h4>Technical Repair</h4>
+                <h4>Asistență Tehnică</h4>
             </div>
-            <p>fndjnf jnfndk slckoj sjd jd nsjvi vjsnvi jisfjn jsnin.</p>
+            <p>Echipa noastră tehnică este disponibilă 24/7 pentru orice problemă tehnică. Toate vehiculele noastre sunt întreținute regulat și verificate înainte de fiecare închiriere.</p>
         </div>
         <div class="card">
             <div>
                 <span class="lnr lnr-user"></span>
-                <h4>Vast Reservation</h4>
+                <h4>Rezervări Flexibile</h4>
             </div>
-            <p>fndjnf jnfndk slckoj sjd jd nsjvi vjsnvi jisfjn jsnin.</p>
+            <p>Sistemul nostru de rezervare online vă permite să planificați închirierea cu ușurință. Oferim opțiuni flexibile pentru perioada de închiriere și posibilitatea de a modifica sau anula rezervarea.</p>
         </div>
         <div class="card">
             <div>
                 <span class="lnr lnr-phone"></span>
-                <h4>24/7 Support</h4>
+                <h4>Suport 24/7</h4>
             </div>
-            <p>fndjnf jnfndk slckoj sjd jd nsjvi vjsnvi jisfjn jsnin.</p>
+            <p>Echipa noastră de suport este disponibilă non-stop pentru a vă ajuta cu orice întrebare sau problemă. Sunați-ne oricând și vă vom oferi asistență imediată.</p>
         </div>
         <div class="card">
             <div>
                 <span class="lnr lnr-location"></span>
-                <h4>Vast Branches</h4>
+                <h4>Locații Multiple</h4>
             </div>
-            <p>fndjnf jnfndk slckoj sjd jd nsjvi vjsnvi jisfjn jsnin.</p>
+            <p>Avem puncte de ridicare și predare în toate orașele mari din România. Puteți ridica mașina dintr-o locație și o puteți preda în alta, pentru confortul dumneavoastră.</p>
         </div>
         <div class="card">
             <div>
                 <span class="lnr lnr-car"></span>
-                <h4>Rental Cars</h4>
+                <h4>Flotă Diversificată</h4>
             </div>
-            <p>fndjnf jnfndk slckoj sjd jd nsjvi vjsnvi jisfjn jsnin.</p>
+            <p>Oferim o gamă largă de vehicule, de la mașini economice până la SUV-uri de lux și mașini sport. Toate vehiculele noastre sunt moderne, bine întreținute și dotate cu cele mai recente tehnologii.</p>
         </div>
+    </div>
+
+    <div class="cta-section">
+        <a href="/Home/Carsection" class="cta-button">Închiriază acum</a>
     </div>
 </section>
 
