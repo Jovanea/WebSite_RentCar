@@ -14,7 +14,7 @@
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
             <div class="input-group">
-                @Html.LabelFor(m => m.Username, "Email sau Nume utilizator")
+                @Html.LabelFor(m => m.Username, "Email")
                 @Html.TextBoxFor(m => m.Username, new { @class = "form-control", required = "required" })
                 @Html.ValidationMessageFor(m => m.Username, "", new { @class = "text-danger" })
             </div>
@@ -41,19 +41,6 @@
                 @TempData["ErrorMessage"]
             </div>
         }
-
-        <div class="promote-admin-section">
-            <h3>Promovează utilizator la administrator</h3>
-            @using (Html.BeginForm("UpdateUserToAdmin", "Home", FormMethod.Post))
-            {
-                @Html.AntiForgeryToken()
-                <div class="input-group">
-                    <label for="email">Email utilizator:</label>
-                    <input type="email" name="email" id="email" class="form-control" required />
-                </div>
-                <button type="submit" class="button">Promovează la administrator</button>
-            }
-        </div>
     </div>
 </div>
 
@@ -130,16 +117,4 @@
         color: #721c24;
         border: 1px solid #f5c6cb;
     }
-
-    .promote-admin-section {
-        margin-top: 30px;
-        padding-top: 20px;
-        border-top: 1px solid #ddd;
-    }
-
-        .promote-admin-section h3 {
-            margin-bottom: 20px;
-            font-size: 1.2em;
-            color: #333;
-        }
 </style>
