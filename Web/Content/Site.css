@@ -24,7 +24,6 @@
     --width-lg: 80%;
     --width-md: 90%;
     --width-sm: 95%;
-
     --first-color: hsl(38, 92%, 58%);
     --first-color-light: hsl(38, 100%, 78%);
     --first-color-alt: hsl(32, 75%, 50%);
@@ -127,13 +126,14 @@ section {
     transition: var(--transition);
 }
 
-.btn:hover {
-    background: var(--color-primary);
-    color: var(--color-secondary);
-}
-.btn:focus {
+    .btn:hover {
+        background: var(--color-primary);
+        color: var(--color-secondary);
+    }
+
+    .btn:focus {
         outline: 2px solid var(--color-secondary);
-}
+    }
 
 .social-icons {
     display: flex;
@@ -149,10 +149,12 @@ section {
         border-radius: 50%;
         cursor: pointer;
     }
-.social-icons i:hover {
+
+        .social-icons i:hover {
             background-color: var(--color-secondary);
             color: var(--color-primary);
-}
+        }
+
 .title {
     text-align: center;
     margin-bottom: 4rem;
@@ -311,7 +313,7 @@ section {
     color: var(--color-text);
     width: 590px;
     padding-left: 10px;
-    padding-right: 10px; 
+    padding-right: 10px;
 }
 
     .booking-form input,
@@ -510,7 +512,7 @@ section {
 /*========================Cardetalies===================================*/
 
 .car-details {
-    padding: 0rem ;
+    padding: 4rem 0;
     background-color: #f8f9fa;
     color: #333;
     font-family: 'Roboto', sans-serif;
@@ -552,16 +554,13 @@ section {
     .car-details .car-images {
         display: flex;
         flex-direction: column;
-        align-items:center;
         gap: 1rem;
     }
 
     .car-details .main-image {
         border-radius: 8px;
         overflow: hidden;
-        width: 100%; /* Se adaptează la lățimea containerului */
-        max-width: 800px; /* Limitează lățimea maximă */
-        height: auto; /* Se adaptează proporțional */
+        height: 400px;
         background: #f0f0f0;
     }
 
@@ -572,14 +571,12 @@ section {
             transition: transform 0.3s;
         }
 
-
         .car-details .main-image:hover img {
             transform: scale(1.02);
         }
 
     .car-details .thumbnails {
         display: flex;
-        align-self: flex-start;
         gap: 10px;
     }
 
@@ -662,7 +659,7 @@ section {
 
     .car-details .centered-content {
         display: grid;
-        grid-template-columns: 3fr 2fr; 
+        grid-template-columns: 3fr 2fr;
         gap: 2rem;
         margin-top: 2rem;
         width: 100%;
@@ -878,14 +875,19 @@ section {
 .blog-container {
     display: grid;
     gap: 2rem 0;
+    padding: 0 1rem;
 }
 
     .blog-container .card {
         display: grid;
         grid-template-columns: 40% 60%;
-        gap: 1rem;
+        gap: 1.5rem;
         background: var(--color-bg);
         cursor: pointer;
+        padding: 1.5rem;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        position: relative;
     }
 
     .blog-container .card-2 {
@@ -895,15 +897,37 @@ section {
     .blog-container img {
         filter: grayscale(1);
         transition: var(--transition);
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 8px;
     }
 
     .blog-container .card:hover img {
         filter: grayscale(0);
     }
 
-    .blog-container .contect p {
-        padding: .1rem 1.5rem;
+    .blog-container .content {
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 8px;
     }
+
+        .blog-container .content h3 {
+            margin-bottom: 1rem;
+            color: #000;
+            font-size: 1.8rem;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .blog-container .content p {
+            line-height: 1.6;
+            color: #333;
+            font-size: 1.1rem;
+            text-align: justify;
+            font-weight: 500;
+        }
 
 .pagination {
     display: flex;
@@ -1150,10 +1174,11 @@ section {
     margin: 40px auto;
     padding: 30px;
 }
-.container11{
-    flex-direction:column;
-    align-items:center;
-    text-align:center;
+
+.container11 {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
 }
 
 .registration-container h2 {
@@ -1522,10 +1547,10 @@ section.container {
 
 
 
-.contact-section p {
-    font-size: 18px;
-    margin-bottom: 40px;
-}
+    .contact-section p {
+        font-size: 18px;
+        margin-bottom: 40px;
+    }
 
 .contact-details {
     display: flex;
@@ -1630,15 +1655,15 @@ section.container {
 }
 
 .info-grid, .mission-section, .team-section, .stats-section {
-    max-width: 900px; 
+    max-width: 900px;
     margin: 0 auto;
-    text-align: center; 
-    padding: 20px; 
+    text-align: center;
+    padding: 20px;
 }
 
 
 .info-card {
-    max-width: 400px; 
+    max-width: 400px;
     margin: 20px auto;
     background: white;
     padding: 20px;
@@ -1768,37 +1793,42 @@ section.container {
 .first-row {
     display: flex;
 }
-.owner{
+
+.owner {
     width: 100%;
     margin-right: 40px;
 }
+
 .input-field {
     border-radius: 10px;
-    border: 1px solid #999; 
+    border: 1px solid #999;
     padding: 8px;
     outline: none;
 }
+
     .input-field input {
         width: 100%;
     }
+
 .selection {
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 75%;
 }
+
     .selection select {
         padding: 10px 20px;
         border: 1px solid #999;
         border-radius: 10px;
     }
+
 .cards {
     width: 40px;
     display: flex;
     flex-wrap: nowrap;
     flex-direction: row;
     gap: 5px;
-
 }
 
 .pay-container button {
@@ -2076,4 +2106,3 @@ section.container {
             font-size: 12px;
             color: #666;
         }
-
