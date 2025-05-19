@@ -1,13 +1,96 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "About";
 }
 
 @Html.Partial("_Header")
 
+<style>
+    .hero-banner {
+        position: relative;
+        background-image: url('/images/car-banner.jpg');
+        background-size: cover;
+        background-position: center;
+        padding: 100px 0;
+        color: white;
+        text-align: center;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .hero-banner::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: inherit;
+        filter: blur(8px);
+        z-index: 1;
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 2;
+    }
+
+    .scroll-indicator {
+        position: absolute;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 2;
+        color: white;
+        animation: bounce 2s infinite;
+    }
+
+
+    .team-section {
+        background-color: rgba(255, 255, 255, 0.95);
+        padding: 60px 20px;
+        margin: 40px auto;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        max-width: 1200px;
+        width: 90%;
+    }
+
+        .team-section h2 {
+            color: #007bff;
+            font-size: 2.5em;
+            margin-bottom: 40px;
+            text-align: center;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+    .team-member img {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid #007bff;
+    }
+
+    .about-content {
+        opacity: 0;
+        transform: translateY(50px);
+        transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    .about-content.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+</style>
+
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const sections = document.querySelectorAll('.info-card, .mission-section, .team-section, .stats-section');
+        const aboutContent = document.querySelector('.about-content');
+        
         function reveal() {
             sections.forEach(section => {
                 const sectionTop = section.getBoundingClientRect().top;
@@ -15,7 +98,15 @@
                     section.classList.add('show');
                 }
             });
+
+            // Reveal about content when scrolled
+            if (window.scrollY > 100) {
+                aboutContent.classList.add('visible');
+            } else {
+                aboutContent.classList.remove('visible');
+            }
         }
+        
         window.addEventListener('scroll', reveal);
         reveal();
     });
@@ -25,74 +116,80 @@
     <div class="hero-banner">
         <div class="hero-content">
             <h1>Despre DriveNow</h1>
-            <a href="#contact" class="cta-button">Închiriază acum</a>
+            <a href="/Home/Carsection" class="cta-button">Închiriază acum</a>
+        </div>
+        <div class="scroll-indicator">
+            <i class="fas fa-chevron-down"></i>
         </div>
     </div>
 
-    <div class="hero-banner">
-        <div class="hero-content">
-            <h1>Experiență și profesionalism în servicii de închirieri auto din 2010</h1>
-        </div>
-    </div>
 
-    <div class="info-grid">
-        <div class="info-card">
-            <i class="fas fa-bolt"></i>
-            <h3>Servicii rapide</h3>
-            <p>Cu peste 13 ani de experiență în domeniul închirierilor auto, oferim servicii de cea mai înaltă calitate și în cel mai scurt timp.</p>
+    <div class="about-content">
+        <div class="hero-banner">
+            <div class="hero-content">
+                <h1>Experiență și profesionalism în servicii de închirieri auto din 2010</h1>
+            </div>
         </div>
-        <div class="info-card">
-            <i class="fas fa-handshake"></i> 
-            <h3>Încredere și comfort</h3>
-            <p>Ne asigurăm că fiecare client beneficiază de o experiență fără griji, oferind asistență non-stop și suport tehnic de încredere, indiferent de locație. Punem siguranța și confortul pe primul loc, astfel încât fiecare călătorie să fie plăcută și lipsită de stres.</p>
-        </div>
-    </div>
 
-    <div class="mission-section">
-        <div class="mission-content">
-            <h2>Misiunea Noastră</h2>
-            <p>Misiunea noastră este să oferim servicii de închirieri auto la standarde înalte, cu transparență și profesionalism. Ne străduim să depășim așteptările clienților noștri prin calitatea serviciilor și atenția la detalii. Oferim o flotă diversificată de vehicule moderne și bine întreținute, potrivite pentru orice nevoie – de la mașini compacte pentru oraș, până la SUV-uri spațioase și elegante pentru călătorii mai lungi.</p>
-        </div>
-    </div>
-
-    <div class="team-section">
-        <h2>Echipa Noastră</h2>
-        <div class="team-grid">
-            <div class="team-member">
-                <img src="/api/placeholder/150/150" alt="Manager">
-                <h3>Ioan Popescu</h3>
-                <p>Director General</p>
+        <div class="info-grid">
+            <div class="info-card">
+                <i class="fas fa-bolt"></i>
+                <h3>Servicii rapide</h3>
+                <p>Cu peste 13 ani de experiență în domeniul închirierilor auto, oferim servicii de cea mai înaltă calitate și în cel mai scurt timp.</p>
             </div>
-            <div class="team-member">
-                <img src="/api/placeholder/150/150" alt="Service">
-                <h3>Maria Ionescu</h3>
-                <p>Manager Service</p>
-            </div>
-            <div class="team-member">
-                <img src="/api/placeholder/150/150" alt="Customer">
-                <h3>Andrei Popa</h3>
-                <p>Relații Clienți</p>
+            <div class="info-card">
+                <i class="fas fa-handshake"></i>
+                <h3>Încredere și comfort</h3>
+                <p>Ne asigurăm că fiecare client beneficiază de o experiență fără griji, oferind asistență non-stop și suport tehnic de încredere, indiferent de locație. Punem siguranța și confortul pe primul loc, astfel încât fiecare călătorie să fie plăcută și lipsită de stres.</p>
             </div>
         </div>
-    </div>
 
-    <div class="stats-section">
-        <div class="stats-grid">
-            <div class="stat-item">
-                <h3>50+</h3>
-                <p>Vehicule în flotă</p>
+        <div class="mission-section">
+            <div class="mission-content">
+                <h2>Misiunea Noastră</h2>
+                <p>Misiunea noastră este să oferim servicii de închirieri auto la standarde înalte, cu transparență și profesionalism. Ne străduim să depășim așteptările clienților noștri prin calitatea serviciilor și atenția la detalii. Oferim o flotă diversificată de vehicule moderne și bine întreținute, potrivite pentru orice nevoie – de la mașini compacte pentru oraș, până la SUV-uri spațioase și elegante pentru călătorii mai lungi.</p>
             </div>
-            <div class="stat-item">
-                <h3>1000+</h3>
-                <p>Clienți mulțumiți</p>
+        </div>
+
+        <div class="team-section">
+            <h2>Echipa Noastră</h2>
+            <div class="team-grid">
+                <div class="team-member">
+                    <img src="https://ui-avatars.com/api/?name=Ioan+Popescu&background=007bff&color=fff" alt="Manager">
+                    <h3>Ioan Popescu</h3>
+                    <p>Director General</p>
+                </div>
+                <div class="team-member">
+                    <img src="https://ui-avatars.com/api/?name=Maria+Ionescu&background=007bff&color=fff" alt="Service">
+                    <h3>Maria Ionescu</h3>
+                    <p>Manager Service</p>
+                </div>
+                <div class="team-member">
+                    <img src="https://ui-avatars.com/api/?name=Andrei+Popa&background=007bff&color=fff" alt="Customer">
+                    <h3>Andrei Popa</h3>
+                    <p>Relații Clienți</p>
+                </div>
             </div>
-            <div class="stat-item">
-                <h3>13</h3>
-                <p>Ani de experiență</p>
-            </div>
-            <div class="stat-item">
-                <h3>24/7</h3>
-                <p>Suport clienți</p>
+        </div>
+
+        <div class="stats-section">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <h3>50+</h3>
+                    <p>Vehicule în flotă</p>
+                </div>
+                <div class="stat-item">
+                    <h3>1000+</h3>
+                    <p>Clienți mulțumiți</p>
+                </div>
+                <div class="stat-item">
+                    <h3>13</h3>
+                    <p>Ani de experiență</p>
+                </div>
+                <div class="stat-item">
+                    <h3>24/7</h3>
+                    <p>Suport clienți</p>
+                </div>
             </div>
         </div>
     </div>
