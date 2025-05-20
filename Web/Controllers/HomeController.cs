@@ -11,7 +11,7 @@ using System.Data.Entity;
 
 namespace Web.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         private readonly IUserApi _userApi;
 
@@ -22,6 +22,7 @@ namespace Web.Controllers
 
         public ActionResult Index()
         {
+            SessionStatus();
             return View();
         }
 
@@ -48,6 +49,16 @@ namespace Web.Controllers
                     Session["Email"] = login.Credential;
                     Session["Phone"] = userLogin.Phone;
                     Session.Timeout = 60;
+
+                    var bl = new BusinessLogic();
+                    var session = bl.GetSessionBL();
+                    string secureToken = session.CreateCookie(data);
+                    
+                    Response.Cookies.Add(new HttpCookie("X-KEY", secureToken)
+                    {
+                        Expires = DateTime.Now.AddHours(1),
+                        HttpOnly = true
+                    });
 
                     var userData = new
                     {
@@ -114,9 +125,35 @@ namespace Web.Controllers
 
         public ActionResult Login()
         {
+            SessionStatus();
+            
             if (Session["Id"] != null)
             {
                 return RedirectToAction("Profile", "Home");
+            }
+
+            var xKeyCookie = Request.Cookies["X-KEY"];
+            if (xKeyCookie != null)
+            {
+                var bl = new BusinessLogic();
+                var session = bl.GetSessionBL();
+                var userData = session.GetUserByCookie(xKeyCookie.Value);
+                
+                if (userData != null)
+                {
+                    var userApi = new UserApi();
+                    var userLogin = userApi.UserLogin(userData);
+                    
+                    if (userLogin.Status)
+                    {
+                        Session["Id"] = userLogin.Id;
+                        Session["UserName"] = userLogin.Credential;
+                        Session["Email"] = userData.Credential;
+                        Session["Phone"] = userLogin.Phone;
+                        
+                        return RedirectToAction("Profile", "Home");
+                    }
+                }
             }
 
             var sessionCookie = Request.Cookies["user_session"];
@@ -169,6 +206,8 @@ namespace Web.Controllers
 
         public new ActionResult Profile()
         {
+            SessionStatus();
+            
             if (Session["Id"] == null)
             {
                 return RedirectToAction("Login");
@@ -599,7 +638,7 @@ namespace Web.Controllers
                 {
                     var admin = db.Users.FirstOrDefault(u =>
                         (u.Email == login.Username || u.UserName == login.Username) &&
-                        u.Level == 1); // Level 1 pentru administrator
+                        u.Level == 1); 
 
                     if (admin != null && eUseControl.BusinessLogic.Core.PasswordHasher.VerifyPassword(login.Password, admin.Password))
                     {
@@ -628,7 +667,7 @@ namespace Web.Controllers
             {
                 registerData.UserIp = Request.UserHostAddress;
                 registerData.LastLogin = DateTime.Now;
-                registerData.Level = 1; // Setăm nivelul la 1 pentru administrator
+                registerData.Level = 1; 
 
                 var registerResponse = _userApi.UserRegister(registerData);
 
@@ -657,7 +696,7 @@ namespace Web.Controllers
                     var user = db.Users.FirstOrDefault(u => u.Email == email);
                     if (user != null)
                     {
-                        user.Level = 1; // Setăm nivelul la 1 pentru administrator
+                        user.Level = 1; 
                         db.SaveChanges();
                         TempData["SuccessMessage"] = "Utilizatorul a fost promovat la administrator cu succes!";
                     }

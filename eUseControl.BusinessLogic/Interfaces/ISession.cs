@@ -13,6 +13,8 @@ namespace eUseControl.BusinessLogic
     public interface ISession
     {
         UserLogin UserLogin(ULoginData data);
+        ULoginData GetUserByCookie(string cookieValue);
+        string CreateCookie(ULoginData data);
     }
 
     public interface ICarSession
