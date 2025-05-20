@@ -16,7 +16,7 @@
                         UserId = c.Int(nullable: false),
                         PickupDate = c.DateTime(nullable: false),
                         ReturnDate = c.DateTime(nullable: false),
-                        TotalAmount = c.Decimal(nullable: false, precision: 18, scale: 2),
+                        TotalAmount = c.Int(nullable: false),
                         Status = c.String(nullable: false),
                     })
                 .PrimaryKey(t => t.BookingId);
@@ -27,7 +27,7 @@
                     {
                         PaymentId = c.Int(nullable: false, identity: true),
                         BookingId = c.Int(nullable: false),
-                        Amount = c.Decimal(nullable: false, precision: 18, scale: 2),
+                        Amount = c.Int(nullable: false),
                         PaymentDate = c.DateTime(nullable: false),
                         PaymentStatus = c.String(nullable: false),
                         TransactionId = c.String(),

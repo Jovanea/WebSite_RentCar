@@ -1,18 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
+using Web.Interfaces;
+using Web.BusinessLogic;
 using eUseControl.BusinessLogic.DBModel;
-using System.Data.Entity;
-using System.Data.SqlClient;
-using eUseControl.Domain.Entities.Car;
+using System.Linq;
 
 namespace Web.Controllers
 {
     public class PaymentController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private readonly IPaymentApi _paymentApi;
+        private readonly IBookingApi _bookingApi;
+
+        public PaymentController()
+        {
+            _paymentApi = new PaymentApi();
+            _bookingApi = new BookingApi();
+        }
 
         public ActionResult Process()
         {
@@ -21,20 +25,16 @@ namespace Web.Controllers
                 return RedirectToAction("Login", "Home");
             }
 
-            var cart = Session["Cart"] as List<Booking>;
-            if (cart == null || cart.Count == 0)
+            var booking = _bookingApi.GetUserBookings((int)Session["Id"])
+                .FirstOrDefault(b => b.Status == "Pending");
+
+            if (booking == null)
             {
                 return RedirectToAction("Carsection", "Home");
             }
 
-            decimal totalAmount = cart.Sum(b => b.TotalAmount);
-
-
-            ViewBag.Amount = totalAmount;
-            System.Diagnostics.Debug.WriteLine($"DEBUG: Total Amount={totalAmount} ({totalAmount.GetType()})");
-
-            var model = new CardDetails();
-            return View(model);
+            ViewBag.Amount = booking.TotalAmount;
+            return View(new CardDetails());
         }
 
         [HttpPost]
@@ -46,207 +46,58 @@ namespace Web.Controllers
                 return RedirectToAction("Login", "Home");
             }
 
-            var cart = Session["Cart"] as List<Booking>;
-            if (cart == null || cart.Count == 0)
+            var booking = _bookingApi.GetUserBookings((int)Session["Id"])
+                .FirstOrDefault(b => b.Status == "Pending");
+
+            if (booking == null)
             {
                 return RedirectToAction("Carsection", "Home");
             }
 
-            decimal totalAmount = cart.Sum(b => b.TotalAmount);
-
             if (!ModelState.IsValid)
             {
-                ViewBag.Amount = totalAmount;
+                ViewBag.Amount = booking.TotalAmount;
                 return View(cardDetails);
             }
 
-            if (!cardDetails.IsNumberValid())
+            if (_paymentApi.ProcessPayment(cardDetails, booking.TotalAmount))
             {
-                ModelState.AddModelError("", "Numărul cardului este invalid. Vă rugăm să introduceți un număr valid de 16 cifre.");
-                ViewBag.Amount = totalAmount;
-                return View(cardDetails);
-            }
-
-            if (!cardDetails.IsExpiryDateValid())
-            {
-                ModelState.AddModelError("", "Data de expirare a cardului este invalidă sau a expirat.");
-                ViewBag.Amount = totalAmount;
-                return View(cardDetails);
-            }
-
-            if (cardDetails.CardNumber.Length != 19)
-            {
-                ModelState.AddModelError("", "Numărul cardului trebuie să conțină exact 16 cifre.");
-                ViewBag.Amount = totalAmount;
-                return View(cardDetails);
-            }
-
-            if (verificNume(cardDetails.CardHolderName) == false)
-            {
-                ModelState.AddModelError("", "Numele cardului este invalid");
-                ViewBag.Amount = totalAmount;
-                return View(cardDetails);
-            }
-
-            if (cardDetails.CVV.Length != 3)
-            {
-                ModelState.AddModelError("", "CVV-ul trebuie să conțină exact 3 cifre.");
-                ViewBag.Amount = totalAmount;
-                return View(cardDetails);
-            }
-
-            bool paymentSuccessful = ProcessPayment(cardDetails, totalAmount);
-
-            if (paymentSuccessful)
-            {
-                using (var transaction = db.Database.BeginTransaction())
+                booking.Status = "Paid";
+                if (_bookingApi.UpdateBooking(booking))
                 {
-                    try
+                    Session["TransactionId"] = Guid.NewGuid().ToString();
+                    Session["PaymentAmount"] = booking.TotalAmount;
+                    Session["PaymentDate"] = DateTime.Now;
+                    Session["PaymentDetails"] = new
                     {
-                        foreach (var booking in cart)
-                        {
+                        CarId = booking.CarId,
+                        PickupDate = booking.PickupDate,
+                        ReturnDate = booking.ReturnDate,
+                        TotalAmount = booking.TotalAmount
+                    };
 
-                            booking.Status = "Confirmed";
-                            db.Bookings.Add(booking);
-
-                        }
-
-                        db.SaveChanges();
-                        transaction.Commit();
-
-                        Session["TransactionId"] = Guid.NewGuid().ToString();
-                        Session["PaymentAmount"] = totalAmount;
-                        Session["PaymentDate"] = DateTime.Now;
-                        Session["PaymentDetails"] = cart.Select(b => new
-                        {
-                            CarId = b.CarId,
-                            PickupDate = b.PickupDate,
-                            ReturnDate = b.ReturnDate,
-                            TotalAmount = b.TotalAmount
-                        }).ToList();
-
-                        Session.Remove("Cart");
-                        Session.Remove("CurrentBooking");
-
-                        return RedirectToAction("Success");
-                    }
-                    catch
-                    {
-                        transaction.Rollback();
-                        ViewBag.Amount = totalAmount;
-                        ModelState.AddModelError("", "A apărut o eroare în timpul procesării plății. Vă rugăm să încercați din nou.");
-                        return View(cardDetails);
-                    }
+                    return RedirectToAction("Success");
                 }
             }
-            else
-            {
-                ViewBag.Amount = totalAmount;
-                ModelState.AddModelError("", "Procesarea plății a eșuat. Vă rugăm să verificați detaliile cardului și să încercați din nou.");
-                return View(cardDetails);
-            }
-        }
 
-        private bool verificNume(string card)
-        {
-            if (card[card.Length - 1] == 32)
-                return false;
-            int a = 0;
-            for (int i = 0; i < card.Length; i++)
-            {
-                if (card[i] == 32 && a == 1)
-                {
-                    return false;
-                }
-                else if (card[i] == 32 && a == 0)
-                {
-                    a = 1;
-                }
-            }
-            if (a == 0)
-                return false;
-
-            return true;
-        }
-
-        private bool ProcessPayment(CardDetails cardDetails, decimal amount)
-        {
-            try
-            {
-                if (amount <= 0)
-                {
-                    System.Diagnostics.Debug.WriteLine("Eroare: amount <= 0");
-                    return false;
-                }
-
-                if (!cardDetails.IsExpiryDateValid())
-                {
-                    System.Diagnostics.Debug.WriteLine("Eroare: CardNumber invalid");
-                    return false;
-                }
-                if (!cardDetails.IsExpiryDateValid())
-                {
-                    System.Diagnostics.Debug.WriteLine("Eroare: ExpiryDate invalid");
-                    return false;
-                }
-                if (string.IsNullOrEmpty(cardDetails.CVV) || cardDetails.CVV.Length != 3 || !cardDetails.CVV.All(char.IsDigit))
-                {
-                    System.Diagnostics.Debug.WriteLine("Eroare: CVV invalid");
-                    return false;
-                }
-                if (string.IsNullOrEmpty(cardDetails.CardHolderName) || !cardDetails.CardHolderName.All(c => char.IsLetter(c) || char.IsWhiteSpace(c)))
-                {
-                    System.Diagnostics.Debug.WriteLine("Eroare: CardHolderName invalid");
-                    return false;
-                }
-
-                return true;
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine("Exceptie: " + ex.Message);
-                return false;
-            }
+            ViewBag.Amount = booking.TotalAmount;
+            ModelState.AddModelError("", "Procesarea plății a eșuat. Vă rugăm să verificați detaliile cardului și să încercați din nou.");
+            return View(cardDetails);
         }
 
         public ActionResult Success()
         {
-            if (Session["Id"] == null)
+            if (Session["TransactionId"] == null)
             {
-                return RedirectToAction("Login", "Home");
+                return RedirectToAction("Index", "Home");
             }
 
             ViewBag.TransactionId = Session["TransactionId"];
-            ViewBag.PaymentAmount = Session["PaymentAmount"];
+            ViewBag.Amount = Session["PaymentAmount"];
             ViewBag.PaymentDate = Session["PaymentDate"];
             ViewBag.PaymentDetails = Session["PaymentDetails"];
 
             return View();
-        }
-
-        private bool ProcessPaymentWithGateway(CardDetails cardDetails, decimal amount)
-        {
-            System.Threading.Thread.Sleep(1000);
-
-            if (string.IsNullOrEmpty(cardDetails.CardNumber) ||
-                string.IsNullOrEmpty(cardDetails.CardHolderName) ||
-                string.IsNullOrEmpty(cardDetails.CVV) ||
-                string.IsNullOrEmpty(cardDetails.ExpiryMonth) ||
-                string.IsNullOrEmpty(cardDetails.ExpiryYear))
-            {
-                return false;
-            }
-
-            return true;
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
         }
     }
 }

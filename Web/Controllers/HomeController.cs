@@ -8,16 +8,24 @@ using eUseControl.BusinessLogic;
 using eUseControl.BusinessLogic.Interfaces;
 using eUseControl.BusinessLogic.DBModel;
 using System.Data.Entity;
+using Web.Interfaces;
+using Web.BusinessLogic;
 
 namespace Web.Controllers
 {
     public class HomeController : BaseController
     {
         private readonly IUserApi _userApi;
+        private readonly ICarApi _carApi;
+        private readonly IBookingApi _bookingApi;
+        private readonly IPaymentApi _paymentApi;
 
         public HomeController()
         {
             _userApi = new UserApi();
+            _carApi = new CarApi();
+            _bookingApi = new BookingApi();
+            _paymentApi = new PaymentApi();
         }
 
         public ActionResult Index()
@@ -50,10 +58,9 @@ namespace Web.Controllers
                     Session["Phone"] = userLogin.Phone;
                     Session.Timeout = 60;
 
-                    var bl = new BusinessLogic();
-                    var session = bl.GetSessionBL();
+                    var session = _userApi.GetSessionBL();
                     string secureToken = session.CreateCookie(data);
-                    
+
                     Response.Cookies.Add(new HttpCookie("X-KEY", secureToken)
                     {
                         Expires = DateTime.Now.AddHours(1),
@@ -119,14 +126,18 @@ namespace Web.Controllers
 
         public ActionResult Cardetalies(int id = 1)
         {
+            var car = _carApi.GetCarById(id);
+            if (car == null)
+                return HttpNotFound();
+
             ViewBag.CarId = id;
-            return View();
+            return View(car);
         }
 
         public ActionResult Login()
         {
             SessionStatus();
-            
+
             if (Session["Id"] != null)
             {
                 return RedirectToAction("Profile", "Home");
@@ -135,22 +146,21 @@ namespace Web.Controllers
             var xKeyCookie = Request.Cookies["X-KEY"];
             if (xKeyCookie != null)
             {
-                var bl = new BusinessLogic();
-                var session = bl.GetSessionBL();
+                var session = _userApi.GetSessionBL();
                 var userData = session.GetUserByCookie(xKeyCookie.Value);
-                
+
                 if (userData != null)
                 {
                     var userApi = new UserApi();
                     var userLogin = userApi.UserLogin(userData);
-                    
+
                     if (userLogin.Status)
                     {
                         Session["Id"] = userLogin.Id;
                         Session["UserName"] = userLogin.Credential;
                         Session["Email"] = userData.Credential;
                         Session["Phone"] = userLogin.Phone;
-                        
+
                         return RedirectToAction("Profile", "Home");
                     }
                 }
@@ -207,7 +217,7 @@ namespace Web.Controllers
         public new ActionResult Profile()
         {
             SessionStatus();
-            
+
             if (Session["Id"] == null)
             {
                 return RedirectToAction("Login");
@@ -258,100 +268,24 @@ namespace Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Pay(CardDetails cardDetails)
         {
-            if (Session["Id"] == null)
+            if (!ModelState.IsValid)
+                return View();
+
+            var booking = _bookingApi.GetUserBookings((int)Session["Id"])
+                .FirstOrDefault(b => b.Status == "Pending");
+
+            if (booking == null)
+                return RedirectToAction("Index");
+
+            if (_paymentApi.ProcessPayment(cardDetails, booking.TotalAmount))
             {
-                return RedirectToAction("Login", "Home");
+                booking.Status = "Paid";
+                _bookingApi.UpdateBooking(booking);
+                return RedirectToAction("Index");
             }
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    var cart = Session["Cart"] as List<eUseControl.BusinessLogic.DBModel.Booking>;
-                    if (cart == null || cart.Count == 0)
-                    {
-                        return RedirectToAction("Carsection", "Home");
-                    }
-
-                    decimal totalAmount = cart.Sum(b => b.TotalAmount);
-
-                    bool paymentSuccessful = ProcessPayment(cardDetails, totalAmount);
-
-                    if (paymentSuccessful)
-                    {
-                        using (var db = new ApplicationDbContext())
-                        {
-                            foreach (var booking in cart)
-                            {
-                                booking.Status = "Confirmed";
-
-                                var existingBooking = db.Bookings.Find(booking.BookingId);
-
-                                if (existingBooking != null)
-                                {
-                                    existingBooking.Status = "Confirmed";
-                                    db.Entry(existingBooking).State = System.Data.Entity.EntityState.Modified;
-
-                                    var payment = new Payment
-                                    {
-                                        BookingId = booking.BookingId,
-                                        Amount = booking.TotalAmount,
-                                        PaymentDate = DateTime.Now,
-                                        PaymentStatus = "Completed",
-                                        TransactionId = Guid.NewGuid().ToString()
-                                    };
-
-                                }
-                            }
-
-                            db.SaveChanges();
-
-                            string transactionId = Guid.NewGuid().ToString();
-                            Session["TransactionId"] = transactionId;
-                            Session["PaymentAmount"] = totalAmount;
-                            Session["PaymentDate"] = DateTime.Now;
-                            Session["PaymentDetails"] = cart.Select(b => new
-                            {
-                                CarId = b.CarId,
-                                PickupDate = b.PickupDate,
-                                ReturnDate = b.ReturnDate,
-                                TotalAmount = b.TotalAmount
-                            }).ToList();
-
-                            Session.Remove("Cart");
-                            Session.Remove("CurrentBooking");
-
-                            return RedirectToAction("Index");
-                        }
-                    }
-                    else
-                    {
-                        ModelState.AddModelError("", "Plata nu a putut fi procesată. Vă rugăm să încercați din nou.");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    ModelState.AddModelError("", "A apărut o eroare la procesarea plății: " + ex.Message);
-                }
-            }
-
-            return View(cardDetails);
-        }
-
-        private bool ProcessPayment(CardDetails cardDetails, decimal amount)
-        {
-            System.Threading.Thread.Sleep(1000);
-
-            if (string.IsNullOrEmpty(cardDetails.CardNumber) ||
-                string.IsNullOrEmpty(cardDetails.CardHolderName) ||
-                string.IsNullOrEmpty(cardDetails.CVV) ||
-                string.IsNullOrEmpty(cardDetails.ExpiryMonth) ||
-                string.IsNullOrEmpty(cardDetails.ExpiryYear))
-            {
-                return false;
-            }
-
-            return true;
+            ModelState.AddModelError("", "Plata nu a putut fi procesată.");
+            return View();
         }
 
         public ActionResult LoginAdmin()
@@ -396,88 +330,28 @@ namespace Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult AddToCart(int carId, DateTime pickupDate, DateTime returnDate, decimal totalAmount)
+        public ActionResult AddToCart(int carId, DateTime pickupDate, DateTime returnDate, int totalAmount)
         {
-            if (Session["Id"] == null)
-            {
-                TempData["ReturnUrl"] = Url.Action("Cos", "Home");
-                return RedirectToAction("Login");
-            }
-
-            if (returnDate <= pickupDate)
-            {
-                ModelState.AddModelError("", "Data de returnare trebuie să fie mai mare decât data de împrumutare.");
-            }
-            if (pickupDate < DateTime.Today)
-            {
-                ModelState.AddModelError("", "Data de început nu poate fi în trecut.");
-            }
-            if ((returnDate - pickupDate).TotalDays < 1)
-            {
-                ModelState.AddModelError("", "Perioada de închiriere trebuie să fie de cel puțin o zi.");
-            }
-
             if (!ModelState.IsValid)
+                return View();
+
+            var booking = new Booking
             {
-                ViewBag.CarId = carId;
-                return View("Cardetalies");
+                CarId = carId,
+                UserId = (int)Session["Id"],
+                PickupDate = pickupDate,
+                ReturnDate = returnDate,
+                TotalAmount = totalAmount,
+                Status = "Pending"
+            };
+
+            if (_bookingApi.CreateBooking(booking))
+            {
+                return RedirectToAction("Pay", "Home");
             }
 
-            decimal pricePerDay = 0;
-            switch (carId)
-            {
-                case 1: pricePerDay = 60; break;
-                case 2: pricePerDay = 100; break;
-                case 3: pricePerDay = 600; break;
-                case 4: pricePerDay = 500; break;
-                case 5: pricePerDay = 700; break;
-                case 6: pricePerDay = 2000; break;
-                case 7: pricePerDay = 5000; break;
-                case 8: pricePerDay = 450; break;
-                case 9: pricePerDay = 1500; break;
-                case 10: pricePerDay = 1000; break;
-                case 11: pricePerDay = 850; break;
-                case 12: pricePerDay = 60; break;
-                default:
-                    TempData["Error"] = "Mașina selectată nu există.";
-                    return RedirectToAction("Carsection");
-            }
-
-            decimal calculatedTotal = pricePerDay * (returnDate - pickupDate).Days;
-
-            if (Math.Abs(calculatedTotal - totalAmount) > 0.01m)
-            {
-                TempData["Error"] = "Suma totală calculată nu se potrivește cu cea așteptată.";
-                return RedirectToAction("Carsection");
-            }
-
-            try
-            {
-                var booking = new eUseControl.BusinessLogic.DBModel.Booking
-                {
-                    CarId = carId,
-                    UserId = (int)Session["Id"],
-                    PickupDate = pickupDate,
-                    ReturnDate = returnDate,
-                    TotalAmount = calculatedTotal,
-                    Status = "Pending"
-                };
-
-                List<eUseControl.BusinessLogic.DBModel.Booking> cart = Session["Cart"] as List<eUseControl.BusinessLogic.DBModel.Booking>;
-                if (cart == null)
-                {
-                    cart = new List<eUseControl.BusinessLogic.DBModel.Booking>();
-                }
-                cart.Add(booking);
-                Session["Cart"] = cart;
-
-                return RedirectToAction("Cos", "Home");
-            }
-            catch (Exception ex)
-            {
-                TempData["Error"] = "A apărut o eroare la adăugarea în coș: " + ex.Message;
-                return RedirectToAction("Carsection");
-            }
+            ModelState.AddModelError("", "Nu s-a putut crea rezervarea.");
+            return View();
         }
 
         [HttpPost]
@@ -638,7 +512,7 @@ namespace Web.Controllers
                 {
                     var admin = db.Users.FirstOrDefault(u =>
                         (u.Email == login.Username || u.UserName == login.Username) &&
-                        u.Level == 1); 
+                        u.Level == 1);
 
                     if (admin != null && eUseControl.BusinessLogic.Core.PasswordHasher.VerifyPassword(login.Password, admin.Password))
                     {
@@ -667,7 +541,7 @@ namespace Web.Controllers
             {
                 registerData.UserIp = Request.UserHostAddress;
                 registerData.LastLogin = DateTime.Now;
-                registerData.Level = 1; 
+                registerData.Level = 1;
 
                 var registerResponse = _userApi.UserRegister(registerData);
 
@@ -696,7 +570,7 @@ namespace Web.Controllers
                     var user = db.Users.FirstOrDefault(u => u.Email == email);
                     if (user != null)
                     {
-                        user.Level = 1; 
+                        user.Level = 1;
                         db.SaveChanges();
                         TempData["SuccessMessage"] = "Utilizatorul a fost promovat la administrator cu succes!";
                     }

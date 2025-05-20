@@ -25,7 +25,7 @@ namespace eUseControl.BusinessLogic.DBModel
         public DateTime ReturnDate { get; set; }
 
         [Required]
-        public decimal TotalAmount { get; set; }
+        public int TotalAmount { get; set; }
 
         [Required]
         public string Status { get; set; }

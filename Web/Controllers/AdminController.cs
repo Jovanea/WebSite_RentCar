@@ -1,99 +1,87 @@
 ﻿using System;
-using System.Linq;
 using System.Web.Mvc;
-using eUseControl.BusinessLogic.DBModel;
-using System.Data.Entity;
-using System.IO;
-using System.Web;
-using System.Collections.Generic;
+using Web.Interfaces;
+using Web.BusinessLogic;
+using eUseControl.Domain.Entities.Car;
+using eUseControl.BusinessLogic.Models;
 
 namespace Web.Controllers
 {
     public class AdminController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private readonly IAdminApi _adminApi;
+
+        public AdminController()
+        {
+            _adminApi = new AdminApi();
+        }
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             base.OnActionExecuting(filterContext);
 
-            // Verifică dacă utilizatorul este admin
             if (Session["IsAdmin"] == null || !(bool)Session["IsAdmin"])
             {
-                System.Diagnostics.Debug.WriteLine("Acces refuzat la Admin: IsAdmin=" + (Session["IsAdmin"] != null ? Session["IsAdmin"].ToString() : "null"));
                 filterContext.Result = new RedirectResult("~/Home/LoginAdmin");
                 return;
             }
-
-            System.Diagnostics.Debug.WriteLine("Acces permis la Admin: IsAdmin=" + Session["IsAdmin"]);
         }
 
-        // GET: Admin/Cars
         public ActionResult Cars()
         {
             try
             {
-                var cars = db.Cars.ToList();
+                var cars = _adminApi.GetAllCars();
                 return View(cars);
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine("Eroare la încărcarea mașinilor: " + ex.Message);
                 ViewBag.ErrorMessage = "Eroare la încărcarea mașinilor: " + ex.Message;
-                return View(new List<Car>());
+                return View(new System.Collections.Generic.List<CarDetails>());
             }
         }
 
-        // GET: Admin/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: Admin/Create
+        private ImageUpload ConvertToImageUpload(System.Web.HttpPostedFileBase file)
+        {
+            if (file == null) return null;
+            using (var ms = new System.IO.MemoryStream())
+            {
+                file.InputStream.CopyTo(ms);
+                return new ImageUpload
+                {
+                    FileName = file.FileName,
+                    Content = ms.ToArray(),
+                    ContentType = file.ContentType
+                };
+            }
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Car car, HttpPostedFileBase mainImage, HttpPostedFileBase interiorImage, HttpPostedFileBase exteriorImage)
+        public ActionResult Create(CarDetails car, System.Web.HttpPostedFileBase mainImage, System.Web.HttpPostedFileBase interiorImage, System.Web.HttpPostedFileBase exteriorImage)
         {
             if (ModelState.IsValid)
             {
-                // Handle image uploads
-                if (mainImage != null && mainImage.ContentLength > 0)
+                var mainImg = ConvertToImageUpload(mainImage);
+                var intImg = ConvertToImageUpload(interiorImage);
+                var extImg = ConvertToImageUpload(exteriorImage);
+                if (_adminApi.CreateCar(car, mainImg, intImg, extImg))
                 {
-                    var fileName = Path.GetFileName(mainImage.FileName);
-                    var path = Path.Combine(Server.MapPath("~/Content/images/cars"), fileName);
-                    mainImage.SaveAs(path);
-                    car.MainImageUrl = "/Content/images/cars/" + fileName;
+                    return RedirectToAction("Cars");
                 }
-
-                if (interiorImage != null && interiorImage.ContentLength > 0)
-                {
-                    var fileName = Path.GetFileName(interiorImage.FileName);
-                    var path = Path.Combine(Server.MapPath("~/Content/images/cars"), fileName);
-                    interiorImage.SaveAs(path);
-                    car.InteriorImageUrl = "/Content/images/cars/" + fileName;
-                }
-
-                if (exteriorImage != null && exteriorImage.ContentLength > 0)
-                {
-                    var fileName = Path.GetFileName(exteriorImage.FileName);
-                    var path = Path.Combine(Server.MapPath("~/Content/images/cars"), fileName);
-                    exteriorImage.SaveAs(path);
-                    car.ExteriorImageUrl = "/Content/images/cars/" + fileName;
-                }
-
-                db.Cars.Add(car);
-                db.SaveChanges();
-                return RedirectToAction("Cars");
+                ModelState.AddModelError("", "Nu s-a putut crea mașina.");
             }
-
             return View(car);
         }
 
-        // GET: Admin/Edit/5
         public ActionResult Edit(int id)
         {
-            var car = db.Cars.Find(id);
+            var car = _adminApi.GetCarById(id);
             if (car == null)
             {
                 return HttpNotFound();
@@ -101,74 +89,27 @@ namespace Web.Controllers
             return View(car);
         }
 
-        // POST: Admin/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(Car car, HttpPostedFileBase mainImage, HttpPostedFileBase interiorImage, HttpPostedFileBase exteriorImage)
+        public ActionResult Edit(CarDetails car, System.Web.HttpPostedFileBase mainImage, System.Web.HttpPostedFileBase interiorImage, System.Web.HttpPostedFileBase exteriorImage)
         {
             if (ModelState.IsValid)
             {
-                var existingCar = db.Cars.Find(car.CarId);
-                if (existingCar == null)
+                var mainImg = ConvertToImageUpload(mainImage);
+                var intImg = ConvertToImageUpload(interiorImage);
+                var extImg = ConvertToImageUpload(exteriorImage);
+                if (_adminApi.UpdateCar(car, mainImg, intImg, extImg))
                 {
-                    return HttpNotFound();
+                    return RedirectToAction("Cars");
                 }
-
-                // Handle image uploads
-                if (mainImage != null && mainImage.ContentLength > 0)
-                {
-                    var fileName = Path.GetFileName(mainImage.FileName);
-                    var path = Path.Combine(Server.MapPath("~/Content/images/cars"), fileName);
-                    mainImage.SaveAs(path);
-                    existingCar.MainImageUrl = "/Content/images/cars/" + fileName;
-                }
-
-                if (interiorImage != null && interiorImage.ContentLength > 0)
-                {
-                    var fileName = Path.GetFileName(interiorImage.FileName);
-                    var path = Path.Combine(Server.MapPath("~/Content/images/cars"), fileName);
-                    interiorImage.SaveAs(path);
-                    existingCar.InteriorImageUrl = "/Content/images/cars/" + fileName;
-                }
-
-                if (exteriorImage != null && exteriorImage.ContentLength > 0)
-                {
-                    var fileName = Path.GetFileName(exteriorImage.FileName);
-                    var path = Path.Combine(Server.MapPath("~/Content/images/cars"), fileName);
-                    exteriorImage.SaveAs(path);
-                    existingCar.ExteriorImageUrl = "/Content/images/cars/" + fileName;
-                }
-
-                // Update other properties
-                existingCar.Brand = car.Brand;
-                existingCar.Model = car.Model;
-                existingCar.Year = car.Year;
-                existingCar.PricePerDay = car.PricePerDay;
-                existingCar.Transmission = car.Transmission;
-                existingCar.FuelType = car.FuelType;
-                existingCar.Horsepower = car.Horsepower;
-                existingCar.Seats = car.Seats;
-                existingCar.Category = car.Category;
-                existingCar.IsAvailable = car.IsAvailable;
-                existingCar.Description = car.Description;
-                existingCar.Engine = car.Engine;
-                existingCar.Torque = car.Torque;
-                existingCar.Acceleration = car.Acceleration;
-                existingCar.TopSpeed = car.TopSpeed;
-                existingCar.FuelConsumption = car.FuelConsumption;
-
-                db.Entry(existingCar).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Cars");
+                ModelState.AddModelError("", "Nu s-a putut actualiza mașina.");
             }
-
             return View(car);
         }
 
-        // GET: Admin/Delete/5
         public ActionResult Delete(int id)
         {
-            var car = db.Cars.Find(id);
+            var car = _adminApi.GetCarById(id);
             if (car == null)
             {
                 return HttpNotFound();
@@ -176,57 +117,46 @@ namespace Web.Controllers
             return View(car);
         }
 
-        // POST: Admin/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            var car = db.Cars.Find(id);
-            if (car == null)
+            if (_adminApi.DeleteCar(id))
             {
-                return HttpNotFound();
+                return RedirectToAction("Cars");
             }
-
-            // Delete associated images
-            if (!string.IsNullOrEmpty(car.MainImageUrl))
-            {
-                var mainImagePath = Server.MapPath("~" + car.MainImageUrl);
-                if (System.IO.File.Exists(mainImagePath))
-                {
-                    System.IO.File.Delete(mainImagePath);
-                }
-            }
-
-            if (!string.IsNullOrEmpty(car.InteriorImageUrl))
-            {
-                var interiorImagePath = Server.MapPath("~" + car.InteriorImageUrl);
-                if (System.IO.File.Exists(interiorImagePath))
-                {
-                    System.IO.File.Delete(interiorImagePath);
-                }
-            }
-
-            if (!string.IsNullOrEmpty(car.ExteriorImageUrl))
-            {
-                var exteriorImagePath = Server.MapPath("~" + car.ExteriorImageUrl);
-                if (System.IO.File.Exists(exteriorImagePath))
-                {
-                    System.IO.File.Delete(exteriorImagePath);
-                }
-            }
-
-            db.Cars.Remove(car);
-            db.SaveChanges();
-            return RedirectToAction("Cars");
+            return HttpNotFound();
         }
 
-        protected override void Dispose(bool disposing)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult UpdateUserToAdmin(string email)
         {
-            if (disposing)
+            if (_adminApi.UpdateUserToAdmin(email))
             {
-                db.Dispose();
+                TempData["SuccessMessage"] = "Utilizatorul a fost promovat la administrator cu succes!";
             }
-            base.Dispose(disposing);
+            else
+            {
+                TempData["ErrorMessage"] = "Nu s-a putut promova utilizatorul la administrator.";
+            }
+            return RedirectToAction("LoginAdmin", "Home");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateAdmin(UserData userData)
+        {
+            if (ModelState.IsValid)
+            {
+                if (_adminApi.CreateAdmin(userData))
+                {
+                    TempData["SuccessMessage"] = "Cont de administrator creat cu succes!";
+                    return RedirectToAction("LoginAdmin", "Home");
+                }
+                ModelState.AddModelError("", "Nu s-a putut crea contul de administrator.");
+            }
+            return View("Registre", userData);
         }
     }
 }

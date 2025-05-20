@@ -21,7 +21,7 @@ namespace Web.Controllers
         private readonly IUserApi _userApi;
         public LogicController()
         {
-            var bl = new BusinessLogic();
+            var bl = new eUseControl.BusinessLogic.BusinessLogic();
             _session = bl.GetSessionBL();
             _userApi = new UserApi();
         }
@@ -37,7 +37,7 @@ namespace Web.Controllers
 
             public CarController()
             {
-                var bl = new BusinessLogic();
+                var bl = new eUseControl.BusinessLogic.BusinessLogic();
                 _carSession = bl.GetCarSessionBL();
             }
 

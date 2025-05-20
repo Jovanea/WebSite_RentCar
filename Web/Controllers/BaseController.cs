@@ -14,7 +14,7 @@ namespace Web.Controllers
 
         public BaseController()
         {
-            var bl = new BusinessLogic();
+            var bl = new eUseControl.BusinessLogic.BusinessLogic();
             _session = bl.GetSessionBL();
         }
 

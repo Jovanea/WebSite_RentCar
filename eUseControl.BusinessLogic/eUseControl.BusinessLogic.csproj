@@ -46,6 +46,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -56,8 +57,10 @@
   <ItemGroup>
     <Compile Include="BusinessLogic.cs" />
     <Compile Include="Core\AdminApi.cs" />
+    <Compile Include="Core\BookingApi.cs" />
     <Compile Include="Core\CarApi.cs" />
     <Compile Include="Core\PasswordHasher.cs" />
+    <Compile Include="Core\PaymentApi.cs" />
     <Compile Include="DBModel\ApplicationDbContext.cs" />
     <Compile Include="DBModel\Booking.cs" />
     <Compile Include="DBModel\Car.cs" />
@@ -65,7 +68,12 @@
     <Compile Include="DBModel\Payment.cs" />
     <Compile Include="DBModel\UserContext.cs" />
     <Compile Include="Core\UserApi.cs" />
-    <Compile Include="DBModel\UserData.cs" />
+    <Compile Include="Interfaces\IBookingApi.cs" />
+    <Compile Include="Interfaces\ICarApi.cs" />
+    <Compile Include="Interfaces\IPaymentApi.cs" />
+    <Compile Include="Models\ImageUpload.cs" />
+    <Compile Include="Models\UserData.cs" />
+    <Compile Include="Interfaces\IAdminApi.cs" />
     <Compile Include="Interfaces\IUserApi.cs" />
     <Compile Include="Interfaces\ISession.cs" />
     <Compile Include="Models\UserRegister.cs" />

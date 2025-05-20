@@ -109,5 +109,10 @@ namespace eUseControl.BusinessLogic
                 };
             }
         }
+
+        public ISession GetSessionBL()
+        {
+            return new SessionBL();
+        }
     }
 }

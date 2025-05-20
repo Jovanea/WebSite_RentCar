@@ -7,5 +7,6 @@ namespace eUseControl.BusinessLogic.Interfaces
     {
         UserRegister UserRegister(URegisterData data);
         UserLogin UserLogin(ULoginData data);
+        ISession GetSessionBL();
     }
 }

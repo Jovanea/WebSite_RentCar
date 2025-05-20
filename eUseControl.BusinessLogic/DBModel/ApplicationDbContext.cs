@@ -24,6 +24,7 @@ namespace eUseControl.BusinessLogic.DBModel
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<Car> Cars { get; set; }
         public DbSet<Payment> Payments { get; set; }
+         public DbSet<eUseControl.Domain.User.Auth.UDbTable> Users { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

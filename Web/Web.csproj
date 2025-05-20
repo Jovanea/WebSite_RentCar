@@ -308,6 +308,7 @@
     <Folder Include="Views\Base\" />
     <Folder Include="Views\Car\" />
     <Folder Include="Views\Logic\" />
+    <Folder Include="Views\User\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\eUseControl.BusinessLogic\eUseControl.BusinessLogic.csproj">

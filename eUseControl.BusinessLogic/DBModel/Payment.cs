@@ -16,7 +16,7 @@ namespace eUseControl.BusinessLogic.DBModel
         public int BookingId { get; set; }
 
         [Required]
-        public decimal Amount { get; set; }
+        public int Amount { get; set; }
 
         [Required]
         public DateTime PaymentDate { get; set; }
@@ -27,5 +27,7 @@ namespace eUseControl.BusinessLogic.DBModel
         public string TransactionId { get; set; }
 
         public virtual Booking Booking { get; set; }
+        public string CardNumber { get; internal set; }
+        public string Status { get; internal set; }
     }
 }

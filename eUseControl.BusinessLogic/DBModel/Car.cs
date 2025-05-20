@@ -22,7 +22,6 @@ namespace eUseControl.BusinessLogic.DBModel
         public int Year { get; set; }
 
         [Required]
-        [Column(TypeName = "decimal(18,2)")]
         public decimal PricePerDay { get; set; }
 
         [Required]
