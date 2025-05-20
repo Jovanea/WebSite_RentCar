@@ -238,12 +238,6 @@
       <DependentUpon>202505031449181_UpdateUserTable.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="Models\ApplicationDbContext.cs" />
-    <Compile Include="Models\Booking.cs" />
-    <Compile Include="Models\Car.cs" />
-    <Compile Include="Models\CardDetails.cs" />
-    <Compile Include="Models\Payment.cs" />
-    <Compile Include="Models\UserData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Extensions\HttpContextExtensions.cs" />
   </ItemGroup>

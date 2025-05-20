@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.ComponentModel.DataAnnotations;
 
-namespace Web.Models
+namespace eUseControl.BusinessLogic.DBModel
 {
     public class CardDetails
     {

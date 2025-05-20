@@ -58,8 +58,14 @@
     <Compile Include="Core\AdminApi.cs" />
     <Compile Include="Core\CarApi.cs" />
     <Compile Include="Core\PasswordHasher.cs" />
+    <Compile Include="DBModel\ApplicationDbContext.cs" />
+    <Compile Include="DBModel\Booking.cs" />
+    <Compile Include="DBModel\Car.cs" />
+    <Compile Include="DBModel\CardDetails.cs" />
+    <Compile Include="DBModel\Payment.cs" />
     <Compile Include="DBModel\UserContext.cs" />
     <Compile Include="Core\UserApi.cs" />
+    <Compile Include="DBModel\UserData.cs" />
     <Compile Include="Interfaces\IUserApi.cs" />
     <Compile Include="Interfaces\ISession.cs" />
     <Compile Include="Models\UserRegister.cs" />

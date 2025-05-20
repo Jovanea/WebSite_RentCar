@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Web.Models
+namespace eUseControl.BusinessLogic.DBModel
 {
     public class UserData
     {

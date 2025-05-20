@@ -5,7 +5,7 @@ using System.Web;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Web.Models
+namespace eUseControl.BusinessLogic.DBModel
 {
     public class Payment
     {

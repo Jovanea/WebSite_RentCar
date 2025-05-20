@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Web.Mvc;
-using Web.Models;
+using eUseControl.BusinessLogic.DBModel;
 using System.Data.Entity;
 using System.IO;
 using System.Web;

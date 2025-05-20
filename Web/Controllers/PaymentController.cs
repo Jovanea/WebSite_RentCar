@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using Web.Models;
+using eUseControl.BusinessLogic.DBModel;
 using System.Data.Entity;
 using System.Data.SqlClient;
 using eUseControl.Domain.Entities.Car;

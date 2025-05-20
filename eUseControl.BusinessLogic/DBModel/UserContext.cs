@@ -1,7 +1,8 @@
 ﻿using System.Data.Entity;
 using eUseControl.Domain.User.Auth;
 
-namespace eUseControl.BusinessLogic.Core.DBModel
+
+namespace eUseControl.BusinessLogic.DBModel
 {
     public class UserContext : DbContext
     {

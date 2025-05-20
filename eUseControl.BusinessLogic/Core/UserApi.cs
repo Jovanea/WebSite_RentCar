@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using eUseControl.Domain.Entities.User;
-using eUseControl.BusinessLogic.Core.DBModel;
+using eUseControl.BusinessLogic.DBModel;
 using eUseControl.BusinessLogic.Interfaces;
 using eUseControl.BusinessLogic.Models;
 using eUseControl.Domain.User.Auth;

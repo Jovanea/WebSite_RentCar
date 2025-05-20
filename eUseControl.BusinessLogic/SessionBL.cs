@@ -8,7 +8,7 @@ using eUseControl.Domain.Entities.User;
 using eUseControl.Domain.Entities.Car;
 using eUseControl.Helpers;
 using Newtonsoft.Json;
-using eUseControl.BusinessLogic.Core.DBModel;
+using eUseControl.BusinessLogic.DBModel;
 
 namespace eUseControl.BusinessLogic
 {

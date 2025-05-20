@@ -6,7 +6,7 @@ using System.Web.Mvc;
 using eUseControl.Domain.Entities.User;
 using eUseControl.BusinessLogic;
 using eUseControl.BusinessLogic.Interfaces;
-using Web.Models;
+using eUseControl.BusinessLogic.DBModel;
 using System.Data.Entity;
 
 namespace Web.Controllers
@@ -228,7 +228,7 @@ namespace Web.Controllers
                 return RedirectToAction("Login");
             }
 
-            var cart = Session["Cart"] as List<Web.Models.Booking>;
+            var cart = Session["Cart"] as List<eUseControl.BusinessLogic.DBModel.Booking>;
             ViewBag.CartBookings = cart;
 
             return View();
@@ -242,7 +242,7 @@ namespace Web.Controllers
                 return RedirectToAction("Login", "Home");
             }
 
-            var cart = Session["Cart"] as List<Web.Models.Booking>;
+            var cart = Session["Cart"] as List<eUseControl.BusinessLogic.DBModel.Booking>;
             if (cart == null || cart.Count == 0)
             {
                 return RedirectToAction("Carsection", "Home");
@@ -267,7 +267,7 @@ namespace Web.Controllers
             {
                 try
                 {
-                    var cart = Session["Cart"] as List<Web.Models.Booking>;
+                    var cart = Session["Cart"] as List<eUseControl.BusinessLogic.DBModel.Booking>;
                     if (cart == null || cart.Count == 0)
                     {
                         return RedirectToAction("Carsection", "Home");
@@ -453,7 +453,7 @@ namespace Web.Controllers
 
             try
             {
-                var booking = new Web.Models.Booking
+                var booking = new eUseControl.BusinessLogic.DBModel.Booking
                 {
                     CarId = carId,
                     UserId = (int)Session["Id"],
@@ -463,10 +463,10 @@ namespace Web.Controllers
                     Status = "Pending"
                 };
 
-                List<Web.Models.Booking> cart = Session["Cart"] as List<Web.Models.Booking>;
+                List<eUseControl.BusinessLogic.DBModel.Booking> cart = Session["Cart"] as List<eUseControl.BusinessLogic.DBModel.Booking>;
                 if (cart == null)
                 {
-                    cart = new List<Web.Models.Booking>();
+                    cart = new List<eUseControl.BusinessLogic.DBModel.Booking>();
                 }
                 cart.Add(booking);
                 Session["Cart"] = cart;
@@ -491,7 +491,7 @@ namespace Web.Controllers
 
             try
             {
-                using (var db = new eUseControl.BusinessLogic.Core.DBModel.UserContext())
+                using (var db = new eUseControl.BusinessLogic.DBModel.UserContext())
                 {
                     string currentUsername = Session["Id"].ToString();
                     var user = db.Users.FirstOrDefault(u => u.UserName == currentUsername);
@@ -559,7 +559,7 @@ namespace Web.Controllers
 
             try
             {
-                using (var db = new eUseControl.BusinessLogic.Core.DBModel.UserContext())
+                using (var db = new eUseControl.BusinessLogic.DBModel.UserContext())
                 {
                     string username = Session["Id"].ToString();
                     var user = db.Users.FirstOrDefault(u => u.UserName == username);
@@ -615,7 +615,7 @@ namespace Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult RemoveFromCart(int bookingId)
         {
-            var cart = Session["Cart"] as List<Web.Models.Booking>;
+            var cart = Session["Cart"] as List<eUseControl.BusinessLogic.DBModel.Booking>;
             if (cart != null)
             {
                 var bookingToRemove = cart.FirstOrDefault(b => b.BookingId == bookingId);
@@ -634,7 +634,7 @@ namespace Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                using (var db = new eUseControl.BusinessLogic.Core.DBModel.UserContext())
+                using (var db = new eUseControl.BusinessLogic.DBModel.UserContext())
                 {
                     var admin = db.Users.FirstOrDefault(u =>
                         (u.Email == login.Username || u.UserName == login.Username) &&
@@ -691,7 +691,7 @@ namespace Web.Controllers
         {
             try
             {
-                using (var db = new eUseControl.BusinessLogic.Core.DBModel.UserContext())
+                using (var db = new eUseControl.BusinessLogic.DBModel.UserContext())
                 {
                     var user = db.Users.FirstOrDefault(u => u.Email == email);
                     if (user != null)
