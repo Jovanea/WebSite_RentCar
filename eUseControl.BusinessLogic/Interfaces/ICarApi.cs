@@ -12,5 +12,7 @@ namespace Web.Interfaces
         bool AddCar(CarDetails car);
         bool UpdateCar(CarDetails car);
         bool DeleteCar(int id);
+        bool UpdateCarStock(int carId, int stockChange);
+        int GetCarStock(int carId);
     }
 }

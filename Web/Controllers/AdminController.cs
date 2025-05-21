@@ -4,6 +4,8 @@ using Web.Interfaces;
 using Web.BusinessLogic;
 using eUseControl.Domain.Entities.Car;
 using eUseControl.BusinessLogic.Models;
+using eUseControl.BusinessLogic.DBModel;
+using System.Linq;
 
 namespace Web.Controllers
 {
@@ -43,7 +45,13 @@ namespace Web.Controllers
 
         public ActionResult Create()
         {
-            return View();
+            var model = new Car
+            {
+                PricePerDay = 0.0m,  // Initialize with decimal literal
+                Year = DateTime.Now.Year,
+                IsAvailable = true
+            };
+            return View(model);
         }
 
         private ImageUpload ConvertToImageUpload(System.Web.HttpPostedFileBase file)
@@ -63,46 +71,91 @@ namespace Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(CarDetails car, System.Web.HttpPostedFileBase mainImage, System.Web.HttpPostedFileBase interiorImage, System.Web.HttpPostedFileBase exteriorImage)
+        public ActionResult Create(Car car, System.Web.HttpPostedFileBase mainImage, System.Web.HttpPostedFileBase interiorImage, System.Web.HttpPostedFileBase exteriorImage)
         {
-            if (ModelState.IsValid)
+            try
             {
-                var mainImg = ConvertToImageUpload(mainImage);
-                var intImg = ConvertToImageUpload(interiorImage);
-                var extImg = ConvertToImageUpload(exteriorImage);
-                if (_adminApi.CreateCar(car, mainImg, intImg, extImg))
+                if (ModelState.IsValid)
                 {
-                    return RedirectToAction("Cars");
+                    var carDetails = new CarDetails
+                    {
+                        Name = car.Brand + " " + car.Model,
+                        Price = Convert.ToDecimal(car.PricePerDay),
+                        ImageUrl = car.MainImageUrl
+                    };
+
+                    var mainImg = ConvertToImageUpload(mainImage);
+                    var intImg = ConvertToImageUpload(interiorImage);
+                    var extImg = ConvertToImageUpload(exteriorImage);
+                    
+                    if (_adminApi.CreateCar(carDetails, mainImg, intImg, extImg))
+                    {
+                        return RedirectToAction("Cars");
+                    }
+                    ModelState.AddModelError("", "Nu s-a putut crea mașina.");
                 }
-                ModelState.AddModelError("", "Nu s-a putut crea mașina.");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", "Eroare: " + ex.Message);
             }
             return View(car);
         }
 
         public ActionResult Edit(int id)
         {
-            var car = _adminApi.GetCarById(id);
-            if (car == null)
+            // Get the car details
+            var carDetails = _adminApi.GetCarById(id);
+            if (carDetails == null)
             {
                 return HttpNotFound();
             }
+            
+            // Convert to Car model for view
+            var car = new Car
+            {
+                CarId = carDetails.Id,
+                Brand = carDetails.Name?.Split(' ').FirstOrDefault() ?? "",
+                Model = carDetails.Name?.Split(' ').Skip(1).FirstOrDefault() ?? "",
+                PricePerDay = Convert.ToDecimal(carDetails.Price),
+                MainImageUrl = carDetails.ImageUrl,
+                IsAvailable = true,
+                Year = DateTime.Now.Year
+            };
+            
             return View(car);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(CarDetails car, System.Web.HttpPostedFileBase mainImage, System.Web.HttpPostedFileBase interiorImage, System.Web.HttpPostedFileBase exteriorImage)
+        public ActionResult Edit(Car car, System.Web.HttpPostedFileBase mainImage, System.Web.HttpPostedFileBase interiorImage, System.Web.HttpPostedFileBase exteriorImage)
         {
-            if (ModelState.IsValid)
+            try
             {
-                var mainImg = ConvertToImageUpload(mainImage);
-                var intImg = ConvertToImageUpload(interiorImage);
-                var extImg = ConvertToImageUpload(exteriorImage);
-                if (_adminApi.UpdateCar(car, mainImg, intImg, extImg))
+                if (ModelState.IsValid)
                 {
-                    return RedirectToAction("Cars");
+                    var carDetails = new CarDetails
+                    {
+                        Id = car.CarId,
+                        Name = car.Brand + " " + car.Model,
+                        Price = Convert.ToDecimal(car.PricePerDay),
+                        ImageUrl = car.MainImageUrl
+                    };
+
+                    var mainImg = ConvertToImageUpload(mainImage);
+                    var intImg = ConvertToImageUpload(interiorImage);
+                    var extImg = ConvertToImageUpload(exteriorImage);
+                    
+                    if (_adminApi.UpdateCar(carDetails, mainImg, intImg, extImg))
+                    {
+                        return RedirectToAction("Cars");
+                    }
+                    ModelState.AddModelError("", "Nu s-a putut actualiza mașina.");
                 }
-                ModelState.AddModelError("", "Nu s-a putut actualiza mașina.");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", "Eroare: " + ex.Message);
             }
             return View(car);
         }

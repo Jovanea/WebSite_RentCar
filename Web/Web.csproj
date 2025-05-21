@@ -107,7 +107,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\images\cars_pexels_100.jpg" />
-    <Content Include="Content\images\cars_pexels_101.png" />
+    <Content Include="Content\images\cars_pexels_101.jpg" />
     <Content Include="Content\images\cars_pexels_102.jpg" />
     <Content Include="Content\images\cars_pexels_103.jpg" />
     <Content Include="Content\images\mc.png" />
@@ -224,6 +224,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\DecimalModelBinder.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
@@ -291,6 +292,7 @@
     <Content Include="Views\Admin\Create.cshtml" />
     <Content Include="Views\Admin\Delete.cshtml" />
     <Content Include="Views\Admin\Edit.cshtml" />
+    <Content Include="Views\Home\AvailableCars.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

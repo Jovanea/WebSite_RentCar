@@ -26,6 +26,10 @@ namespace Web
 
             //Register Bundle Table
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+            
+            // Register custom model binders
+            ModelBinders.Binders.Add(typeof(decimal), new DecimalModelBinder());
+            ModelBinders.Binders.Add(typeof(decimal?), new DecimalModelBinder());
         }
     }
 }

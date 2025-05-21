@@ -54,6 +54,9 @@ namespace eUseControl.BusinessLogic.DBModel
 
         [Required]
         public bool IsAvailable { get; set; }
+        
+        [Required]
+        public int Stock { get; set; } = 1; // Default value of 1
 
         [StringLength(1000)]
         public string Description { get; set; }

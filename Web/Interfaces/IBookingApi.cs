@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using eUseControl.BusinessLogic.DBModel;
 
@@ -13,4 +13,4 @@ namespace Web.Interfaces
         List<Booking> GetUserBookings(int userId);
         Booking GetBookingById(int bookingId);
     }
-}
+} 

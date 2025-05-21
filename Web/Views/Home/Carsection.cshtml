@@ -1,4 +1,5 @@
-﻿@{
+﻿@model List<eUseControl.Domain.Entities.Car.CarDetails>
+@{
     ViewBag.Title = "Carsection";
 }
 
@@ -13,199 +14,95 @@
             Toate autoturismele sunt bine întreținute, asigurate și echipate cu dotările necesare pentru siguranță și confort.
             Alege modelul potrivit și bucură-te de o experiență de închiriere fără griji!
         </p>
+        
+        @if (ViewBag.Debug != null)
+        {
+            <div class="alert alert-info">
+                Debug: @ViewBag.Debug
+            </div>
+        }
+        
+        @if (ViewBag.Error != null)
+        {
+            <div class="alert alert-danger">
+                Error: @ViewBag.Error
+            </div>
+        }
     </div>
     <div class="container cars-container">
-        <div class="box">
-            <a href="@Url.Action("Cardetalies", "Home", new { id = 1 })"><img src="~/Content/images/cars_pexels_100.jpg" alt="Range Rover"></a>
-            <div class="info">
-                <div class="tag">
-                    <span class="custom-pointer"></span>
-                    <p>$60/DAY</p>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var car in Model)
+            {
+                <div class="box">
+                    <a href="@Url.Action("Cardetalies", "Home", new { id = car.Id })">
+                        <img src="@(string.IsNullOrEmpty(car.ImageUrl) ? "/Content/images/car-placeholder.jpg" : car.ImageUrl)" alt="@car.Name">
+                    </a>
+                    <div class="info">
+                        <div class="tag">
+                            <span class="custom-pointer"></span>
+                            <p>$@car.Price/DAY</p>
+                        </div>
+                        <h5><a href="@Url.Action("Cardetalies", "Home", new { id = car.Id })">@car.Name</a></h5>
+                        <p>@car.Name</p>
+                        <div class="details">
+                            <a href="#">Automatic</a>
+                            <a href="#">Full option</a>
+                        </div>
+                        <div class="car-stock">
+                            <span class="stock-label">În stoc:</span>
+                            <span class="stock-value @(car.Stock > 0 ? "in-stock" : "out-of-stock")">
+                                @if (car.Stock > 0)
+                                {
+                                    <text><i class="fa-solid fa-check"></i> </text>
+                                    @car.Stock
+                                    <text> disponibile</text>
+                                }
+                                else
+                                {
+                                    <text><i class="fa-solid fa-xmark"></i> Indisponibil</text>
+                                }
+                            </span>
+                        </div>
+                    </div>
                 </div>
-                <h5><a href="@Url.Action("Cardetalies", "Home", new { id = 1 })">Range Rover</a></h5>
-                <p> Rover Range Sport 4.0</p>
-                <div class="details">
-                    <a href="#">2020</a>
-                    <a href="#">Automatic</a>
-                    <a href="#">Middle option</a>
-                </div>
+            }
+        }
+        else
+        {
+            <div class="alert alert-info">
+                Nu există mașini disponibile în acest moment.
             </div>
-        </div>
-        <div class="box">
-            <a href="@Url.Action("Cardetalies", "Home", new { id = 2 })"><img src="/Content/images/cars_pexels_2.jpg" alt="Mercedes"></a>
-            <div class="info">
-                <div class="tag">
-                    <span class="custom-pointer"></span>
-                    <p>$100/DAY</p>
-                </div>
-                <h5><a href="@Url.Action("Cardetalies", "Home", new { id = 2 })">Mercedes</a></h5>
-                <p>Mercedes-Benz Maybach 600</p>
-                <div class="details">
-                    <a href="#">2018</a>
-                    <a href="#">Automatic</a>
-                    <a href="#">Full option</a>
-                </div>
-            </div>
-        </div>
-        <div class="box">
-            <a href="@Url.Action("Cardetalies", "Home", new { id = 3 })"><img src="/Content/images/cars_pexels_3.jpg" alt="Range Rover"></a>
-            <div class="info">
-                <div class="tag">
-                    <span class="custom-pointer"></span>
-                    <p>$600/DAY</p>
-                </div>
-                <h5><a href="@Url.Action("Cardetalies", "Home", new { id = 3 })">Range Rover</a></h5>
-                <p>Range Rover Autobiography</p>
-                <div class="details">
-                    <a href="#">2024</a>
-                    <a href="#">Automatic</a>
-                    <a href="#">Full option</a>
-                </div>
-            </div>
-        </div>
-        <div class="box">
-            <a href="@Url.Action("Cardetalies", "Home", new { id = 4 })"><img src="/Content/images/cars_pexels_4.jpg" alt="Ferrari"></a>
-            <div class="info">
-                <div class="tag">
-                    <span class="custom-pointer"></span>
-                    <p>$500/DAY</p>
-                </div>
-                <h5><a href="@Url.Action("Cardetalies", "Home", new { id = 4 })">Ferrari</a></h5>
-                <p>Ferrari  F12</p>
-                <div class="details">
-                    <a href="#">1016</a>
-                    <a href="#">Automatic</a>
-                    <a href="#">Full option</a>
-                </div>
-            </div>
-        </div>
-        <div class="box">
-            <a href="@Url.Action("Cardetalies", "Home", new { id = 5 })"><img src="/Content/images/cars_pexels_5.jpg" alt="Porsche"></a>
-            <div class="info">
-                <div class="tag">
-                    <span class="custom-pointer"></span>
-                    <p>$700/DAY</p>
-                </div>
-                <h5><a href="@Url.Action("Cardetalies", "Home", new { id = 5 })">Porsche</a></h5>
-                <p>Porsche GT3</p>
-                <div class="details">
-                    <a href="#">2025</a>
-                    <a href="#">Automatic</a>
-                    <a href="#">Middle option</a>
-                </div>
-            </div>
-        </div>
-        <div class="box">
-            <a href="@Url.Action("Cardetalies", "Home", new { id = 6 })"><img src="/Content/images/cars_pexels_6.jpg" alt="Pagani"></a>
-            <div class="info">
-                <div class="tag">
-                    <span class="custom-pointer"></span>
-                    <p>$2000/DAY</p>
-                </div>
-                <h5><a href="@Url.Action("Cardetalies", "Home", new { id = 6 })">Pagani</a></h5>
-                <p>Pagani Huayra</p>
-                <div class="details">
-                    <a href="#">2024</a>
-                    <a href="#">Automatic</a>
-                    <a href="#">Exclusive option</a>
-                </div>
-            </div>
-        </div>
-        <div class="box">
-            <a href="@Url.Action("Cardetalies", "Home", new { id = 7 })"><img src="/Content/images/cars_pexels_7.jpg" alt="Bugatti"></a>
-            <div class="info">
-                <div class="tag">
-                    <span class="custom-pointer"></span>
-                    <p>$5000/DAY</p>
-                </div>
-                <h5><a href="@Url.Action("Cardetalies", "Home", new { id = 7 })">Bugatti</a></h5>
-                <p>Bugatti Tourbilion</p>
-                <div class="details">
-                    <a href="#">2025</a>
-                    <a href="#">Automatic</a>
-                    <a href="#">1 OF 1</a>
-                </div>
-            </div>
-        </div>
-        <div class="box">
-            <a href="@Url.Action("Cardetalies", "Home", new { id = 8 })"><img src="/Content/images/cars_pexels_8.jpg" alt="Bentley"></a>
-            <div class="info">
-                <div class="tag">
-                    <span class="custom-pointer"></span>
-                    <p>$450/DAY</p>
-                </div>
-                <h5><a href="@Url.Action("Cardetalies", "Home", new { id = 8 })">Bentley</a></h5>
-                <p>Bentley Bentayga w12</p>
-                <div class="details">
-                    <a href="#">2018</a>
-                    <a href="#">Automatic</a>
-                    <a href="#">Extra option</a>
-                </div>
-            </div>
-        </div>
-        <div class="box">
-            <a href="@Url.Action("Cardetalies", "Home", new { id = 9 })"><img src="/Content/images/cars_pexels_9.jpg" alt="Rolls-Royce"></a>
-            <div class="info">
-                <div class="tag">
-                    <span class="custom-pointer"></span>
-                    <p>$1500/DAY</p>
-                </div>
-                <h5><a href="@Url.Action("Cardetalies", "Home", new { id = 9 })">Rolls-Royce</a></h5>
-                <p>Rolls-Royce Phantom</p>
-                <div class="details">
-                    <a href="#">2023</a>
-                    <a href="#">Automatic</a>
-                    <a href="#">Edition pulse </a>
-                </div>
-            </div>
-        </div>
-        <div class="box">
-            <a href="@Url.Action("Cardetalies", "Home", new { id = 10 })"><img src="/Content/images/cars_pexels_10.jpg" alt="McLaren"></a>
-            <div class="info">
-                <div class="tag">
-                    <span class="custom-pointer"></span>
-                    <p>$1000/DAY</p>
-                </div>
-                <h5><a href="@Url.Action("Cardetalies", "Home", new { id = 10 })">McLaren</a></h5>
-                <p>McLaren  720S</p>
-                <div class="details">
-                    <a href="#">2020</a>
-                    <a href="#">Automatic</a>
-                    <a href="#">Edition One</a>
-                </div>
-            </div>
-        </div>
-        <div class="box">
-            <a href="@Url.Action("Cardetalies", "Home", new { id = 11 })"><img src="/Content/images/cars_pexels_11.jpg" alt="BMW"></a>
-            <div class="info">
-                <div class="tag">
-                    <span class="custom-pointer"></span>
-                    <p>$850/DAY</p>
-                </div>
-                <h5><a href="@Url.Action("Cardetalies", "Home", new { id = 11 })">BMW</a></h5>
-                <p>BMW M5Cs</p>
-                <div class="details">
-                    <a href="#">2024</a>
-                    <a href="#">Automatic</a>
-                    <a href="#">Full option</a>
-                </div>
-            </div>
-        </div>
-        <div class="box">
-            <a href="@Url.Action("Cardetalies", "Home", new { id = 12 })"><img src="/Content/images/cars_pexels_12.jpg" alt="Lamborghini"></a>
-            <div class="info">
-                <div class="tag">
-                    <span class="custom-pointer"></span>
-                    <p>$60/DAY</p>
-                </div>
-                <h5><a href="@Url.Action("Cardetalies", "Home", new { id = 12 })">Lamborghini</a></h5>
-                <p>Lamborghini Urus</p>
-                <div class="details">
-                    <a href="#">2019</a>
-                    <a href="#">Automatic</a>
-                    <a href="#">Full option</a>
-                </div>
-            </div>
-        </div>
+        }
     </div>
 </section>
+
+<style>
+    .car-stock {
+        margin-top: 10px;
+        padding: 5px 10px;
+        border-radius: 4px;
+        background-color: #f8f9fa;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .stock-label {
+        font-weight: bold;
+        margin-right: 5px;
+    }
+    
+    .stock-value {
+        padding: 2px 6px;
+        border-radius: 3px;
+    }
+    
+    .in-stock {
+        color: #28a745;
+    }
+    
+    .out-of-stock {
+        color: #dc3545;
+    }
+</style>

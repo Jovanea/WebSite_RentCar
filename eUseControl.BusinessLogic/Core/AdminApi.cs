@@ -26,12 +26,51 @@ namespace Web.BusinessLogic
 
         public List<CarDetails> GetAllCars()
         {
-            return _context.Cars.ToList().Select(ToCarDetails).ToList();
+            try
+            {
+                // Explicitly handle the conversion by using a manual conversion
+                var cars = new List<CarDetails>();
+                foreach (var car in _context.Cars.ToList())
+                {
+                    cars.Add(new CarDetails
+                    {
+                        Id = car.CarId,
+                        Name = car.Brand + " " + car.Model,
+                        Price = Convert.ToDecimal(car.PricePerDay),
+                        ImageUrl = car.MainImageUrl
+                    });
+                }
+                return cars;
+            }
+            catch (Exception ex)
+            {
+                // Log the error
+                System.Diagnostics.Debug.WriteLine("Error getting cars: " + ex.Message);
+                return new List<CarDetails>();
+            }
         }
 
         public CarDetails GetCarById(int id)
         {
-            return ToCarDetails(_context.Cars.Find(id));
+            try
+            {
+                var car = _context.Cars.Find(id);
+                if (car == null) return null;
+                
+                return new CarDetails
+                {
+                    Id = car.CarId,
+                    Name = car.Brand + " " + car.Model,
+                    Price = Convert.ToDecimal(car.PricePerDay),
+                    ImageUrl = car.MainImageUrl
+                };
+            }
+            catch (Exception ex)
+            {
+                // Log the error
+                System.Diagnostics.Debug.WriteLine("Error getting car by ID: " + ex.Message);
+                return null;
+            }
         }
 
         public bool CreateCar(CarDetails carDetails, ImageUpload mainImage, ImageUpload interiorImage, ImageUpload exteriorImage)
@@ -87,7 +126,7 @@ namespace Web.BusinessLogic
 
                 existingCar.Brand = carDetails.Name?.Split(' ').FirstOrDefault() ?? existingCar.Brand;
                 existingCar.Model = carDetails.Name?.Split(' ').Skip(1).FirstOrDefault() ?? existingCar.Model;
-                existingCar.PricePerDay = carDetails.Price;
+                existingCar.PricePerDay = Convert.ToDecimal(carDetails.Price);
                 existingCar.MainImageUrl = carDetails.ImageUrl ?? existingCar.MainImageUrl;
 
                 _context.SaveChanges();
@@ -222,7 +261,7 @@ namespace Web.BusinessLogic
                 CarId = details.Id,
                 Brand = details.Name?.Split(' ').FirstOrDefault() ?? "",
                 Model = details.Name?.Split(' ').Skip(1).FirstOrDefault() ?? "",
-                PricePerDay = details.Price,
+                PricePerDay = Convert.ToDecimal(details.Price),
                 MainImageUrl = details.ImageUrl,
                 Year = 2020,
                 Transmission = "Manual",
