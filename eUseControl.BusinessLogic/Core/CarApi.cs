@@ -79,16 +79,10 @@ namespace Web.BusinessLogic
         {
             try
             {
-                // Add debugging to check if any cars exist in database
+                // Obține lista de mașini
                 var carsInDb = _context.Cars.ToList();
-                System.Diagnostics.Debug.WriteLine($"Found {carsInDb.Count} cars in database");
                 
-                foreach (var car in carsInDb)
-                {
-                    System.Diagnostics.Debug.WriteLine($"Car in DB: ID={car.CarId}, Brand={car.Brand}, Model={car.Model}, Price={car.PricePerDay}, Stock={car.Stock}");
-                }
-                
-                // Explicitly handle the conversion by using a direct SQL query with proper casting
+                // Convertire într-o listă de CarDetails
                 var cars = new List<CarDetails>();
                 foreach (var car in carsInDb)
                 {
@@ -101,20 +95,18 @@ namespace Web.BusinessLogic
                             ImageUrl = car.MainImageUrl,
                             Stock = car.Stock
                         });
-                        System.Diagnostics.Debug.WriteLine($"Successfully converted car: {car.Brand} {car.Model}");
                     }
                     catch (Exception ex) {
+                        // Nu afișăm mesajul de eroare, dar continuăm cu următoarea mașină
                         System.Diagnostics.Debug.WriteLine($"Error converting car {car.CarId}: {ex.Message}");
                     }
                 }
-                System.Diagnostics.Debug.WriteLine($"Returning {cars.Count} car details objects");
                 return cars;
             }
             catch (Exception ex)
             {
-                // Log the error
+                // Eroare generală - logăm, dar nu afișăm
                 System.Diagnostics.Debug.WriteLine("Error getting cars: " + ex.Message);
-                System.Diagnostics.Debug.WriteLine("Stack trace: " + ex.StackTrace);
                 return new List<CarDetails>();
             }
         }

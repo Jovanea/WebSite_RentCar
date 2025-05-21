@@ -10,24 +10,10 @@
         <h4><i class="fa-solid fa-car"></i></h4>
         <h2><i>Alegeți mașina dorită</i></h2>
         <p>
-            Stocul nostru de mașini de închiriat oferă o gamă variată de vehicule, adaptate nevoilor fiecărui client.
+            Stocul nostru de mașini de închiriat oferă o gamă variată de vehicule, adaptate nevoilor fiecărui client.<br>
             Toate autoturismele sunt bine întreținute, asigurate și echipate cu dotările necesare pentru siguranță și confort.
             Alege modelul potrivit și bucură-te de o experiență de închiriere fără griji!
         </p>
-        
-        @if (ViewBag.Debug != null)
-        {
-            <div class="alert alert-info">
-                Debug: @ViewBag.Debug
-            </div>
-        }
-        
-        @if (ViewBag.Error != null)
-        {
-            <div class="alert alert-danger">
-                Error: @ViewBag.Error
-            </div>
-        }
     </div>
     <div class="container cars-container">
         @if (Model != null && Model.Any())

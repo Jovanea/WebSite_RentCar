@@ -124,23 +124,11 @@ namespace Web.Controllers
             try
             {
                 var cars = _carApi.GetAllCars();
-                System.Diagnostics.Debug.WriteLine($"Carsection: Retrieved {cars.Count} cars from API");
-                
-                foreach (var car in cars)
-                {
-                    System.Diagnostics.Debug.WriteLine($"Car: ID={car.Id}, Name={car.Name}, Price={car.Price}, ImageUrl={car.ImageUrl}");
-                }
-                
-                // Debug ViewBag
-                ViewBag.Debug = $"Found {cars.Count} cars";
-                
                 return View(cars);
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Error in Carsection: {ex.Message}");
-                System.Diagnostics.Debug.WriteLine($"Stack trace: {ex.StackTrace}");
-                ViewBag.Error = ex.Message;
+                // Tratăm excepția, dar nu afișăm mesaje de debug
                 return View(new List<eUseControl.Domain.Entities.Car.CarDetails>());
             }
         }
