@@ -38,7 +38,7 @@ namespace Web.BusinessLogic
                 CarId = details.Id,
                 Brand = details.Name?.Split(' ').FirstOrDefault() ?? "",
                 Model = details.Name?.Split(' ').Skip(1).FirstOrDefault() ?? "",
-                PricePerDay = Convert.ToDecimal(details.Price),
+                PricePerDay = Convert.ToInt32(details.Price),
                 MainImageUrl = details.ImageUrl,
                 Year = 2020,
                 Transmission = "Manual",
@@ -57,7 +57,7 @@ namespace Web.BusinessLogic
             {
                 var car = _context.Cars.Find(id);
                 if (car == null) return null;
-                
+
                 return new CarDetails
                 {
                     Id = car.CarId,
@@ -81,12 +81,13 @@ namespace Web.BusinessLogic
             {
                 // Obține lista de mașini
                 var carsInDb = _context.Cars.ToList();
-                
+
                 // Convertire într-o listă de CarDetails
                 var cars = new List<CarDetails>();
                 foreach (var car in carsInDb)
                 {
-                    try {
+                    try
+                    {
                         cars.Add(new CarDetails
                         {
                             Id = car.CarId,
@@ -96,18 +97,27 @@ namespace Web.BusinessLogic
                             Stock = car.Stock
                         });
                     }
-                    catch (Exception ex) {
-                        // Nu afișăm mesajul de eroare, dar continuăm cu următoarea mașină
+                    catch (Exception ex)
+                    {
+                        // Logăm eroarea specifică pentru a o depana
                         System.Diagnostics.Debug.WriteLine($"Error converting car {car.CarId}: {ex.Message}");
+                        System.Diagnostics.Debug.WriteLine($"Stack trace: {ex.StackTrace}");
                     }
                 }
+
+                if (cars.Count == 0 && carsInDb.Count > 0)
+                {
+                    System.Diagnostics.Debug.WriteLine("Warning: No cars were converted successfully even though cars exist in DB.");
+                }
+
                 return cars;
             }
             catch (Exception ex)
             {
-                // Eroare generală - logăm, dar nu afișăm
-                System.Diagnostics.Debug.WriteLine("Error getting cars: " + ex.Message);
-                return new List<CarDetails>();
+                // Eroare generală - logăm, dar nu afișăm pe interfața publică
+                System.Diagnostics.Debug.WriteLine("Error getting cars from DB or during overall conversion: " + ex.Message);
+                System.Diagnostics.Debug.WriteLine($"Stack trace: {ex.StackTrace}");
+                return new List<CarDetails>(); // Returns an empty list if a general error occurs
             }
         }
 
@@ -136,7 +146,7 @@ namespace Web.BusinessLogic
 
                 existingCar.Brand = carDetails.Name?.Split(' ').FirstOrDefault() ?? existingCar.Brand;
                 existingCar.Model = carDetails.Name?.Split(' ').Skip(1).FirstOrDefault() ?? existingCar.Model;
-                existingCar.PricePerDay = Convert.ToDecimal(carDetails.Price);
+                existingCar.PricePerDay = Convert.ToInt32(carDetails.Price);
                 existingCar.MainImageUrl = carDetails.ImageUrl ?? existingCar.MainImageUrl;
                 existingCar.Stock = carDetails.Stock;
 
@@ -167,7 +177,7 @@ namespace Web.BusinessLogic
                 return false;
             }
         }
-        
+
         public bool UpdateCarStock(int carId, int stockChange)
         {
             try
@@ -175,7 +185,7 @@ namespace Web.BusinessLogic
                 // Retrieve the car from the database
                 var car = _context.Cars.Find(carId);
                 if (car == null) return false;
-                
+
                 // Check if the requested change is valid
                 int newStock = car.Stock + stockChange;
                 if (newStock < 0)
@@ -183,10 +193,10 @@ namespace Web.BusinessLogic
                     System.Diagnostics.Debug.WriteLine($"Cannot update stock to negative value: {newStock}");
                     return false;
                 }
-                
+
                 // Update the stock
                 car.Stock = newStock;
-                
+
                 // If stock becomes 0, set IsAvailable to false
                 if (newStock == 0)
                 {
@@ -196,7 +206,7 @@ namespace Web.BusinessLogic
                 {
                     car.IsAvailable = true;
                 }
-                
+
                 // Save changes to the database
                 _context.SaveChanges();
                 System.Diagnostics.Debug.WriteLine($"Updated stock for car {carId} to {car.Stock}");
@@ -209,14 +219,14 @@ namespace Web.BusinessLogic
                 return false;
             }
         }
-        
+
         public int GetCarStock(int carId)
         {
             try
             {
                 var car = _context.Cars.Find(carId);
                 if (car == null) return 0;
-                
+
                 return car.Stock;
             }
             catch (Exception ex)

@@ -1,8 +1,11 @@
 ﻿@model IEnumerable<eUseControl.BusinessLogic.DBModel.Car>
 
 @{
+    Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.Title = "Manage Cars";
 }
+
+@Html.Partial("_Header")
 
 <div class="admin-container">
     <h2>Manage Cars</h2>

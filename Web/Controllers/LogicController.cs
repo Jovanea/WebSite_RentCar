@@ -38,7 +38,6 @@ namespace Web.Controllers
             public CarController()
             {
                 var bl = new eUseControl.BusinessLogic.BusinessLogic();
-                _carSession = bl.GetCarSessionBL();
             }
 
             public ActionResult Details(int id)
@@ -49,12 +48,6 @@ namespace Web.Controllers
                     return HttpNotFound(); 
                 }
                 return View(carDetails);
-            }
-
-            public ActionResult Sections()
-            {
-                var carSections = _carSession.GetCarSections();
-                return View(carSections);
             }
 
             public ActionResult Create()

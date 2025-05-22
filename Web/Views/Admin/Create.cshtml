@@ -10,6 +10,24 @@
     @using (Html.BeginForm("Create", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
         @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        @* Debug: Display all ModelState errors *@
+        if (!ViewData.ModelState.IsValid)
+        {
+            <div class="alert alert-danger">
+                <strong>Validation Errors:</strong>
+                <ul>
+                    @foreach (var modelState in ViewData.ModelState.Values)
+                    {
+                        foreach (var error in modelState.Errors)
+                        {
+                            <li>@error.ErrorMessage</li>
+                        }
+                    }
+                </ul>
+            </div>
+        }
 
         <div class="card">
             <div class="card-body">
@@ -35,7 +53,7 @@
 
                         <div class="form-group">
                             @Html.LabelFor(m => m.PricePerDay)
-                            @Html.TextBoxFor(m => m.PricePerDay, new { @class = "form-control", type = "number", step = "0.01" })
+                            @Html.TextBoxFor(m => m.PricePerDay, new { @class = "form-control", type = "number" })
                             @Html.ValidationMessageFor(m => m.PricePerDay, "", new { @class = "text-danger" })
                         </div>
 
@@ -83,8 +101,9 @@
                         </div>
 
                         <div class="form-group">
-                            <label>Car Image</label>
-                            <input type="file" name="carImage" class="form-control-file" accept="image/*" required />
+                            @Html.LabelFor(m => m.MainImageUrl)
+                            @Html.TextBoxFor(m => m.MainImageUrl, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.MainImageUrl, "", new { @class = "text-danger" })
                         </div>
                     </div>
                 </div>

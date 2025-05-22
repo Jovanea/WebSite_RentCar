@@ -52,10 +52,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entities\Car\CarDetails.cs" />
-    <Compile Include="Entities\Car\CarSection.cs" />
     <Compile Include="Entities\User\Adminlogin.cs" />
     <Compile Include="Entities\User\EFContext.cs" />
-    <Compile Include="Entities\User\EFModel.cs" />
     <Compile Include="Entities\User\UDbTable.cs" />
     <Compile Include="Entities\User\ULoginData.cs" />
     <Compile Include="Entities\User\URegisterData.cs" />

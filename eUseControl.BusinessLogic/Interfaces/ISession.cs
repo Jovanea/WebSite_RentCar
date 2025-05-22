@@ -20,7 +20,6 @@ namespace eUseControl.BusinessLogic
     public interface ICarSession
     {
         CarDetails GetCarDetails(int carId);
-        List<CarSection> GetCarSections();
     }
 
 

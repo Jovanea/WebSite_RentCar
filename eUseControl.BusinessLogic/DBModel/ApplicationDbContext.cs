@@ -21,8 +21,8 @@ namespace eUseControl.BusinessLogic.DBModel
                     // Add sample cars
                     var cars = new List<Car>
                     {
-                        new Car { Brand = "Range Rover", Model = "Range Sport", Year = 2020, PricePerDay = 60m, Transmission = "Automată", FuelType = "Diesel", Horsepower = 340, Seats = 5, Category = "SUV", MainImageUrl = "/Content/images/cars_pexels_101.jpg", IsAvailable = true },
-                        new Car { Brand = "Mercedes", Model = "Maybach 600", Year = 2018, PricePerDay = 100m, Transmission = "Automată", FuelType = "Benzină", Horsepower = 630, Seats = 4, Category = "Luxury", MainImageUrl = "/Content/images/cars_pexels_2.jpg", IsAvailable = true }
+                        new Car { Brand = "Range Rover", Model = "Range Sport", Year = 2020, PricePerDay = 60, Transmission = "Automată", FuelType = "Diesel", Horsepower = 340, Seats = 5, Category = "SUV", MainImageUrl = "/Content/images/cars_pexels_101.jpg", IsAvailable = true },
+                        new Car { Brand = "Mercedes", Model = "Maybach 600", Year = 2018, PricePerDay = 100, Transmission = "Automată", FuelType = "Benzină", Horsepower = 630, Seats = 4, Category = "Luxury", MainImageUrl = "/Content/images/cars_pexels_2.jpg", IsAvailable = true }
                     };
                     
                     cars.ForEach(c => context.Cars.Add(c));
@@ -79,8 +79,7 @@ namespace eUseControl.BusinessLogic.DBModel
                 .WithRequired(b => b.Car)
                 .HasForeignKey(b => b.CarId);
             modelBuilder.Entity<Car>()
-                .Property(c => c.PricePerDay)
-                .HasPrecision(18, 2);
+                .Property(c => c.PricePerDay);
         }
     }
 }

@@ -75,6 +75,14 @@
     <Compile Include="Migrations\202505201836454_InitialCreate.Designer.cs">
       <DependentUpon>202505201836454_InitialCreate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202505211855585_UpdateCarModelWithStock.cs" />
+    <Compile Include="Migrations\202505211855585_UpdateCarModelWithStock.Designer.cs">
+      <DependentUpon>202505211855585_UpdateCarModelWithStock.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202505221940091_ModifyPricePerDayToInt.cs" />
+    <Compile Include="Migrations\202505221940091_ModifyPricePerDayToInt.Designer.cs">
+      <DependentUpon>202505221940091_ModifyPricePerDayToInt.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ImageUpload.cs" />
     <Compile Include="Models\UserData.cs" />
@@ -105,6 +113,12 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202505201836454_InitialCreate.resx">
       <DependentUpon>202505201836454_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202505211855585_UpdateCarModelWithStock.resx">
+      <DependentUpon>202505211855585_UpdateCarModelWithStock.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202505221940091_ModifyPricePerDayToInt.resx">
+      <DependentUpon>202505221940091_ModifyPricePerDayToInt.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

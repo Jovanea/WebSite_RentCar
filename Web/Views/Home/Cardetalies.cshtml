@@ -1,1095 +1,320 @@
 ﻿@{
     ViewBag.Title = "Cardetalies";
-    var carId = ViewBag.CarId != null ? ViewBag.CarId : 1;
 }
+
+@model eUseControl.BusinessLogic.DBModel.Car
 
 @Html.Partial("_Header")
 
 <section class="car-details">
     <div class="container">
-
         <div class="car-details-content">
-            <!-- Range Rover -->
-            @if (carId == 1)
+            @if (Model != null)
             {
                 <div class="car-images">
                     <div class="main-image">
-                        <img src="https://autoimage.capitalone.com/cms/Auto/assets/images/2760-hero-2023-land-rover-range-rover-sport-phev-varesine-blue-front-quarter.jpg" alt="Range Rover" id="main-car-image">
+                        <img src="@(string.IsNullOrEmpty(Model.MainImageUrl) ? "/Content/images/car-placeholder.jpg" : Model.MainImageUrl)" alt="@Model.Brand @Model.Model" id="main-car-image">
                     </div>
-                    <div class="thumbnails">
-                        <img src="https://autoimage.capitalone.com/cms/Auto/assets/images/2760-hero-2023-land-rover-range-rover-sport-phev-varesine-blue-front-quarter.jpg" alt="Range Rover" onclick="changeImage(this.src)">
-                    </div>
+                    @* Add thumbnails if available in the model *@
                 </div>
 
                 <div class="car-basic-info">
-                    <h2>Range Rover</h2>
-                    <h3> Rover Range Sport</h3>
+                    <h2>@Model.Brand</h2>
+                    <h3>@Model.Model</h3>
 
                     <div class="price-tag">
-                        <span class="price">$60</span>
+                        <span class="price">$@Model.PricePerDay</span>
                         <span class="period">/zi</span>
                     </div>
 
                     <div class="car-specs">
-                        <div class="spec-item">
-                            <i class="fa-solid fa-calendar"></i>
-                            <span>An: 2020</span>
-                        </div>
-                        <div class="spec-item">
-                            <i class="fa-solid fa-gears"></i>
-                            <span>Cutie: Automată</span>
-                        </div>
-                        <div class="spec-item">
-                            <i class="fa-solid fa-gas-pump"></i>
-                            <span>Combustibil: Diesel</span>
-                        </div>
-                        <div class="spec-item">
-                            <i class="fa-solid fa-gauge-high"></i>
-                            <span>Putere: 340 CP</span>
-                        </div>
-                        <div class="spec-item">
-                            <i class="fa-solid fa-user-group"></i>
-                            <span>Locuri: 5</span>
-                        </div>
-                        <div class="spec-item">
-                            <i class="fa-solid fa-car"></i>
-                            <span>Categorie: SUV</span>
-                        </div>
+                        <div class="spec-item"><i class="fa-solid fa-calendar"></i> <span>An: @Model.Year</span></div>
+                        <div class="spec-item"><i class="fa-solid fa-gears"></i> <span>Cutie: @Model.Transmission</span></div>
+                        <div class="spec-item"><i class="fa-solid fa-gas-pump"></i> <span>Combustibil: @Model.FuelType</span></div>
+                        <div class="spec-item"><i class="fa-solid fa-gauge-high"></i> <span>Putere: @Model.Horsepower CP</span></div>
+                        <div class="spec-item"><i class="fa-solid fa-user-group"></i> <span>Locuri: @Model.Seats</span></div>
+                        <div class="spec-item"><i class="fa-solid fa-car"></i> <span>Categorie: @Model.Category</span></div>
+                    </div>
+
+                    <div class="car-stock">
+                        <span class="stock-label">În stoc:</span>
+                        <span class="stock-value @(Model.Stock > 0 ? "in-stock" : "out-of-stock")">
+                            @if (Model.Stock > 0)
+                            {
+                                <text><i class="fa-solid fa-check"></i> @Model.Stock disponibile</text>
+                            }
+                            else
+                            {
+                                <text><i class="fa-solid fa-xmark"></i> Indisponibil</text>
+                            }
+                        </span>
+                    </div>
+
+                    <div class="car-description">
+                        <h4>Descriere:</h4>
+                        <p>@(string.IsNullOrEmpty(Model.Description) ? "Nicio descriere disponibilă." : Model.Description)</p>
+                    </div>
+
+                    <div class="car-more-specs">
+                        <h4>Detalii suplimentare:</h4>
+                        <ul>
+                            <li><strong>Motor:</strong> @(string.IsNullOrEmpty(Model.Engine) ? "N/A" : Model.Engine)</li>
+                            <li><strong>Cuplu:</strong> @(string.IsNullOrEmpty(Model.Torque) ? "N/A" : Model.Torque)</li>
+                            <li><strong>Accelerație (0-100 km/h):</strong> @(string.IsNullOrEmpty(Model.Acceleration) ? "N/A" : Model.Acceleration)</li>
+                            <li><strong>Viteză maximă:</strong> @(string.IsNullOrEmpty(Model.TopSpeed) ? "N/A" : Model.TopSpeed)</li>
+                            <li><strong>Consum combustibil:</strong> @(string.IsNullOrEmpty(Model.FuelConsumption) ? "N/A" : Model.FuelConsumption)</li>
+                        </ul>
                     </div>
                 </div>
             }
-
-            <!-- Mercedes -->
-            @if (carId == 2)
+            else
             {
-                <div class="car-images">
-                    <div class="main-image">
-                        <img src="https://monzaexotics.com/wp-content/uploads/2024/05/KIM-MAYBACH-GLS-600-2-scaled.jpg" alt="Mercedes" id="main-car-image">
-                    </div>
-                    <div class="thumbnails">
-                        <img src="https://monzaexotics.com/wp-content/uploads/2024/05/KIM-MAYBACH-GLS-600-2-scaled.jpg" alt="Mercedes" onclick="changeImage(this.src)">
-                    </div>
-                </div>
-
-                <div class="car-basic-info">
-                    <h2>Mercedes</h2>
-                    <h3>Mercedes-Benz Maybach 600</h3>
-
-                    <div class="price-tag">
-                        <span class="price">$100</span>
-                        <span class="period">/zi</span>
-                    </div>
-
-                    <div class="car-specs">
-                        <div class="spec-item">
-                            <i class="fa-solid fa-calendar"></i>
-                            <span>An: 2018</span>
-                        </div>
-                        <div class="spec-item">
-                            <i class="fa-solid fa-gears"></i>
-                            <span>Cutie: Automată</span>
-                        </div>
-                        <div class="spec-item">
-                            <i class="fa-solid fa-gas-pump"></i>
-                            <span>Combustibil: Benzină</span>
-                        </div>
-                        <div class="spec-item">
-                            <i class="fa-solid fa-gauge-high"></i>
-                            <span>Putere: 630 CP</span>
-                        </div>
-                    </div>
-                </div>
+                <div class="alert alert-warning">Detalii mașină nu au putut fi încărcate.</div>
             }
 
-            <!-- Range Rover Autobiography -->
-            @if (carId == 3)
-            {
-                <div class="car-images">
-                    <div class="main-image">
-                        <img src="https://canadianautoreview.ca/wp-content/uploads/2024/12/range-rover-21-1.jpg" alt="Range Rover Autobiography" id="main-car-image">
-                    </div>
-                    <div class="thumbnails">
-                        <img src="https://canadianautoreview.ca/wp-content/uploads/2024/12/range-rover-21-1.jpg" alt="Range Rover Autobiography" onclick="changeImage(this.src)">
-                    </div>
-                </div>
-
-                <div class="car-basic-info">
-                    <h2>Range Rover</h2>
-                    <h3>Range Rover Autobiography</h3>
-
-                    <div class="price-tag">
-                        <span class="price">$600</span>
-                        <span class="period">/zi</span>
-                    </div>
-
-                    <div class="car-specs">
-                        <div class="spec-item">
-                            <i class="fa-solid fa-calendar"></i>
-                            <span>An: 2024</span>
-                        </div>
-                        <div class="spec-item">
-                            <i class="fa-solid fa-gears"></i>
-                            <span>Cutie: Automată</span>
-                        </div>
-                        <div class="spec-item">
-                            <i class="fa-solid fa-gas-pump"></i>
-                            <span>Combustibil: Hibrid</span>
-                        </div>
-                        <div class="spec-item">
-                            <i class="fa-solid fa-gauge-high"></i>
-                            <span>Putere: 550 CP</span>
-                        </div>
-                        <div class="spec-item">
-                            <i class="fa-solid fa-user-group"></i>
-                            <span>Locuri: 5</span>
-                        </div>
-                        <div class="spec-item">
-                            <i class="fa-solid fa-car"></i>
-                            <span>Categorie: SUV</span>
-                        </div>
-                    </div>
-                </div>
-            }
-            <!-- Ferrari -->
-            @if (carId == 4)
-            {
-                <div class="car-images">
-                    <div class="main-image">
-                        <img src="https://simonfurlonger.co.uk/wp-content/uploads/2023/cars/163914913044209.jpg" alt="Ferrari" id="main-car-image">
-                    </div>
-                    <div class="thumbnails">
-                        <img src="https://simonfurlonger.co.uk/wp-content/uploads/2023/cars/163914913044209.jpg" alt="Ferrari" onclick="changeImage(this.src)">
-                    </div>
-                </div>
-
-                <div class="car-basic-info">
-                    <h2>Ferrari</h2>
-                    <h3>Ferrari F12</h3>
-
-                    <div class="price-tag">
-                        <span class="price">$500</span>
-                        <span class="period">/zi</span>
-                    </div>
-
-                    <div class="car-specs">
-                        <div class="spec-item">
-                            <i class="fa-solid fa-calendar"></i>
-                            <span>An: 2016</span>
-                        </div>
-                        <div class="spec-item">
-                            <i class="fa-solid fa-gears"></i>
-                            <span>Cutie: Automată</span>
-                        </div>
-                        <div class="spec-item">
-                            <i class="fa-solid fa-gas-pump"></i>
-                            <span>Combustibil: Benzină</span>
-                        </div>
-                        <div class="spec-item">
-                            <i class="fa-solid fa-gauge-high"></i>
-                            <span>Putere: 740 CP</span>
-                        </div>
-                        <div class="spec-item">
-                            <i class="fa-solid fa-user-group"></i>
-                            <span>Locuri: 2</span>
-                        </div>
-                        <div class="spec-item">
-                            <i class="fa-solid fa-car"></i>
-                            <span>Categorie: Supercar</span>
-                        </div>
-                    </div>
-                </div>
-            }
-
-            <!-- Porsche -->
-            @if (carId == 5)
-            {
-                <div class="car-images">
-                    <div class="main-image">
-                        <img src="https://images-porsche.imgix.net/-/media/D41AD8E7D55E45BDA5CFE8651F497A74_145CD2F719DF4CC88352C7DC0B71C560_CZ23V20OX0038-911-gt3-rs-side?w=2560&h=1440&q=45&crop=faces%2Centropy%2Cedges&auto=format" alt="Porsche" id="main-car-image">
-                    </div>
-                    <div class="thumbnails">
-                        <img src="https://images-porsche.imgix.net/-/media/D41AD8E7D55E45BDA5CFE8651F497A74_145CD2F719DF4CC88352C7DC0B71C560_CZ23V20OX0038-911-gt3-rs-side?w=2560&h=1440&q=45&crop=faces%2Centropy%2Cedges&auto=format" alt="Porsche" onclick="changeImage(this.src)">
-                    </div>
-                </div>
-
-                <div class="car-basic-info">
-                    <h2>Porsche</h2>
-                    <h3>Porsche GT3</h3>
-
-                    <div class="price-tag">
-                        <span class="price">$700</span>
-                        <span class="period">/zi</span>
-                    </div>
-
-                    <div class="car-specs">
-                        <div class="spec-item">
-                            <i class="fa-solid fa-calendar"></i>
-                            <span>An: 2025</span>
-                        </div>
-                        <div class="spec-item">
-                            <i class="fa-solid fa-gears"></i>
-                            <span>Cutie: Automată</span>
-                        </div>
-                        <div class="spec-item">
-                            <i class="fa-solid fa-gas-pump"></i>
-                            <span>Combustibil: Benzină</span>
-                        </div>
-                        <div class="spec-item">
-                            <i class="fa-solid fa-gauge-high"></i>
-                            <span>Putere: 510 CP</span>
-                        </div>
-                        <div class="spec-item">
-                            <i class="fa-solid fa-user-group"></i>
-                            <span>Locuri: 2</span>
-                        </div>
-                        <div class="spec-item">
-                            <i class="fa-solid fa-car"></i>
-                            <span>Categorie: Sport</span>
-                        </div>
-                    </div>
-                </div>
-            }
-
-            <!-- Pagani -->
-            @if (carId == 6)
-            {
-                <div class="car-images">
-                    <div class="main-image">
-                        <img src="https://www.topgear.com/sites/default/files/cars-car/image/2016/08/rh_huayrabc-67.jpg" alt="Pagani" id="main-car-image">
-                    </div>
-                    <div class="thumbnails">
-                        <img src="https://www.topgear.com/sites/default/files/cars-car/image/2016/08/rh_huayrabc-67.jpg" alt="Pagani" onclick="changeImage(this.src)">
-                    </div>
-                </div>
-
-                <div class="car-basic-info">
-                    <h2>Pagani</h2>
-                    <h3>Pagani Huayra</h3>
-
-                    <div class="price-tag">
-                        <span class="price">$2000</span>
-                        <span class="period">/zi</span>
-                    </div>
-
-                    <div class="car-specs">
-                        <div class="spec-item">
-                            <i class="fa-solid fa-calendar"></i>
-                            <span>An: 2024</span>
-                        </div>
-                        <div class="spec-item">
-                            <i class="fa-solid fa-gears"></i>
-                            <span>Cutie: Automată</span>
-                        </div>
-                        <div class="spec-item">
-                            <i class="fa-solid fa-gas-pump"></i>
-                            <span>Combustibil: Benzină</span>
-                        </div>
-                        <div class="spec-item">
-                            <i class="fa-solid fa-gauge-high"></i>
-                            <span>Putere: 840 CP</span>
-                        </div>
-                    </div>
-                </div>
-            }
-
-
-            <!-- Bugatti -->
-            @if (carId == 7)
-            {
-                <div class="car-images">
-                    <div class="main-image">
-                        <img src="https://newsroom.cdn.bugatti-media.com/667499268f9399fbd36b30c1/original" alt="Bugatti" id="main-car-image">
-                    </div>
-                    <div class="thumbnails">
-                        <img src="https://newsroom.cdn.bugatti-media.com/667499268f9399fbd36b30c1/original" alt="Bugatti" onclick="changeImage(this.src)">
-                    </div>
-                </div>
-
-                <div class="car-basic-info">
-                    <h2>Bugatti</h2>
-                    <h3>Bugatti Tourbilion</h3>
-
-                    <div class="price-tag">
-                        <span class="price">$5000</span>
-                        <span class="period">/zi</span>
-                    </div>
-
-                    <div class="car-specs">
-                        <div class="spec-item">
-                            <i class="fa-solid fa-calendar"></i>
-                            <span>An: 2025</span>
-                        </div>
-                        <div class="spec-item">
-                            <i class="fa-solid fa-gears"></i>
-                            <span>Cutie: Automată</span>
-                        </div>
-                        <div class="spec-item">
-                            <i class="fa-solid fa-gas-pump"></i>
-                            <span>Combustibil: Benzină</span>
-                        </div>
-                        <div class="spec-item">
-                            <i class="fa-solid fa-gauge-high"></i>
-                            <span>Putere: 1600 CP</span>
-                        </div>
-                        <div class="spec-item">
-                            <i class="fa-solid fa-user-group"></i>
-                            <span>Locuri: 2</span>
-                        </div>
-                        <div class="spec-item">
-                            <i class="fa-solid fa-car"></i>
-                            <span>Categorie: Hypercar</span>
-                        </div>
-                    </div>
-                </div>
-            }
-
-            <!-- Bentley -->
-            @if (carId == 8)
-            {
-                <div class="car-images">
-                    <div class="main-image">
-                        <img src="https://www.bentleymedia.com/attachment/7c2c9efb-278b-43ac-be88-1eb7ca97d4d6" alt="Bentley" id="main-car-image">
-                    </div>
-                    <div class="thumbnails">
-                        <img src="https://www.bentleymedia.com/attachment/7c2c9efb-278b-43ac-be88-1eb7ca97d4d6" alt="Bentley" onclick="changeImage(this.src)">
-                    </div>
-                </div>
-
-                <div class="car-basic-info">
-                    <h2>Bentley</h2>
-                    <h3>Bentley Bentayga w12</h3>
-
-                    <div class="price-tag">
-                        <span class="price">$450</span>
-                        <span class="period">/zi</span>
-                    </div>
-
-                    <div class="car-specs">
-                        <div class="spec-item">
-                            <i class="fa-solid fa-calendar"></i>
-                            <span>An: 2018</span>
-                        </div>
-                        <div class="spec-item">
-                            <i class="fa-solid fa-gears"></i>
-                            <span>Cutie: Automată</span>
-                        </div>
-                        <div class="spec-item">
-                            <i class="fa-solid fa-gas-pump"></i>
-                            <span>Combustibil: Benzină</span>
-                        </div>
-                        <div class="spec-item">
-                            <i class="fa-solid fa-gauge-high"></i>
-                            <span>Putere: 635 CP</span>
-                        </div>
-                        <div class="spec-item">
-                            <i class="fa-solid fa-user-group"></i>
-                            <span>Locuri: 5</span>
-                        </div>
-                        <div class="spec-item">
-                            <i class="fa-solid fa-car"></i>
-                            <span>Categorie: SUV</span>
-                        </div>
-                    </div>
-                </div>
-            }
-
-            <!-- Rolls-Royce -->
-            @if (carId == 9)
-            {
-                <div class="car-images">
-                    <div class="main-image">
-                        <img src="https://mediapool.bmwgroup.com/cache/P9/202408/P90564794/P90564794-phantom-scintilla-2666px.jpg" alt="Rolls-Royce" id="main-car-image">
-                    </div>
-                    <div class="thumbnails">
-                        <img src="https://mediapool.bmwgroup.com/cache/P9/202408/P90564794/P90564794-phantom-scintilla-2666px.jpg" alt="Rolls-Royce" onclick="changeImage(this.src)">
-                    </div>
-                </div>
-
-                <div class="car-basic-info">
-                    <h2>Rolls-Royce</h2>
-                    <h3>Rolls-Royce Phantom</h3>
-
-                    <div class="price-tag">
-                        <span class="price">$1500</span>
-                        <span class="period">/zi</span>
-                    </div>
-
-                    <div class="car-specs">
-                        <div class="spec-item">
-                            <i class="fa-solid fa-calendar"></i>
-                            <span>An: 2023</span>
-                        </div>
-                        <div class="spec-item">
-                            <i class="fa-solid fa-gears"></i>
-                            <span>Cutie: Automată</span>
-                        </div>
-                        <div class="spec-item">
-                            <i class="fa-solid fa-gas-pump"></i>
-                            <span>Combustibil: Benzină</span>
-                        </div>
-                        <div class="spec-item">
-                            <i class="fa-solid fa-gauge-high"></i>
-                            <span>Putere: 571 CP</span>
-                        </div>
-                        <div class="spec-item">
-                            <i class="fa-solid fa-user-group"></i>
-                            <span>Locuri: 4</span>
-                        </div>
-                        <div class="spec-item">
-                            <i class="fa-solid fa-car"></i>
-                            <span>Categorie: Sedan</span>
-                        </div>
-                    </div>
-                </div>
-            }
-
-            <!-- McLaren -->
-            @if (carId == 10)
-            {
-                <div class="car-images">
-                    <div class="main-image">
-                        <img src="https://mclaren.scene7.com/is/image/mclaren/720S-Coupe_hero:crop-16x9?wid=1920&hei=1080" alt="McLaren" id="main-car-image">
-                    </div>
-                    <div class="thumbnails">
-                        <img src="https://mclaren.scene7.com/is/image/mclaren/720S-Coupe_hero:crop-16x9?wid=1920&hei=1080" alt="McLaren" onclick="changeImage(this.src)">
-                    </div>
-                </div>
-
-                <div class="car-basic-info">
-                    <h2>McLaren</h2>
-                    <h3>McLaren 720S</h3>
-
-                    <div class="price-tag">
-                        <span class="price">$1000</span>
-                        <span class="period">/zi</span>
-                    </div>
-
-                    <div class="car-specs">
-                        <div class="spec-item">
-                            <i class="fa-solid fa-calendar"></i>
-                            <span>An: 2020</span>
-                        </div>
-                        <div class="spec-item">
-                            <i class="fa-solid fa-gears"></i>
-                            <span>Cutie: Automată</span>
-                        </div>
-                        <div class="spec-item">
-                            <i class="fa-solid fa-gas-pump"></i>
-                            <span>Combustibil: Benzină</span>
-                        </div>
-                        <div class="spec-item">
-                            <i class="fa-solid fa-gauge-high"></i>
-                            <span>Putere: 720 CP</span>
-                        </div>
-                        <div class="spec-item">
-                            <i class="fa-solid fa-user-group"></i>
-                            <span>Locuri: 2</span>
-                        </div>
-                        <div class="spec-item">
-                            <i class="fa-solid fa-car"></i>
-                            <span>Categorie: Supercar</span>
-                        </div>
-                    </div>
-                </div>
-            }
-
-            <!-- BMW -->
-            @if (carId == 11)
-            {
-                <div class="car-images">
-                    <div class="main-image">
-                        <img src="https://www.topgear.com/sites/default/files/images/cars-road-test/2021/05/78582c5421f3395c8b0365d1e12cb015/dsc06755.jpg" alt="BMW" id="main-car-image">
-                    </div>
-                    <div class="thumbnails">
-                        <img src="https://www.topgear.com/sites/default/files/images/cars-road-test/2021/05/78582c5421f3395c8b0365d1e12cb015/dsc06755.jpg" alt="BMW" onclick="changeImage(this.src)">
-                    </div>
-                </div>
-
-                <div class="car-basic-info">
-                    <h2>BMW</h2>
-                    <h3>BMW M5Cs</h3>
-
-                    <div class="price-tag">
-                        <span class="price">$850</span>
-                        <span class="period">/zi</span>
-                    </div>
-
-                    <div class="car-specs">
-                        <div class="spec-item">
-                            <i class="fa-solid fa-calendar"></i>
-                            <span>An: 2024</span>
-                        </div>
-                        <div class="spec-item">
-                            <i class="fa-solid fa-gears"></i>
-                            <span>Cutie: Automată</span>
-                        </div>
-                        <div class="spec-item">
-                            <i class="fa-solid fa-gas-pump"></i>
-                            <span>Combustibil: Benzină</span>
-                        </div>
-                        <div class="spec-item">
-                            <i class="fa-solid fa-gauge-high"></i>
-                            <span>Putere: 635 CP</span>
-                        </div>
-                        <div class="spec-item">
-                            <i class="fa-solid fa-user-group"></i>
-                            <span>Locuri: 5</span>
-                        </div>
-                        <div class="spec-item">
-                            <i class="fa-solid fa-car"></i>
-                            <span>Categorie: Sedan</span>
-                        </div>
-                    </div>
-                </div>
-            }
-
-            <!-- Lamborghini -->
-            @if (carId == 12)
-            {
-                <div class="car-images">
-                    <div class="main-image">
-                        <img src="https://www.topgear.com/sites/default/files/2024/10/1-Lamborghini-Urus-SE-review-2024.jpg" alt="Lamborghini" id="main-car-image">
-                    </div>
-                    <div class="thumbnails">
-                        <img src="https://www.topgear.com/sites/default/files/2024/10/1-Lamborghini-Urus-SE-review-2024.jpg" alt="Lamborghini" onclick="changeImage(this.src)">
-                    </div>
-                </div>
-
-                <div class="car-basic-info">
-                    <h2>Lamborghini</h2>
-                    <h3>Lamborghini Urus</h3>
-
-                    <div class="price-tag">
-                        <span class="price">$60</span>
-                        <span class="period">/zi</span>
-                    </div>
-
-                    <div class="car-specs">
-                        <div class="spec-item">
-                            <i class="fa-solid fa-calendar"></i>
-                            <span>An: 2019</span>
-                        </div>
-                        <div class="spec-item">
-                            <i class="fa-solid fa-gears"></i>
-                            <span>Cutie: Automată</span>
-                        </div>
-                        <div class="spec-item">
-                            <i class="fa-solid fa-gas-pump"></i>
-                            <span>Combustibil: Benzină</span>
-                        </div>
-                        <div class="spec-item">
-                            <i class="fa-solid fa-gauge-high"></i>
-                            <span>Putere: 650 CP</span>
-                        </div>
-                        <div class="spec-item">
-                            <i class="fa-solid fa-user-group"></i>
-                            <span>Locuri: 5</span>
-                        </div>
-                        <div class="spec-item">
-                            <i class="fa-solid fa-car"></i>
-                            <span>Categorie: SUV</span>
-                        </div>
-                    </div>
-                </div>
-            }
-
-
-
-
-            <div class="centered-content">
-                <div class="description-section">
-                    @if (carId == 1)
-                    {
-                        <div class="car-description">
-                            <h4>Descriere</h4>
-                            <p>Range Rover este simbolul luxului și al performanței off-road. Acest SUV de lux oferă confort excepțional, tehnologie de vârf și capacități de conducere impresionante atât în oraș, cât și în afara lui.</p>
-                        </div>
-
-                        <div class="specifications">
-                            <h4>Specificații tehnice</h4>
-                            <table>
-                                <tr><td>Motor</td><td>4.0L V8 Turbodiesel</td></tr>
-                                <tr><td>Putere</td><td>340 CP</td></tr>
-                                <tr><td>Cuplu</td><td>700 Nm</td></tr>
-                                <tr><td>Accelerație 0-100 km/h</td><td>6.3 secunde</td></tr>
-                                <tr><td>Viteza maximă</td><td>250 km/h</td></tr>
-                                <tr><td>Consum mediu</td><td>8.5 l/100 km</td></tr>
-                            </table>
-                        </div>
-
-                        <div class="car-features">
-                            <h4>Dotări</h4>
-                            <ul>
-                                <li><i class="fa-solid fa-check"></i> Scaune din piele ventilate și încălzite </li>
-                                <li><i class="fa-solid fa-check"></i> Sistem audio premium Meridian</li>
-                                <li><i class="fa-solid fa-check"></i> Suspensie pneumatică</li>
-                                <li><i class="fa-solid fa-check"></i> Panoramă </li>
-                            </ul>
-                        </div>
-                    }
-
-                    @if (carId == 2)
-                    {
-                        <div class="car-description">
-                            <h4>Descriere</h4>
-                            <p>Mercedes-Maybach S600 reprezintă vârful luxului automobilistic, cu finisaje de excepție și tehnologie avansată.</p>
-                        </div>
-
-                        <div class="specifications">
-                            <h4>Specificații tehnice</h4>
-                            <table>
-                                <tr><td>Motor</td><td>6.0L V12 Biturbo</td></tr>
-                                <tr><td>Putere</td><td>630 CP</td></tr>
-                                <tr><td>Cuplu</td><td>1000 Nm</td></tr>
-                                <tr><td>Accelerație 0-100 km/h</td><td>4.6 secunde</td></tr>
-                                <tr><td>Viteza maximă</td><td>250 km/h</td></tr>
-                                <tr><td>Consum mediu</td><td>12.0 l/100 km</td></tr>
-                            </table>
-                        </div>
-                        <div class="car-features">
-                            <h4>Dotări</h4>
-                            <ul>
-                                <li><i class="fa-solid fa-check"></i> Scaune cu masaj și ventilație</li>
-                                <li><i class="fa-solid fa-check"></i> Sistem audio Burmester 3D</li>
-                                <li><i class="fa-solid fa-check"></i> Frigider integrat</li>
-                                <li><i class="fa-solid fa-check"></i> Asistent de conducere autonom</li>
-                            </ul>
-                        </div>
-                    }
-
-                    @if (carId == 3)
-                    {
-                        <div class="car-description">
-                            <h4>Descriere</h4>
-                            <p>Range Rover Autobiography reprezintă cea mai luxoasă versiune din gama Range Rover, oferind dotări exclusive și tehnologie de ultimă generație. Este alegerea perfectă pentru cei care doresc maximum de confort și rafinament.</p>
-                        </div>
-
-                        <div class="specifications">
-                            <h4>Specificații tehnice</h4>
-                            <table>
-                                <tr><td>Motor</td><td>4.4L V8 Hibrid</td></tr>
-                                <tr><td>Putere</td><td>550 CP</td></tr>
-                                <tr><td>Cuplu</td><td>750 Nm</td></tr>
-                                <tr><td>Accelerație 0-100 km/h</td><td>5.3 secunde</td></tr>
-                                <tr><td>Viteza maximă</td><td>250 km/h</td></tr>
-                                <tr><td>Consum mediu</td><td>7.5 l/100 km</td></tr>
-                            </table>
-                        </div>
-
-                        <div class="car-features">
-                            <h4>Dotări</h4>
-                            <ul>
-                                <li><i class="fa-solid fa-check"></i> Scaune Executive cu masaj</li>
-                                <li><i class="fa-solid fa-check"></i> Sistem audio Meridian Signature Sound</li>
-                                <li><i class="fa-solid fa-check"></i> Scaun pasager dreapta zero gravity </li>
-                                <li><i class="fa-solid fa-check"></i> Faruri Matrix LED</li>
-                            </ul>
-                        </div>
-                    }
-                    @if (carId == 4)
-                    {
-                        <div class="car-description">
-                            <h4>Descriere</h4>
-                            <p>Ferrari F12 este un exemplu perfect de inginerie italiană, combinând performanța extremă cu un design elegant. Acest supercar vă va oferi o experiență de conducere de neuitat, cu accelerații impresionante și un sunet de motor inconfundabil.</p>
-                        </div>
-
-                        <div class="specifications">
-                            <h4>Specificații tehnice</h4>
-                            <table>
-                                <tr><td>Motor</td><td>6.3L V12</td></tr>
-                                <tr><td>Putere</td><td>740 CP</td></tr>
-                                <tr><td>Cuplu</td><td>690 Nm</td></tr>
-                                <tr><td>Accelerație 0-100 km/h</td><td>3.1 secunde</td></tr>
-                                <tr><td>Viteza maximă</td><td>340 km/h</td></tr>
-                                <tr><td>Consum mediu</td><td>15.0 l/100 km</td></tr>
-                            </table>
-                        </div>
-
-                        <div class="car-features">
-                            <h4>Dotări</h4>
-                            <ul>
-                                <li><i class="fa-solid fa-check"></i> Interior complet din piele și carbon</li>
-                                <li><i class="fa-solid fa-check"></i> Sistem audio JBL Premium</li>
-                                <li><i class="fa-solid fa-check"></i> Frâne ceramice carbon</li>
-                                <li><i class="fa-solid fa-check"></i> Suspensie adaptivă</li>
-                            </ul>
-                        </div>
-                    }
-                    @if (carId == 5)
-                    {
-                        <div class="car-description">
-                            <h4>Descriere</h4>
-                            <p>Porsche GT3 este una dintre cele mai pure mașini sport de astăzi, creată pentru a oferi plăcerea maximă pe circuit dar și pe șosea. Cu un motor atmosferic și o aerodinamică avansată, GT3 reprezintă esența experienței Porsche.</p>
-                        </div>
-
-                        <div class="specifications">
-                            <h4>Specificații tehnice</h4>
-                            <table>
-                                <tr><td>Motor</td><td>4.0L Boxer 6 cilindri</td></tr>
-                                <tr><td>Putere</td><td>510 CP</td></tr>
-                                <tr><td>Cuplu</td><td>470 Nm</td></tr>
-                                <tr><td>Accelerație 0-100 km/h</td><td>3.4 secunde</td></tr>
-                                <tr><td>Viteza maximă</td><td>320 km/h</td></tr>
-                                <tr><td>Consum mediu</td><td>12.4 l/100 km</td></tr>
-                            </table>
-                        </div>
-
-                        <div class="car-features">
-                            <h4>Dotări</h4>
-                            <ul>
-                                <li><i class="fa-solid fa-check"></i> Scaune sport bucket din carbon</li>
-                                <li><i class="fa-solid fa-check"></i> Sistem de evacuare sport</li>
-                                <li><i class="fa-solid fa-check"></i> Suspensie PASM reglabilă</li>
-                                <li><i class="fa-solid fa-check"></i> Sistem Porsche Track Precision</li>
-                            </ul>
-                        </div>
-                    }
-
-                    @if (carId == 6)
-                    {
-                        <div class="car-description">
-                            <h4>Descriere</h4>
-                            <p>Pagani Huayra este o operă de artă pe roți, combinând performanțe extreme cu design uluitor. Acest hypercar italian reprezintă întruchiparea perfecțiunii automobilistice, cu un nivel de atenție pentru detalii nemaiîntâlnit.</p>
-                        </div>
-
-                        <div class="specifications">
-                            <h4>Specificații tehnice</h4>
-                            <table>
-                                <tr><td>Motor</td><td>6.0L V12 Twin-Turbo</td></tr>
-                                <tr><td>Putere</td><td>840 CP</td></tr>
-                                <tr><td>Cuplu</td><td>1100 Nm</td></tr>
-                                <tr><td>Accelerație 0-100 km/h</td><td>2.8 secunde</td></tr>
-                                <tr><td>Viteza maximă</td><td>383 km/h</td></tr>
-                                <tr><td>Consum mediu</td><td>18.3 l/100 km</td></tr>
-                            </table>
-                        </div>
-
-                        <div class="car-features">
-                            <h4>Dotări</h4>
-                            <ul>
-                                <li><i class="fa-solid fa-check"></i> Caroserie din carbon-titanium</li>
-                                <li><i class="fa-solid fa-check"></i> Interior personalizat manual</li>
-                                <li><i class="fa-solid fa-check"></i> Sistem aerodinamic activ</li>
-                                <li><i class="fa-solid fa-check"></i> Sistem audio Sonus Faber premium</li>
-                            </ul>
-                        </div>
-                    }
-                    @if (carId == 7)
-                    {
-                        <div class="car-description">
-                            <h4>Descriere</h4>
-                            <p>Bugatti Tourbilion reprezintă vârful tehnologiei automobilistice și performanței absolute. Acest hypercar exclusivist este proiectat pentru viteze extreme și experiențe inegalabile, fiind unul dintre cele mai rare și valoroase vehicule din lume.</p>
-                        </div>
-
-                        <div class="specifications">
-                            <h4>Specificații tehnice</h4>
-                            <table>
-                                <tr><td>Motor</td><td>8.0L W16 Quad-Turbo</td></tr>
-                                <tr><td>Putere</td><td>1600 CP</td></tr>
-                                <tr><td>Cuplu</td><td>1600 Nm</td></tr>
-                                <tr><td>Accelerație 0-100 km/h</td><td>2.4 secunde</td></tr>
-                                <tr><td>Viteza maximă</td><td>440 km/h</td></tr>
-                                <tr><td>Consum mediu</td><td>26.0 l/100 km</td></tr>
-                            </table>
-                        </div>
-
-                        <div class="car-features">
-                            <h4>Dotări</h4>
-                            <ul>
-                                <li><i class="fa-solid fa-check"></i> Caroserie din fibră de carbon</li>
-                                <li><i class="fa-solid fa-check"></i> Interior din piele Poltrona Frau</li>
-                                <li><i class="fa-solid fa-check"></i> Sistem de telemetrie avansată</li>
-                                <li><i class="fa-solid fa-check"></i> Sistem aerodinamic activ</li>
-                            </ul>
-                        </div>
-                    }
-                    @if (carId == 8)
-                    {
-                        <div class="car-description">
-                            <h4>Descriere</h4>
-                            <p>Bentley Bentayga W12 este un SUV ultra-luxos care combină rafinamentul britanic cu performanțe impresionante. Oferă o experiență de călătorie supremă, cu materiale exclusive și o calitate a manufacturării de excepție.</p>
-                        </div>
-
-                        <div class="specifications">
-                            <h4>Specificații tehnice</h4>
-                            <table>
-                                <tr><td>Motor</td><td>6.0L W12 Twin-Turbo</td></tr>
-                                <tr><td>Putere</td><td>635 CP</td></tr>
-                                <tr><td>Cuplu</td><td>900 Nm</td></tr>
-                                <tr><td>Accelerație 0-100 km/h</td><td>4.1 secunde</td></tr>
-                                <tr><td>Viteza maximă</td><td>305 km/h</td></tr>
-                                <tr><td>Consum mediu</td><td>14.8 l/100 km</td></tr>
-                            </table>
-                        </div>
-
-                        <div class="car-features">
-                            <h4>Dotări</h4>
-                            <ul>
-                                <li><i class="fa-solid fa-check"></i> Tapițerie din piele Mulliner</li>
-                                <li><i class="fa-solid fa-check"></i> Sistem audio Naim</li>
-                                <li><i class="fa-solid fa-check"></i> Ornamente din lemn prețios</li>
-                                <li><i class="fa-solid fa-check"></i> Suspensie pneumatică cu control electronic</li>
-                            </ul>
-                        </div>
-                    }
-                    @if (carId == 9)
-                    {
-                        <div class="car-description">
-                            <h4>Descriere</h4>
-                            <p>Rolls-Royce Phantom este mașina emblematică a luxului suprem, reprezentând expresia maximă a rafinamentului și exclusivismului. Cu o izolare fonică desăvârșită și materiale de cea mai înaltă calitate, oferă o experiență inegalabilă.</p>
-                        </div>
-
-                        <div class="specifications">
-                            <h4>Specificații tehnice</h4>
-                            <table>
-                                <tr><td>Motor</td><td>6.75L V12 Twin-Turbo</td></tr>
-                                <tr><td>Putere</td><td>571 CP</td></tr>
-                                <tr><td>Cuplu</td><td>900 Nm</td></tr>
-                                <tr><td>Accelerație 0-100 km/h</td><td>5.3 secunde</td></tr>
-                                <tr><td>Viteza maximă</td><td>250 km/h</td></tr>
-                                <tr><td>Consum mediu</td><td>15.2 l/100 km</td></tr>
-                            </table>
-                        </div>
-
-                        <div class="car-features">
-                            <h4>Dotări</h4>
-                            <ul>
-                                <li><i class="fa-solid fa-check"></i> Plafon Starlight cu stele personalizate</li>
-                                <li><i class="fa-solid fa-check"></i> Sistem audio Bespoke</li>
-                                <li><i class="fa-solid fa-check"></i> Uși cu închidere asistată electric</li>
-                                <li><i class="fa-solid fa-check"></i> Sistem de champagne integrat</li>
-                            </ul>
-                        </div>
-                    }
-                    @if (carId == 10)
-                    {
-                        <div class="car-description">
-                            <h4>Descriere</h4>
-                            <p>McLaren 720S este unul dintre cele mai avansate supercaruri din lume, cu performanțe uluitoare și un design aerodinamic incredibil. Este o mașină care oferă experiențe extreme și tehnologii derivate direct din Formula 1.</p>
-                        </div>
-
-                        <div class="specifications">
-                            <h4>Specificații tehnice</h4>
-                            <table>
-                                <tr><td>Motor</td><td>4.0L V8 Twin-Turbo</td></tr>
-                                <tr><td>Putere</td><td>720 CP</td></tr>
-                                <tr><td>Cuplu</td><td>770 Nm</td></tr>
-                                <tr><td>Accelerație 0-100 km/h</td><td>2.9 secunde</td></tr>
-                                <tr><td>Viteza maximă</td><td>341 km/h</td></tr>
-                                <tr><td>Consum mediu</td><td>12.2 l/100 km</td></tr>
-                            </table>
-                        </div>
-
-                        <div class="car-features">
-                            <h4>Dotări</h4>
-                            <ul>
-                                <li><i class="fa-solid fa-check"></i> Monocoque din carbon</li>
-                                <li><i class="fa-solid fa-check"></i> Sistem de telemetrie integrat</li>
-                                <li><i class="fa-solid fa-check"></i> Suspensie Proactive Chassis Control II</li>
-                                <li><i class="fa-solid fa-check"></i> Sistem de evacuare sport variabil</li>
-                            </ul>
-                        </div>
-                    }
-                    @if (carId == 11)
-                    {
-                        <div class="car-description">
-                            <h4>Descriere</h4>
-                            <p>BMW M5Cs este cea mai puternică versiune a legendarul sedan german, combinând luxul cu performanțele extreme. Oferă o dinamică de conducere excepțională și tehnologii de ultimă generație într-un pachet elegant și practic.</p>
-                        </div>
-
-                        <div class="specifications">
-                            <h4>Specificații tehnice</h4>
-                            <table>
-                                <tr><td>Motor</td><td>4.4L V8 Twin-Turbo</td></tr>
-                                <tr><td>Putere</td><td>635 CP</td></tr>
-                                <tr><td>Cuplu</td><td>750 Nm</td></tr>
-                                <tr><td>Accelerație 0-100 km/h</td><td>3.0 secunde</td></tr>
-                                <tr><td>Viteza maximă</td><td>305 km/h</td></tr>
-                                <tr><td>Consum mediu</td><td>11.3 l/100 km</td></tr>
-                            </table>
-                        </div>
-
-                        <div class="car-features">
-                            <h4>Dotări</h4>
-                            <ul>
-                                <li><i class="fa-solid fa-check"></i> Scaune sport M cu tapițerie din piele</li>
-                                <li><i class="fa-solid fa-check"></i> Sistem audio Harman Kardon</li>
-                                <li><i class="fa-solid fa-check"></i> Tracțiune integrală M xDrive</li>
-                                <li><i class="fa-solid fa-check"></i> Pachet aerodinamic M Carbon</li>
-                            </ul>
-                        </div>
-                    }
-                    @if (carId == 12)
-                    {
-                        <div class="car-description">
-                            <h4>Descriere</h4>
-                            <p>Lamborghini Urus este un Super SUV care combină agresivitatea și performanțele specifice mărcii italiene cu praticitatea unui SUV. Cu un design spectaculos și caracteristici tehnice impresionante, Urus redefinește segmentul SUV de lux.</p>
-                        </div>
-
-                        <div class="specifications">
-                            <h4>Specificații tehnice</h4>
-                            <table>
-                                <tr><td>Motor</td><td>4.0L V8 Twin-Turbo</td></tr>
-                                <tr><td>Putere</td><td>650 CP</td></tr>
-                                <tr><td>Cuplu</td><td>850 Nm</td></tr>
-                                <tr><td>Accelerație 0-100 km/h</td><td>3.6 secunde</td></tr>
-                                <tr><td>Viteza maximă</td><td>305 km/h</td></tr>
-                                <tr><td>Consum mediu</td><td>14.1 l/100 km</td></tr>
-                            </table>
-                        </div>
-
-                        <div class="car-features">
-                            <h4>Dotări</h4>
-                            <ul>
-                                <li><i class="fa-solid fa-check"></i> Scaune sport cu tapițerie Alcantara</li>
-                                <li><i class="fa-solid fa-check"></i> Sistem audio Bang & Olufsen</li>
-                                <li><i class="fa-solid fa-check"></i> Moduri de conducere multiple (Strada, Sport, Corsa, Sabbia, Terra, Neve)</li>
-                                <li><i class="fa-solid fa-check"></i> Suspensie pneumatică adaptivă</li>
-                            </ul>
-                        </div>
-                    }
-                </div>
-
-                <!-- Partea dreaptă - Formular de rezervare -->
-                <div class="booking-section">
-                    <h4>Rezervă acum</h4>
-                    
-                    @if (TempData["ErrorMessage"] != null)
-                    {
-                        <div class="alert alert-danger">
-                            @TempData["ErrorMessage"]
-                        </div>
-                    }
-                    
-                    @using (Html.BeginForm("AddToCart", "Home", FormMethod.Post, new { id = "booking-form" }))
+            <div class="booking-form">
+                <h4>Alegeți datele de închiriere</h4>
+                @if (Model != null)
+                {
+                    using (Html.BeginForm("AddToCart", "Home", FormMethod.Post))
                     {
                         @Html.AntiForgeryToken()
-                        <input type="hidden" name="carId" id="carId" value="@carId" />
-                        <input type="hidden" name="totalAmount" id="totalAmount" value="0" />
+                        @Html.Hidden("CarId", Model.CarId)
 
-                        <div class="date-picker">
-                            <div class="date-input">
-                                <label for="pickupDate">Data preluare:</label>
-                                <input type="date" id="pickupDate" name="pickupDate" required>
-                            </div>
-                            <div class="date-input">
-                                <label for="returnDate">Data returnare:</label>
-                                <input type="date" id="returnDate" name="returnDate" required>
-                            </div>
+                        <div class="form-group">
+                            <label for="pickupDate">Data preluării:</label>
+                            <input type="date" id="pickupDate" name="pickupDate" class="form-control" required>
                         </div>
 
-                        <div class="booking-summary">
-                            <div class="summary-item">
-                                <span>Preț / zi:</span>
-                                <span id="daily-price">@(carId == 1 ? "$60" : carId == 2 ? "$100" : carId == 3 ? "$600" : carId == 4 ? "$500" : carId == 5 ? "$700" : carId == 6 ? "$2000" : carId == 7 ? "$5000" : carId == 8 ? "$450" : carId == 9 ? "$1500" : carId == 10 ? "$1000" : carId == 11 ? "$850" : carId == 12 ? "$60" : "$0")</span>
-                            </div>
-                            <div class="summary-item">
-                                <span>Zile:</span>
-                                <span id="days-count">0</span>
-                            </div>
-                            <div class="summary-item total">
-                                <span>Total:</span>
-                                <span id="total-price">$0</span>
-                            </div>
+                        <div class="form-group">
+                            <label for="returnDate">Data returnării:</label>
+                            <input type="date" id="returnDate" name="returnDate" class="form-control" required>
                         </div>
 
-                        <button type="submit" class="btn-primary">
-                            <i class="fa-solid fa-cart-plus"></i> Rezervă acum
-                        </button>
-                        @Html.ValidationSummary(false, "", new { @class = "text-danger", style = "margin-top: 10px;" })
+                        <div class="form-group">
+                            <label for="totalAmount">Preț Total:</label>
+                            <input type="text" id="totalAmount" name="totalAmount" class="form-control" readonly value="0">
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Adaugă în Coș</button>
                     }
-                </div>
+                }
             </div>
         </div>
     </div>
 </section>
 
 <script>
-    // Funcție pentru schimbarea imaginii principale
-    function changeImage(src) {
-        document.getElementById('main-car-image').src = src;
-    }
-
     document.addEventListener('DOMContentLoaded', function () {
         const pickupDateInput = document.getElementById('pickupDate');
         const returnDateInput = document.getElementById('returnDate');
-        const daysCountSpan = document.getElementById('days-count');
-        const totalPriceSpan = document.getElementById('total-price');
         const totalAmountInput = document.getElementById('totalAmount');
-        const dailyPriceSpan = document.getElementById('daily-price');
+        const pricePerDay = @(Model != null ? Model.PricePerDay : 0);
 
-        // Get the daily price from the span
-        const dailyPrice = parseFloat(dailyPriceSpan.textContent.replace('$', ''));
-
-        function updateTotal() {
+        function calculateTotal() {
             const pickupDate = new Date(pickupDateInput.value);
             const returnDate = new Date(returnDateInput.value);
 
-            if (pickupDate && returnDate && !isNaN(pickupDate) && !isNaN(returnDate)) {
-                const diffTime = Math.abs(returnDate - pickupDate);
-                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-                if (diffDays > 0) {
-                    const total = diffDays * dailyPrice;
-                    daysCountSpan.textContent = diffDays;
-                    totalPriceSpan.textContent = '$' + total.toFixed(2);
-                    // Ensure we set a valid decimal number to match controller parameter
-                    totalAmountInput.value = total.toFixed(2);
-                } else {
-                    daysCountSpan.textContent = '0';
-                    totalPriceSpan.textContent = '$0';
-                    totalAmountInput.value = '0';
-                }
+            if (pickupDateInput.value && returnDateInput.value && returnDate >= pickupDate) {
+                const timeDiff = returnDate - pickupDate;
+                const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24)) + 1;
+                const total = daysDiff * pricePerDay;
+                totalAmountInput.value = total.toFixed(2);
+            } else {
+                totalAmountInput.value = '0';
             }
         }
 
-        pickupDateInput.addEventListener('change', updateTotal);
-        returnDateInput.addEventListener('change', updateTotal);
+        pickupDateInput.addEventListener('change', calculateTotal);
+        returnDateInput.addEventListener('change', calculateTotal);
+
+        const today = new Date().toISOString().split('T')[0];
+        pickupDateInput.min = today;
+        returnDateInput.min = today;
+
+        calculateTotal();
     });
 
-    document.addEventListener('DOMContentLoaded', function() {
-        // Obține ID-ul mașinii din ViewBag
-        const carId = @ViewBag.CarId;
-
-        // Obține lista existentă de mașini vizualizate
-        let viewedCars = CookieManager.getLastViewedCars();
-
-        // Adaugă mașina curentă la începutul listei
-        viewedCars = viewedCars.filter(id => id !== carId); // Elimină dacă există deja
-        viewedCars.unshift(carId); // Adaugă la început
-
-        // Păstrează doar ultimele 5 mașini vizualizate
-        viewedCars = viewedCars.slice(0, 5);
-
-        // Salvează lista actualizată
-        CookieManager.saveLastViewedCars(viewedCars);
-    });
+    function changeImage(src) {
+        document.getElementById('main-car-image').src = src;
+    }
 </script>
 
-@Html.Partial("_Footer")
-
 <style>
-    .alert {
-        padding: 10px;
-        margin-bottom: 15px;
+    .car-details-content {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 30px;
+        margin-top: 20px;
+    }
+
+    .car-images {
+        flex: 1;
+        min-width: 300px;
+    }
+
+        .car-images img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+    .car-basic-info {
+        flex: 1;
+        min-width: 300px;
+        display: flex;
+        flex-direction: column;
+    }
+
+        .car-basic-info h2 {
+            font-size: 2em;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .car-basic-info h3 {
+            font-size: 1.5em;
+            margin-top: 0;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+    .price-tag {
+        font-size: 1.8em;
+        margin-bottom: 25px;
+        color: #ff7f00; /* Accent color */
+        font-weight: bold;
+    }
+
+        .price-tag .period {
+            font-size: 0.6em;
+            color: #555;
+            font-weight: normal;
+        }
+
+    .car-specs {
+        margin-bottom: 20px;
+        padding: 15px;
+        background-color: #f8f9fa; /* Light background for specs */
+        border-radius: 8px;
+    }
+
+        .car-specs .spec-item {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+            .car-specs .spec-item i {
+                margin-right: 10px;
+                color: #ff7f00; /* Accent color for icons */
+                font-size: 1.1em;
+            }
+
+    .car-stock {
+        margin-top: 10px;
+        padding: 8px 12px;
         border-radius: 4px;
+        background-color: #e9ecef; /* Different background for stock */
+        display: inline-block;
+        font-weight: bold;
     }
+
+    .stock-label {
+        margin-right: 5px;
+    }
+
+    .in-stock {
+        color: #28a745; /* Green for in stock */
+    }
+
+    .out-of-stock {
+        color: #dc3545; /* Red for out of stock */
+    }
+
+    .car-description {
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+
+        .car-description h4, .car-more-specs h4 {
+            color: #333;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+        }
+
+    .car-more-specs ul {
+        list-style: none;
+        padding: 0;
+    }
+
+        .car-more-specs ul li {
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+
+            .car-more-specs ul li strong {
+                color: #555;
+            }
+
+    .booking-form {
+        border: 1px solid #ddd; /* Lighter border */
+        padding: 25px; /* More padding */
+        border-radius: 8px;
+        background-color: #fff; /* White background */
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05); /* Subtle shadow */
+    }
+
+        .booking-form h4 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: #333;
+            text-align: center;
+        }
+
+        .booking-form .form-group {
+            margin-bottom: 15px;
+        }
+
+            .booking-form .form-group label {
+                font-weight: bold;
+                display: block;
+                margin-bottom: 5px;
+                color: #555;
+            }
+
+        .booking-form .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box; /* Include padding and border in element's total width and height */
+        }
+
+        .booking-form button[type="submit"] {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #ff7f00; /* Accent color */
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+            .booking-form button[type="submit"]:hover {
+                background-color: #e67300;
+            }
+
+
+        .car-images, .car-basic-info, .booking-form {
+            min-width: unset;
+            width: 100%;
+        }
     
-    .alert-danger {
-        background-color: #f8d7da;
-        color: #721c24;
-        border: 1px solid #f5c6cb;
-    }
-    
-    .alert-info {
-        background-color: #d1ecf1;
-        color: #0c5460;
-        border: 1px solid #bee5eb;
-    }
-    
-    .alert-success {
-        background-color: #d4edda;
-        color: #155724;
-        border: 1px solid #c3e6cb;
-    }
 </style>
+
+@Html.Partial("_Footer")

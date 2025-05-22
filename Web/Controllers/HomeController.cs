@@ -19,6 +19,7 @@ namespace Web.Controllers
         private readonly ICarApi _carApi;
         private readonly IBookingApi _bookingApi;
         private readonly IPaymentApi _paymentApi;
+        private readonly IAdminApi _adminApi;
 
         public HomeController()
         {
@@ -26,6 +27,7 @@ namespace Web.Controllers
             _carApi = new CarApi();
             _bookingApi = new BookingApi();
             _paymentApi = new PaymentApi();
+            _adminApi = new AdminApi();
         }
 
         public ActionResult Index()
@@ -126,20 +128,18 @@ namespace Web.Controllers
                 var cars = _carApi.GetAllCars();
                 return View(cars);
             }
-            catch (Exception ex)
+            catch
             {
-                // Tratăm excepția, dar nu afișăm mesaje de debug
                 return View(new List<eUseControl.Domain.Entities.Car.CarDetails>());
             }
         }
 
         public ActionResult Cardetalies(int id = 1)
         {
-            var car = _carApi.GetCarById(id);
+            var car = _adminApi.GetCarById(id);
             if (car == null)
                 return HttpNotFound();
 
-            ViewBag.CarId = id;
             return View(car);
         }
 
@@ -149,7 +149,6 @@ namespace Web.Controllers
 
             if (Session["Id"] != null)
             {
-                // If there was a pending booking, continue with it
                 if (TempData["BookingRedirect"] != null && (bool)TempData["BookingRedirect"])
                 {
                     int carId = (int)TempData["CarId"];
@@ -159,7 +158,7 @@ namespace Web.Controllers
 
                     return RedirectToAction("Cardetalies", new { id = carId });
                 }
-                
+
                 return RedirectToAction("Profile", "Home");
             }
 
@@ -258,30 +257,27 @@ namespace Web.Controllers
                 return RedirectToAction("Login");
             }
 
-            // Show success/error messages if they exist
             if (TempData["SuccessMessage"] != null)
             {
                 ViewBag.SuccessMessage = TempData["SuccessMessage"];
             }
-            
+
             if (TempData["ErrorMessage"] != null)
             {
                 ViewBag.ErrorMessage = TempData["ErrorMessage"];
             }
 
             var cart = Session["Cart"] as List<eUseControl.BusinessLogic.DBModel.Booking>;
-            
-            // If cart doesn't exist at all (first visit), initialize it from database
+
             if (cart == null)
             {
                 int userId = GetCurrentUserId();
                 if (userId > 0)
                 {
-                    // Get only pending bookings from database
                     var bookings = _bookingApi.GetUserBookings(userId)
                         .Where(b => b.Status == "Pending")
                         .ToList();
-                    
+
                     if (bookings.Count > 0)
                     {
                         cart = bookings;
@@ -289,23 +285,33 @@ namespace Web.Controllers
                     }
                     else
                     {
-                        // No bookings found, set empty cart
                         cart = new List<eUseControl.BusinessLogic.DBModel.Booking>();
                         Session["Cart"] = cart;
                     }
                 }
                 else
                 {
-                    // User not found, return empty cart
                     cart = new List<eUseControl.BusinessLogic.DBModel.Booking>();
                     Session["Cart"] = cart;
                 }
             }
-            
-            // Set cart for the view
-            ViewBag.CartBookings = cart;
-            
-            // Calculate total if needed
+
+            var cartWithCarDetails = new List<(eUseControl.BusinessLogic.DBModel.Booking, eUseControl.BusinessLogic.DBModel.Car)>();
+
+            if (cart != null && cart.Count > 0)
+            {
+                foreach (var booking in cart)
+                {
+                    var car = _adminApi.GetCarById(booking.CarId);
+                    if (car != null)
+                    {
+                        cartWithCarDetails.Add((booking, car));
+                    }
+                }
+            }
+
+            ViewBag.CartItems = cartWithCarDetails;
+
             if (cart != null && cart.Count > 0)
             {
                 ViewBag.CartTotal = cart.Sum(b => b.TotalAmount);
@@ -320,9 +326,8 @@ namespace Web.Controllers
 
         private int GetCurrentUserId()
         {
-            // Helper method to get current user ID
             int userId = 0;
-            
+
             if (Session["Id"] is int)
             {
                 userId = (int)Session["Id"];
@@ -333,7 +338,6 @@ namespace Web.Controllers
             }
             else
             {
-                // Try to get user ID from database
                 using (var db = new eUseControl.BusinessLogic.DBModel.UserContext())
                 {
                     var username = Session["Id"]?.ToString();
@@ -347,7 +351,7 @@ namespace Web.Controllers
                     }
                 }
             }
-            
+
             return userId;
         }
 
@@ -362,7 +366,6 @@ namespace Web.Controllers
             var cart = Session["Cart"] as List<eUseControl.BusinessLogic.DBModel.Booking>;
             if (cart == null || cart.Count == 0)
             {
-                // Try to get pending bookings from database
                 int userId;
                 if (Session["Id"] is int)
                 {
@@ -374,7 +377,6 @@ namespace Web.Controllers
                 }
                 else
                 {
-                    // If can't parse as int, need to get user ID from database
                     using (var db = new eUseControl.BusinessLogic.DBModel.UserContext())
                     {
                         var username = Session["Id"].ToString();
@@ -386,11 +388,11 @@ namespace Web.Controllers
                         userId = user.Id;
                     }
                 }
-                
+
                 var pendingBookings = _bookingApi.GetUserBookings(userId)
                     .Where(b => b.Status == "Pending")
                     .ToList();
-                
+
                 if (pendingBookings.Count > 0)
                 {
                     cart = pendingBookings;
@@ -402,7 +404,6 @@ namespace Web.Controllers
                 }
             }
 
-            // Calculate the total and handle conversion from int to decimal if needed
             decimal totalAmount = cart.Sum(b => (decimal)b.TotalAmount);
             ViewBag.TotalAmount = totalAmount;
             ViewBag.Username = Session["UserName"];
@@ -428,18 +429,16 @@ namespace Web.Controllers
             {
                 if (_paymentApi.ProcessPayment(cardDetails, booking.TotalAmount))
                 {
-                    // Update booking status
-                    booking.Status = "Paid";
+                    booking.Status = "Confirmed";
                     if (_bookingApi.UpdateBooking(booking))
                     {
                         // Clear the cart
                         Session["Cart"] = new List<Booking>();
-                        
-                        // Store successful payment info
+
                         TempData["PaymentSuccess"] = true;
                         TempData["PaymentAmount"] = booking.TotalAmount;
                         TempData["BookingId"] = booking.BookingId;
-                        
+
                         return RedirectToAction("Success", "Payment");
                     }
                     else
@@ -457,15 +456,11 @@ namespace Web.Controllers
                 System.Diagnostics.Debug.WriteLine($"Payment error: {ex.Message}");
                 ModelState.AddModelError("", $"Eroare la procesarea plății: {ex.Message}");
             }
-            
+
             return View();
         }
 
         public ActionResult LoginAdmin()
-        {
-            return View();
-        }
-        public ActionResult AdminManagment()
         {
             return View();
         }
@@ -505,38 +500,29 @@ namespace Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult AddToCart(int carId, DateTime pickupDate, DateTime returnDate, decimal totalAmount)
         {
-            // Check if user is logged in
             if (Session["Id"] == null)
             {
-                // Store details in TempData to persist across redirect
                 TempData["BookingRedirect"] = true;
                 TempData["CarId"] = carId;
                 TempData["PickupDate"] = pickupDate;
                 TempData["ReturnDate"] = returnDate;
                 TempData["TotalAmount"] = totalAmount;
-                
-                // Redirect to login
+
                 return RedirectToAction("Login");
             }
 
-            try 
+            try
             {
                 if (!ModelState.IsValid)
                     return View();
 
-                // Use ToString() first and then try to parse as int to handle numeric or string IDs
                 int userId;
                 if (Session["Id"] is int)
                 {
                     userId = (int)Session["Id"];
                 }
-                else if (int.TryParse(Session["Id"].ToString(), out int parsedId))
-                {
-                    userId = parsedId;
-                }
                 else
                 {
-                    // If can't parse as int, need to get user ID from database
                     using (var db = new eUseControl.BusinessLogic.DBModel.UserContext())
                     {
                         var username = Session["Id"].ToString();
@@ -547,23 +533,22 @@ namespace Web.Controllers
                             return RedirectToAction("Login");
                         }
                         userId = user.Id;
+                        Session["Id"] = userId;
                     }
                 }
 
-                // Create booking with user ID - convert decimal to int
                 var booking = new Booking
                 {
                     CarId = carId,
                     UserId = userId,
                     PickupDate = pickupDate,
                     ReturnDate = returnDate,
-                    TotalAmount = (int)totalAmount, // Convert decimal to int
-                    Status = "Confirm"
+                    TotalAmount = (int)totalAmount,
+                    Status = "Pending" 
                 };
 
                 if (_bookingApi.CreateBooking(booking))
                 {
-                    // Add to session cart
                     var cart = Session["Cart"] as List<Booking>;
                     if (cart == null)
                     {
@@ -571,8 +556,8 @@ namespace Web.Controllers
                     }
                     cart.Add(booking);
                     Session["Cart"] = cart;
-                    
-                    return RedirectToAction("Pay", "Home");
+
+                    return RedirectToAction("Cos", "Home");
                 }
 
                 TempData["ErrorMessage"] = "Nu s-a putut crea rezervarea.";
@@ -724,7 +709,6 @@ namespace Web.Controllers
         {
             try
             {
-                // First remove from session cart
                 var cart = Session["Cart"] as List<eUseControl.BusinessLogic.DBModel.Booking>;
                 if (cart != null)
                 {
@@ -735,11 +719,9 @@ namespace Web.Controllers
                         Session["Cart"] = cart;
                     }
                 }
-                
-                // Then cancel in the database to prevent reloading
+
                 _bookingApi.CancelBooking(bookingId);
-                
-                // Return success
+
                 TempData["SuccessMessage"] = "Produsul a fost șters din coș.";
                 return RedirectToAction("Cos");
             }
@@ -750,14 +732,13 @@ namespace Web.Controllers
                 return RedirectToAction("Cos");
             }
         }
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult ClearCart()
         {
             try
             {
-                // Get user ID
                 int userId = 0;
                 if (Session["Id"] is int)
                 {
@@ -769,7 +750,6 @@ namespace Web.Controllers
                 }
                 else
                 {
-                    // Try to get user ID from database
                     using (var db = new eUseControl.BusinessLogic.DBModel.UserContext())
                     {
                         var username = Session["Id"]?.ToString();
@@ -783,15 +763,13 @@ namespace Web.Controllers
                         }
                     }
                 }
-                
+
                 if (userId > 0)
                 {
-                    // Cancel all pending bookings for this user
-                    _bookingApi.CancelBookingByUserAndStatus(userId, "Pending");
-                    
-                    // Clear the session cart
+                    _bookingApi.DeleteBookingsByUserAndStatus(userId, "Pending");
+
                     Session["Cart"] = new List<eUseControl.BusinessLogic.DBModel.Booking>();
-                    
+
                     TempData["SuccessMessage"] = "Coșul a fost golit cu succes.";
                 }
                 else
@@ -804,7 +782,7 @@ namespace Web.Controllers
                 System.Diagnostics.Debug.WriteLine($"Error clearing cart: {ex.Message}");
                 TempData["ErrorMessage"] = "A apărut o eroare la golirea coșului.";
             }
-            
+
             return RedirectToAction("Cos");
         }
 
@@ -825,7 +803,7 @@ namespace Web.Controllers
                         Session["Id"] = admin.Id;
                         Session["UserName"] = admin.UserName;
                         Session["Email"] = admin.Email;
-                        Session["IsAdmin"] = true;
+                        Session["Level"] = admin.Level;
                         Session.Timeout = 60;
 
                         return RedirectToAction("Cars", "Admin");

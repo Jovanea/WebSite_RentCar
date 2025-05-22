@@ -13,14 +13,6 @@ namespace eUseControl.BusinessLogic
         {
             return new SessionBL();
         }
-
-        
-        public ICarSession GetCarSessionBL()
-        {
-            return new CarSessionBL();
-        }
-
-        
     }
 }
 

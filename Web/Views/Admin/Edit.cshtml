@@ -1,4 +1,5 @@
 ﻿@model eUseControl.BusinessLogic.DBModel.Car
+@using System.Web.Mvc;
 
 @{
     ViewBag.Title = "Edit Car";
@@ -10,6 +11,25 @@
     @using (Html.BeginForm("Edit", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
         @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        @* Debug: Display all ModelState errors *@
+        if (!ViewData.ModelState.IsValid)
+        {
+            <div class="alert alert-danger">
+                <strong>Validation Errors:</strong>
+                <ul>
+                    @foreach (var modelState in ViewData.ModelState.Values)
+                    {
+                        foreach (var error in modelState.Errors)
+                        {
+                            <li>@error.ErrorMessage</li>
+                        }
+                    }
+                </ul>
+            </div>
+        }
+
         @Html.HiddenFor(m => m.CarId)
 
         <div class="card">
@@ -36,7 +56,7 @@
 
                         <div class="form-group">
                             @Html.LabelFor(m => m.PricePerDay)
-                            @Html.TextBoxFor(m => m.PricePerDay, new { @class = "form-control", type = "number", step = "0.01" })
+                            @Html.TextBoxFor(m => m.PricePerDay, new { @class = "form-control", type = "number" })
                             @Html.ValidationMessageFor(m => m.PricePerDay, "", new { @class = "text-danger" })
                         </div>
 
@@ -79,19 +99,9 @@
                         </div>
 
                         <div class="form-group">
-                            @Html.LabelFor(m => m.IsAvailable)
-                            @Html.CheckBoxFor(m => m.IsAvailable, new { @class = "form-check-input" })
-                        </div>
-
-                        <div class="form-group">
-                            <label>Car Image</label>
-                            @if (!string.IsNullOrEmpty(Model.MainImageUrl))
-                            {
-                                <div class="current-image">
-                                    <img src="@Model.MainImageUrl" alt="Current car image" style="max-width: 200px;" />
-                                </div>
-                            }
-                            <input type="file" name="carImage" class="form-control-file" accept="image/*" />
+                            @Html.LabelFor(m => m.MainImageUrl)
+                            @Html.TextBoxFor(m => m.MainImageUrl, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.MainImageUrl, "", new { @class = "text-danger" })
                         </div>
                     </div>
                 </div>

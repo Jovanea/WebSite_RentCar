@@ -22,7 +22,7 @@ namespace eUseControl.BusinessLogic.DBModel
         public int Year { get; set; }
 
         [Required]
-        public decimal PricePerDay { get; set; }
+        public int PricePerDay { get; set; }
 
         [Required]
         [StringLength(20)]
@@ -54,7 +54,7 @@ namespace eUseControl.BusinessLogic.DBModel
 
         [Required]
         public bool IsAvailable { get; set; }
-        
+
         [Required]
         public int Stock { get; set; } = 1; // Default value of 1
 

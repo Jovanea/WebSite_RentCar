@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -16,7 +17,7 @@ namespace Web.BusinessLogic
         private readonly ApplicationDbContext _context;
         private readonly string _imagePath;
         private readonly string[] _allowedExtensions = { ".jpg", ".jpeg", ".png" };
-        private readonly int _maxFileSize = 5 * 1024 * 1024; // 5MB
+        private readonly int _maxFileSize = 5 * 1024 * 1024;
 
         public AdminApi()
         {
@@ -72,14 +73,20 @@ namespace Web.BusinessLogic
         {
             try
             {
+                System.Diagnostics.Debug.WriteLine($"[DEBUG] UpdateCar called for CarId: {car.CarId}");
                 var existingCar = _context.Cars.Find(car.CarId);
                 if (existingCar == null)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Car with ID {car.CarId} not found.");
                     return false;
+                }
 
                 if (!ValidateCarData(car))
+                {
+                    System.Diagnostics.Debug.WriteLine("ValidateCarData failed.");
                     return false;
+                }
 
-                // Update car properties
                 existingCar.Brand = car.Brand;
                 existingCar.Model = car.Model;
                 existingCar.Year = car.Year;
@@ -98,11 +105,21 @@ namespace Web.BusinessLogic
                 existingCar.Stock = car.Stock;
 
                 _context.SaveChanges();
+                System.Diagnostics.Debug.WriteLine("Changes saved successfully.");
                 return true;
+            }
+            catch (System.Data.Entity.Validation.DbEntityValidationException dbEx)
+            {
+                var errorMessages = dbEx.EntityValidationErrors
+                    .SelectMany(x => x.ValidationErrors)
+                    .Select(x => $"Property: {x.PropertyName} Error: {x.ErrorMessage}");
+                var fullErrorMessage = string.Join("; ", errorMessages);
+                System.Diagnostics.Debug.WriteLine($"DbEntityValidationException in UpdateCar: {fullErrorMessage}");
+                return false; 
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine("Error updating car: " + ex.Message);
+                System.Diagnostics.Debug.WriteLine($"Error updating car: {ex.GetType().Name} - {ex.Message}");
                 return false;
             }
         }
@@ -113,11 +130,6 @@ namespace Web.BusinessLogic
             {
                 var car = _context.Cars.Find(id);
                 if (car == null)
-                    return false;
-
-                // Check if car has any bookings
-                var hasBookings = _context.Bookings.Any(b => b.CarId == id);
-                if (hasBookings)
                     return false;
 
                 _context.Cars.Remove(car);
@@ -176,16 +188,27 @@ namespace Web.BusinessLogic
         {
             try
             {
+                System.Diagnostics.Debug.WriteLine($"[DEBUG] SaveCarImage called for CarId: {carId}, imageType: {imageType}");
+
                 if (image == null || !ValidateImage(image))
+                {
+                    System.Diagnostics.Debug.WriteLine("[DEBUG] Image validation failed.");
                     return false;
+                }
 
                 var car = _context.Cars.Find(carId);
                 if (car == null)
+                {
+                    System.Diagnostics.Debug.WriteLine($"[DEBUG] Car with ID {carId} not found in SaveCarImage.");
                     return false;
+                }
 
                 var fileName = GenerateUniqueFileName(image.FileName);
                 var path = Path.Combine(_imagePath, fileName);
+
+                System.Diagnostics.Debug.WriteLine($"[DEBUG] Saving image to path: {path}");
                 File.WriteAllBytes(path, image.Content);
+                System.Diagnostics.Debug.WriteLine("[DEBUG] Image file written.");
 
                 switch (imageType.ToLower())
                 {
@@ -199,15 +222,19 @@ namespace Web.BusinessLogic
                         car.ExteriorImageUrl = "/Content/images/cars/" + fileName;
                         break;
                     default:
+                        System.Diagnostics.Debug.WriteLine($"[DEBUG] Invalid imageType: {imageType}");
                         return false;
                 }
 
+                System.Diagnostics.Debug.WriteLine("[DEBUG] Attempting to save image URL to database.");
                 _context.SaveChanges();
+                System.Diagnostics.Debug.WriteLine("[DEBUG] Image URL saved to database.");
+
                 return true;
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine("Error saving car image: " + ex.Message);
+                System.Diagnostics.Debug.WriteLine($"[DEBUG] Error saving car image: {ex.GetType().Name} - {ex.Message}");
                 return false;
             }
         }
@@ -297,7 +324,6 @@ namespace Web.BusinessLogic
             return Guid.NewGuid().ToString() + extension;
         }
 
-        // Existing admin management methods
         public bool UpdateUserToAdmin(string email)
         {
             try
@@ -306,7 +332,7 @@ namespace Web.BusinessLogic
                 if (user == null)
                     return false;
 
-                user.IsAdmin = true;
+                user.Level = 1;
                 _context.SaveChanges();
                 return true;
             }
@@ -324,8 +350,8 @@ namespace Web.BusinessLogic
                 var user = new UDbTable
                 {
                     Email = userData.Email,
-                    Password = userData.Password, // Note: Should be hashed in production
-                    IsAdmin = true
+                    Password = userData.Password,
+                    Level = 1
                 };
 
                 _context.Users.Add(user);

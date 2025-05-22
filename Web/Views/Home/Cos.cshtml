@@ -1,7 +1,7 @@
 ﻿@{
     ViewBag.Title = "Cos";
-    var cart = ViewBag.CartBookings as List<eUseControl.BusinessLogic.DBModel.Booking>;
-    var firstBooking = cart?.FirstOrDefault();
+    var cartItems = ViewBag.CartItems as List<(eUseControl.BusinessLogic.DBModel.Booking, eUseControl.BusinessLogic.DBModel.Car)>;
+    var firstBooking = cartItems?.FirstOrDefault().Item1;
 }
 
 @Html.Partial("_Header")
@@ -10,78 +10,17 @@
     <div class="container">
         <h2>Coșul tău de închirieri</h2>
 
-        @if (cart != null && cart.Count > 0)
+        @if (cartItems != null && cartItems.Count > 0)
         {
             <div class="cart-items">
-                @foreach (var booking in cart)
+                @foreach (var item in cartItems)
                 {
-                    string carName = "Mașina";
-                    string carImage = "/Content/images/cars_pexels_1.jpg";
-                    decimal pricePerDay = 0;
+                    var booking = item.Item1;
+                    var car = item.Item2;
 
-                    switch (booking.CarId)
-                    {
-                        case 1:
-                            carName = "Range Rover";
-                            carImage = "https://simonfurlonger.co.uk/wp-content/uploads/2023/cars/163914913044209.jpg";
-                            pricePerDay = 60;
-                            break;
-                        case 2:
-                            carName = "Mercedes";
-                            carImage = "/Content/images/cars_pexels_2.jpg";
-                            pricePerDay = 100;
-                            break;
-                        case 3:
-                            carName = "Range Rover Autobiography";
-                            carImage = "/Content/images/cars_pexels_3.jpg";
-                            pricePerDay = 600;
-                            break;
-                        case 4:
-                            carName = "Ferrari F12";
-                            carImage = "/Content/images/cars_pexels_4.jpg";
-                            pricePerDay = 500;
-                            break;
-                        case 5:
-                            carName = "Porsche GT3";
-                            carImage = "/Content/images/cars_pexels_5.jpg";
-                            pricePerDay = 700;
-                            break;
-                        case 6:
-                            carName = "Pagani Huayra";
-                            carImage = "/Content/images/cars_pexels_6.jpg";
-                            pricePerDay = 2000;
-                            break;
-                        case 7:
-                            carName = "Bugatti Tourbilion";
-                            carImage = "/Content/images/cars_pexels_7.jpg";
-                            pricePerDay = 5000;
-                            break;
-                        case 8:
-                            carName = "Bentley Bentayga";
-                            carImage = "/Content/images/cars_pexels_8.jpg";
-                            pricePerDay = 450;
-                            break;
-                        case 9:
-                            carName = "Rolls-Royce Phantom";
-                            carImage = "/Content/images/cars_pexels_9.jpg";
-                            pricePerDay = 1500;
-                            break;
-                        case 10:
-                            carName = "McLaren 720S";
-                            carImage = "/Content/images/cars_pexels_10.jpg";
-                            pricePerDay = 1000;
-                            break;
-                        case 11:
-                            carName = "BMW M5Cs";
-                            carImage = "/Content/images/cars_pexels_11.jpg";
-                            pricePerDay = 850;
-                            break;
-                        case 12:
-                            carName = "Lamborghini Urus";
-                            carImage = "/Content/images/cars_pexels_12.jpg";
-                            pricePerDay = 60;
-                            break;
-                    }
+                    string carName = car.Brand + " " + car.Model;
+                    string carImage = string.IsNullOrEmpty(car.MainImageUrl) ? "/Content/images/car-placeholder.jpg" : car.MainImageUrl;
+                    int pricePerDay = car.PricePerDay;
 
                     <div class="cart-item">
                         <div class="cart-item-image">
@@ -121,25 +60,25 @@
                     </div>
                 }
 
-            <div class="cart-total">
-                <h3>Total general: $@cart.Sum(b => b.TotalAmount)</h3>
-                <div class="cart-actions">
-                    @if (firstBooking != null)
-                    {
-                        <a href="@Url.Action("Process", "Payment")" class="btn-primary">
-                            <i class="fa-solid fa-credit-card"></i> Continuă spre plată
-                        </a>
-                    }
-                    
-                    @using (Html.BeginForm("ClearCart", "Home", FormMethod.Post, new { @class = "clear-cart-form" }))
-                    {
-                        @Html.AntiForgeryToken()
-                        <button type="submit" class="btn-danger">
-                            <i class="fa-solid fa-trash"></i> Golește coșul
-                        </button>
-                    }
+                <div class="cart-total">
+                    <h3>Total general: $@cartItems.Sum(i => i.Item1.TotalAmount)</h3>
+                    <div class="cart-actions">
+                        @if (firstBooking != null)
+                        {
+                            <a href="@Url.Action("Process", "Payment")" class="btn-primary">
+                                <i class="fa-solid fa-credit-card"></i> Continuă spre plată
+                            </a>
+                        }
+
+                        @using (Html.BeginForm("ClearCart", "Home", FormMethod.Post, new { @class = "clear-cart-form" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn-danger">
+                                <i class="fa-solid fa-trash"></i> Golește coșul
+                            </button>
+                        }
+                    </div>
                 </div>
-            </div>
             </div>
         }
         else
@@ -228,7 +167,7 @@
         margin-top: 30px;
         text-align: right;
     }
-    
+
     .cart-actions {
         display: flex;
         justify-content: flex-end;
@@ -253,7 +192,7 @@
         .btn-primary:hover {
             background: #e03e00;
         }
-        
+
     .btn-danger {
         display: inline-block;
         background: #dc3545;
@@ -266,7 +205,7 @@
         cursor: pointer;
         transition: background 0.3s;
     }
-    
+
         .btn-danger:hover {
             background: #c82333;
         }
@@ -306,19 +245,19 @@
         .remove-btn:hover {
             background: #c82333;
         }
-        
+
     .alert {
         padding: 15px;
         margin-bottom: 20px;
         border-radius: 4px;
     }
-    
+
     .alert-success {
         background-color: #d4edda;
         color: #155724;
         border: 1px solid #c3e6cb;
     }
-    
+
     .alert-danger {
         background-color: #f8d7da;
         color: #721c24;

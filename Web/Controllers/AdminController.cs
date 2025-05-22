@@ -23,7 +23,7 @@ namespace Web.Controllers
         {
             base.OnActionExecuting(filterContext);
 
-            if (Session["IsAdmin"] == null || !(bool)Session["IsAdmin"])
+            if (Session["Level"] == null || (int)Session["Level"] == 0)
             {
                 filterContext.Result = new RedirectResult("~/Home/LoginAdmin");
                 return;
@@ -56,7 +56,7 @@ namespace Web.Controllers
         {
             var model = new Car
             {
-                PricePerDay = 0.0m,
+                PricePerDay = 0,
                 Year = DateTime.Now.Year,
                 IsAvailable = true,
                 Stock = 1
@@ -66,41 +66,55 @@ namespace Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Car car, System.Web.HttpPostedFileBase mainImage)
+        public ActionResult Create(Car car)
         {
             try
             {
+                System.Diagnostics.Debug.WriteLine("[DEBUG] AdminController.Create POST called.");
+
                 if (ModelState.IsValid)
                 {
-                    if (mainImage != null)
-                    {
-                        var imageUpload = new ImageUpload
-                        {
-                            FileName = mainImage.FileName,
-                            ContentType = mainImage.ContentType,
-                            Content = new byte[mainImage.ContentLength]
-                        };
-                        mainImage.InputStream.Read(imageUpload.Content, 0, mainImage.ContentLength);
-
-                        if (_adminApi.CreateCar(car) && _adminApi.SaveCarImage(car.CarId, imageUpload, "main"))
-                        {
-                            TempData["SuccessMessage"] = "Car created successfully!";
-                            return RedirectToAction("Cars");
-                        }
-                    }
-                    else if (_adminApi.CreateCar(car))
+                    if (_adminApi.CreateCar(car))
                     {
                         TempData["SuccessMessage"] = "Car created successfully!";
+
                         return RedirectToAction("Cars");
                     }
-                    ModelState.AddModelError("", "Could not create car.");
+                    else
+                    {
+                        ModelState.AddModelError("", "Could not create car details.");
+                    }
                 }
+                else
+                {
+                    ModelState.AddModelError("", "Please check the car details for validation errors.");
+                }
+
+                System.Diagnostics.Debug.WriteLine($"[DEBUG] ModelState.IsValid before returning view: {ModelState.IsValid}");
+                if (!ModelState.IsValid)
+                {
+                    System.Diagnostics.Debug.WriteLine("[DEBUG] ModelState errors:");
+                    foreach (var key in ModelState.Keys)
+                    {
+                        var state = ModelState[key];
+                        if (state.Errors.Any())
+                        {
+                            System.Diagnostics.Debug.WriteLine($"[DEBUG] Key: {key}");
+                            foreach (var error in state.Errors)
+                            {
+                                System.Diagnostics.Debug.WriteLine($"[DEBUG] - {error.ErrorMessage}");
+                            }
+                        }
+                    }
+                }
+
+                return View(car);
             }
             catch (Exception ex)
             {
                 ModelState.AddModelError("", "Error: " + ex.Message);
+                return View(car);
             }
-            return View(car);
         }
 
         public ActionResult Edit(int id)
@@ -115,45 +129,33 @@ namespace Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(Car car, System.Web.HttpPostedFileBase mainImage)
+        public ActionResult Edit(Car car)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    if (mainImage != null)
-                    {
-                        var imageUpload = new ImageUpload
-                        {
-                            FileName = mainImage.FileName,
-                            ContentType = mainImage.ContentType,
-                            Content = new byte[mainImage.ContentLength]
-                        };
-                        mainImage.InputStream.Read(imageUpload.Content, 0, mainImage.ContentLength);
-
-                        if (_adminApi.UpdateCar(car) && _adminApi.SaveCarImage(car.CarId, imageUpload, "main"))
-                        {
-                            TempData["SuccessMessage"] = "Car updated successfully!";
-                            return RedirectToAction("Cars");
-                        }
-                    }
-                    else if (_adminApi.UpdateCar(car))
+                    if (_adminApi.UpdateCar(car))
                     {
                         TempData["SuccessMessage"] = "Car updated successfully!";
+
                         return RedirectToAction("Cars");
                     }
-                    ModelState.AddModelError("", "Could not update car.");
+                    else
+                    {
+                        ModelState.AddModelError("", "Failed to update car. Please check input data and try again.");
+                        return View(car);
+                    }
                 }
+                return View(car);
             }
             catch (Exception ex)
             {
                 ModelState.AddModelError("", "Error: " + ex.Message);
+                return View(car);
             }
-            return View(car);
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
         public ActionResult Delete(int id)
         {
             try
