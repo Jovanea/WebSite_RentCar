@@ -24,116 +24,237 @@ namespace Web.BusinessLogic
             _imagePath = HttpContext.Current.Server.MapPath("~/Content/images/cars");
         }
 
-        public List<CarDetails> GetAllCars()
+        public List<Car> GetAllCars()
         {
             try
             {
-                // Explicitly handle the conversion by using a manual conversion
-                var cars = new List<CarDetails>();
-                foreach (var car in _context.Cars.ToList())
-                {
-                    cars.Add(new CarDetails
-                    {
-                        Id = car.CarId,
-                        Name = car.Brand + " " + car.Model,
-                        Price = Convert.ToDecimal(car.PricePerDay),
-                        ImageUrl = car.MainImageUrl
-                    });
-                }
-                return cars;
+                return _context.Cars.ToList();
             }
             catch (Exception ex)
             {
-                // Log the error
                 System.Diagnostics.Debug.WriteLine("Error getting cars: " + ex.Message);
-                return new List<CarDetails>();
+                return new List<Car>();
             }
         }
 
-        public CarDetails GetCarById(int id)
+        public Car GetCarById(int id)
         {
             try
             {
-                var car = _context.Cars.Find(id);
-                if (car == null) return null;
-                
-                return new CarDetails
-                {
-                    Id = car.CarId,
-                    Name = car.Brand + " " + car.Model,
-                    Price = Convert.ToDecimal(car.PricePerDay),
-                    ImageUrl = car.MainImageUrl
-                };
+                return _context.Cars.Find(id);
             }
             catch (Exception ex)
             {
-                // Log the error
                 System.Diagnostics.Debug.WriteLine("Error getting car by ID: " + ex.Message);
                 return null;
             }
         }
 
-        public bool CreateCar(CarDetails carDetails, ImageUpload mainImage, ImageUpload interiorImage, ImageUpload exteriorImage)
+        public bool CreateCar(Car car)
         {
             try
             {
-                var car = ToCar(carDetails);
                 if (!ValidateCarData(car))
                     return false;
-
-                if (mainImage != null && !ValidateImage(mainImage))
-                    return false;
-
-                if (mainImage != null && mainImage.Content != null && mainImage.Content.Length > 0)
-                {
-                    var fileName = GenerateUniqueFileName(mainImage.FileName);
-                    var path = Path.Combine(_imagePath, fileName);
-                    File.WriteAllBytes(path, mainImage.Content);
-                    car.MainImageUrl = "/Content/images/cars/" + fileName;
-                }
 
                 _context.Cars.Add(car);
                 _context.SaveChanges();
                 return true;
             }
-            catch
+            catch (Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine("Error creating car: " + ex.Message);
                 return false;
             }
         }
 
-        public bool UpdateCar(CarDetails carDetails, ImageUpload mainImage, ImageUpload interiorImage, ImageUpload exteriorImage)
+        public bool UpdateCar(Car car)
         {
             try
             {
-                var existingCar = _context.Cars.Find(carDetails.Id);
-                if (existingCar == null) return false;
-
-                if (!ValidateCarData(existingCar))
+                var existingCar = _context.Cars.Find(car.CarId);
+                if (existingCar == null)
                     return false;
 
-                if (mainImage != null && !ValidateImage(mainImage))
+                if (!ValidateCarData(car))
                     return false;
 
-                if (mainImage != null && mainImage.Content != null && mainImage.Content.Length > 0)
-                {
-                    DeleteExistingImage(existingCar.MainImageUrl);
-                    var fileName = GenerateUniqueFileName(mainImage.FileName);
-                    var path = Path.Combine(_imagePath, fileName);
-                    File.WriteAllBytes(path, mainImage.Content);
-                    existingCar.MainImageUrl = "/Content/images/cars/" + fileName;
-                }
-
-                existingCar.Brand = carDetails.Name?.Split(' ').FirstOrDefault() ?? existingCar.Brand;
-                existingCar.Model = carDetails.Name?.Split(' ').Skip(1).FirstOrDefault() ?? existingCar.Model;
-                existingCar.PricePerDay = Convert.ToDecimal(carDetails.Price);
-                existingCar.MainImageUrl = carDetails.ImageUrl ?? existingCar.MainImageUrl;
+                // Update car properties
+                existingCar.Brand = car.Brand;
+                existingCar.Model = car.Model;
+                existingCar.Year = car.Year;
+                existingCar.PricePerDay = car.PricePerDay;
+                existingCar.Transmission = car.Transmission;
+                existingCar.FuelType = car.FuelType;
+                existingCar.Horsepower = car.Horsepower;
+                existingCar.Seats = car.Seats;
+                existingCar.Category = car.Category;
+                existingCar.Description = car.Description;
+                existingCar.Engine = car.Engine;
+                existingCar.Torque = car.Torque;
+                existingCar.Acceleration = car.Acceleration;
+                existingCar.TopSpeed = car.TopSpeed;
+                existingCar.FuelConsumption = car.FuelConsumption;
+                existingCar.Stock = car.Stock;
 
                 _context.SaveChanges();
                 return true;
             }
-            catch
+            catch (Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine("Error updating car: " + ex.Message);
+                return false;
+            }
+        }
+
+        public bool DeleteCar(int id)
+        {
+            try
+            {
+                var car = _context.Cars.Find(id);
+                if (car == null)
+                    return false;
+
+                // Check if car has any bookings
+                var hasBookings = _context.Bookings.Any(b => b.CarId == id);
+                if (hasBookings)
+                    return false;
+
+                _context.Cars.Remove(car);
+                _context.SaveChanges();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Error deleting car: " + ex.Message);
+                return false;
+            }
+        }
+
+        public bool ToggleCarAvailability(int id)
+        {
+            try
+            {
+                var car = _context.Cars.Find(id);
+                if (car == null)
+                    return false;
+
+                car.IsAvailable = !car.IsAvailable;
+                _context.SaveChanges();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Error toggling car availability: " + ex.Message);
+                return false;
+            }
+        }
+
+        public bool UpdateCarStock(int carId, int stockChange)
+        {
+            try
+            {
+                var car = _context.Cars.Find(carId);
+                if (car == null)
+                    return false;
+
+                car.Stock += stockChange;
+                if (car.Stock < 0)
+                    car.Stock = 0;
+
+                _context.SaveChanges();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Error updating car stock: " + ex.Message);
+                return false;
+            }
+        }
+
+        public bool SaveCarImage(int carId, ImageUpload image, string imageType)
+        {
+            try
+            {
+                if (image == null || !ValidateImage(image))
+                    return false;
+
+                var car = _context.Cars.Find(carId);
+                if (car == null)
+                    return false;
+
+                var fileName = GenerateUniqueFileName(image.FileName);
+                var path = Path.Combine(_imagePath, fileName);
+                File.WriteAllBytes(path, image.Content);
+
+                switch (imageType.ToLower())
+                {
+                    case "main":
+                        car.MainImageUrl = "/Content/images/cars/" + fileName;
+                        break;
+                    case "interior":
+                        car.InteriorImageUrl = "/Content/images/cars/" + fileName;
+                        break;
+                    case "exterior":
+                        car.ExteriorImageUrl = "/Content/images/cars/" + fileName;
+                        break;
+                    default:
+                        return false;
+                }
+
+                _context.SaveChanges();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Error saving car image: " + ex.Message);
+                return false;
+            }
+        }
+
+        public bool DeleteCarImage(int carId, string imageType)
+        {
+            try
+            {
+                var car = _context.Cars.Find(carId);
+                if (car == null)
+                    return false;
+
+                string imageUrl = null;
+                switch (imageType.ToLower())
+                {
+                    case "main":
+                        imageUrl = car.MainImageUrl;
+                        car.MainImageUrl = null;
+                        break;
+                    case "interior":
+                        imageUrl = car.InteriorImageUrl;
+                        car.InteriorImageUrl = null;
+                        break;
+                    case "exterior":
+                        imageUrl = car.ExteriorImageUrl;
+                        car.ExteriorImageUrl = null;
+                        break;
+                    default:
+                        return false;
+                }
+
+                if (!string.IsNullOrEmpty(imageUrl))
+                {
+                    var fileName = Path.GetFileName(imageUrl);
+                    var path = Path.Combine(_imagePath, fileName);
+                    if (File.Exists(path))
+                    {
+                        File.Delete(path);
+                    }
+                }
+
+                _context.SaveChanges();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Error deleting car image: " + ex.Message);
                 return false;
             }
         }
@@ -144,7 +265,12 @@ namespace Web.BusinessLogic
                 string.IsNullOrEmpty(car.Model) ||
                 car.Year < 1900 ||
                 car.Year > DateTime.Now.Year + 1 ||
-                car.PricePerDay <= 0)
+                car.PricePerDay <= 0 ||
+                string.IsNullOrEmpty(car.Transmission) ||
+                string.IsNullOrEmpty(car.FuelType) ||
+                car.Horsepower <= 0 ||
+                car.Seats <= 0 ||
+                string.IsNullOrEmpty(car.Category))
                 return false;
 
             return true;
@@ -153,7 +279,7 @@ namespace Web.BusinessLogic
         private bool ValidateImage(ImageUpload image)
         {
             if (image == null || image.Content == null || image.Content.Length == 0)
-                return true;
+                return false;
 
             if (image.Content.Length > _maxFileSize)
                 return false;
@@ -171,48 +297,22 @@ namespace Web.BusinessLogic
             return Guid.NewGuid().ToString() + extension;
         }
 
-        private void DeleteExistingImage(string imageUrl)
-        {
-            if (!string.IsNullOrEmpty(imageUrl))
-            {
-                var imagePath = Path.Combine(_imagePath, Path.GetFileName(imageUrl));
-                if (File.Exists(imagePath))
-                    File.Delete(imagePath);
-            }
-        }
-
-        public bool DeleteCar(int id)
-        {
-            try
-            {
-                var car = _context.Cars.Find(id);
-                if (car == null) return false;
-
-                DeleteExistingImage(car.MainImageUrl);
-
-                _context.Cars.Remove(car);
-                _context.SaveChanges();
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
+        // Existing admin management methods
         public bool UpdateUserToAdmin(string email)
         {
             try
             {
                 var user = _context.Users.FirstOrDefault(u => u.Email == email);
-                if (user == null) return false;
+                if (user == null)
+                    return false;
 
-                user.Level = 1;
+                user.IsAdmin = true;
                 _context.SaveChanges();
                 return true;
             }
-            catch
+            catch (Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine("Error updating user to admin: " + ex.Message);
                 return false;
             }
         }
@@ -223,54 +323,20 @@ namespace Web.BusinessLogic
             {
                 var user = new UDbTable
                 {
-                    UserName = userData.Username,
-                    Email = string.IsNullOrEmpty(userData.Email) ? userData.Username + "@example.com" : userData.Email,
-                    Password = string.IsNullOrEmpty(userData.Password) ? "parola1234" : userData.Password,
-                    Phone = string.IsNullOrEmpty(userData.Phone) ? "000000000" : userData.Phone,
-                    UserIp = "127.0.0.1",
-                    Last_Login = DateTime.Now,
-                    Level = 1
+                    Email = userData.Email,
+                    Password = userData.Password, // Note: Should be hashed in production
+                    IsAdmin = true
                 };
+
                 _context.Users.Add(user);
                 _context.SaveChanges();
                 return true;
             }
-            catch
+            catch (Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine("Error creating admin: " + ex.Message);
                 return false;
             }
-        }
-
-        private CarDetails ToCarDetails(Car car)
-        {
-            if (car == null) return null;
-            return new CarDetails
-            {
-                Id = car.CarId,
-                Name = car.Brand + " " + car.Model,
-                Price = car.PricePerDay,
-                ImageUrl = car.MainImageUrl
-            };
-        }
-
-        private Car ToCar(CarDetails details)
-        {
-            if (details == null) return null;
-            return new Car
-            {
-                CarId = details.Id,
-                Brand = details.Name?.Split(' ').FirstOrDefault() ?? "",
-                Model = details.Name?.Split(' ').Skip(1).FirstOrDefault() ?? "",
-                PricePerDay = Convert.ToDecimal(details.Price),
-                MainImageUrl = details.ImageUrl,
-                Year = 2020,
-                Transmission = "Manual",
-                FuelType = "Benzina",
-                Horsepower = 100,
-                Seats = 4,
-                Category = "Standard",
-                IsAvailable = true
-            };
         }
     }
 }

@@ -9,11 +9,20 @@ namespace Web.Interfaces
 {
     public interface IAdminApi
     {
-        List<CarDetails> GetAllCars();
-        CarDetails GetCarById(int id);
-        bool CreateCar(CarDetails car, ImageUpload mainImage, ImageUpload interiorImage, ImageUpload exteriorImage);
-        bool UpdateCar(CarDetails car, ImageUpload mainImage, ImageUpload interiorImage, ImageUpload exteriorImage);
+        // Car Management Methods
+        List<Car> GetAllCars();
+        Car GetCarById(int id);
+        bool CreateCar(Car car);
+        bool UpdateCar(Car car);
         bool DeleteCar(int id);
+        bool ToggleCarAvailability(int id);
+        bool UpdateCarStock(int carId, int stockChange);
+
+        // Image Management
+        bool SaveCarImage(int carId, ImageUpload image, string imageType);
+        bool DeleteCarImage(int carId, string imageType);
+
+        // Admin Management
         bool UpdateUserToAdmin(string email);
         bool CreateAdmin(UserData userData);
     }

@@ -6,6 +6,7 @@ using eUseControl.Domain.Entities.Car;
 using eUseControl.BusinessLogic.Models;
 using eUseControl.BusinessLogic.DBModel;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace Web.Controllers
 {
@@ -34,12 +35,20 @@ namespace Web.Controllers
             try
             {
                 var cars = _adminApi.GetAllCars();
+                if (TempData["ErrorMessage"] != null)
+                {
+                    ViewBag.ErrorMessage = TempData["ErrorMessage"];
+                }
+                if (TempData["SuccessMessage"] != null)
+                {
+                    ViewBag.SuccessMessage = TempData["SuccessMessage"];
+                }
                 return View(cars);
             }
             catch (Exception ex)
             {
-                ViewBag.ErrorMessage = "Eroare la încărcarea mașinilor: " + ex.Message;
-                return View(new System.Collections.Generic.List<CarDetails>());
+                ViewBag.ErrorMessage = "Error loading cars: " + ex.Message;
+                return View(new List<Car>());
             }
         }
 
@@ -47,120 +56,54 @@ namespace Web.Controllers
         {
             var model = new Car
             {
-                PricePerDay = 0.0m,  // Initialize with decimal literal
+                PricePerDay = 0.0m,
                 Year = DateTime.Now.Year,
-                IsAvailable = true
+                IsAvailable = true,
+                Stock = 1
             };
             return View(model);
         }
 
-        private ImageUpload ConvertToImageUpload(System.Web.HttpPostedFileBase file)
-        {
-            if (file == null) return null;
-            using (var ms = new System.IO.MemoryStream())
-            {
-                file.InputStream.CopyTo(ms);
-                return new ImageUpload
-                {
-                    FileName = file.FileName,
-                    Content = ms.ToArray(),
-                    ContentType = file.ContentType
-                };
-            }
-        }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Car car, System.Web.HttpPostedFileBase mainImage, System.Web.HttpPostedFileBase interiorImage, System.Web.HttpPostedFileBase exteriorImage)
+        public ActionResult Create(Car car, System.Web.HttpPostedFileBase mainImage)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    var carDetails = new CarDetails
+                    if (mainImage != null)
                     {
-                        Name = car.Brand + " " + car.Model,
-                        Price = Convert.ToDecimal(car.PricePerDay),
-                        ImageUrl = car.MainImageUrl
-                    };
+                        var imageUpload = new ImageUpload
+                        {
+                            FileName = mainImage.FileName,
+                            ContentType = mainImage.ContentType,
+                            Content = new byte[mainImage.ContentLength]
+                        };
+                        mainImage.InputStream.Read(imageUpload.Content, 0, mainImage.ContentLength);
 
-                    var mainImg = ConvertToImageUpload(mainImage);
-                    var intImg = ConvertToImageUpload(interiorImage);
-                    var extImg = ConvertToImageUpload(exteriorImage);
-                    
-                    if (_adminApi.CreateCar(carDetails, mainImg, intImg, extImg))
+                        if (_adminApi.CreateCar(car) && _adminApi.SaveCarImage(car.CarId, imageUpload, "main"))
+                        {
+                            TempData["SuccessMessage"] = "Car created successfully!";
+                            return RedirectToAction("Cars");
+                        }
+                    }
+                    else if (_adminApi.CreateCar(car))
                     {
+                        TempData["SuccessMessage"] = "Car created successfully!";
                         return RedirectToAction("Cars");
                     }
-                    ModelState.AddModelError("", "Nu s-a putut crea mașina.");
+                    ModelState.AddModelError("", "Could not create car.");
                 }
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", "Eroare: " + ex.Message);
+                ModelState.AddModelError("", "Error: " + ex.Message);
             }
             return View(car);
         }
 
         public ActionResult Edit(int id)
-        {
-            // Get the car details
-            var carDetails = _adminApi.GetCarById(id);
-            if (carDetails == null)
-            {
-                return HttpNotFound();
-            }
-            
-            // Convert to Car model for view
-            var car = new Car
-            {
-                CarId = carDetails.Id,
-                Brand = carDetails.Name?.Split(' ').FirstOrDefault() ?? "",
-                Model = carDetails.Name?.Split(' ').Skip(1).FirstOrDefault() ?? "",
-                PricePerDay = Convert.ToDecimal(carDetails.Price),
-                MainImageUrl = carDetails.ImageUrl,
-                IsAvailable = true,
-                Year = DateTime.Now.Year
-            };
-            
-            return View(car);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(Car car, System.Web.HttpPostedFileBase mainImage, System.Web.HttpPostedFileBase interiorImage, System.Web.HttpPostedFileBase exteriorImage)
-        {
-            try
-            {
-                if (ModelState.IsValid)
-                {
-                    var carDetails = new CarDetails
-                    {
-                        Id = car.CarId,
-                        Name = car.Brand + " " + car.Model,
-                        Price = Convert.ToDecimal(car.PricePerDay),
-                        ImageUrl = car.MainImageUrl
-                    };
-
-                    var mainImg = ConvertToImageUpload(mainImage);
-                    var intImg = ConvertToImageUpload(interiorImage);
-                    var extImg = ConvertToImageUpload(exteriorImage);
-                    
-                    if (_adminApi.UpdateCar(carDetails, mainImg, intImg, extImg))
-                    {
-                        return RedirectToAction("Cars");
-                    }
-                    ModelState.AddModelError("", "Nu s-a putut actualiza mașina.");
-                }
-            }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError("", "Eroare: " + ex.Message);
-            }
-            return View(car);
-        }
-
-        public ActionResult Delete(int id)
         {
             var car = _adminApi.GetCarById(id);
             if (car == null)
@@ -170,15 +113,109 @@ namespace Web.Controllers
             return View(car);
         }
 
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult Edit(Car car, System.Web.HttpPostedFileBase mainImage)
         {
-            if (_adminApi.DeleteCar(id))
+            try
             {
-                return RedirectToAction("Cars");
+                if (ModelState.IsValid)
+                {
+                    if (mainImage != null)
+                    {
+                        var imageUpload = new ImageUpload
+                        {
+                            FileName = mainImage.FileName,
+                            ContentType = mainImage.ContentType,
+                            Content = new byte[mainImage.ContentLength]
+                        };
+                        mainImage.InputStream.Read(imageUpload.Content, 0, mainImage.ContentLength);
+
+                        if (_adminApi.UpdateCar(car) && _adminApi.SaveCarImage(car.CarId, imageUpload, "main"))
+                        {
+                            TempData["SuccessMessage"] = "Car updated successfully!";
+                            return RedirectToAction("Cars");
+                        }
+                    }
+                    else if (_adminApi.UpdateCar(car))
+                    {
+                        TempData["SuccessMessage"] = "Car updated successfully!";
+                        return RedirectToAction("Cars");
+                    }
+                    ModelState.AddModelError("", "Could not update car.");
+                }
             }
-            return HttpNotFound();
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", "Error: " + ex.Message);
+            }
+            return View(car);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Delete(int id)
+        {
+            try
+            {
+                if (_adminApi.DeleteCar(id))
+                {
+                    TempData["SuccessMessage"] = "Car deleted successfully!";
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "Cannot delete car because it has associated bookings.";
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = "Error deleting car: " + ex.Message;
+            }
+            return RedirectToAction("Cars");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ToggleAvailability(int id)
+        {
+            try
+            {
+                if (_adminApi.ToggleCarAvailability(id))
+                {
+                    TempData["SuccessMessage"] = "Car availability updated successfully!";
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "Could not update car availability.";
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = "Error updating car availability: " + ex.Message;
+            }
+            return RedirectToAction("Cars");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult UpdateStock(int id, int stockChange)
+        {
+            try
+            {
+                if (_adminApi.UpdateCarStock(id, stockChange))
+                {
+                    TempData["SuccessMessage"] = "Car stock updated successfully!";
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "Could not update car stock.";
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = "Error updating car stock: " + ex.Message;
+            }
+            return RedirectToAction("Cars");
         }
 
         [HttpPost]
@@ -187,11 +224,11 @@ namespace Web.Controllers
         {
             if (_adminApi.UpdateUserToAdmin(email))
             {
-                TempData["SuccessMessage"] = "Utilizatorul a fost promovat la administrator cu succes!";
+                TempData["SuccessMessage"] = "User promoted to admin successfully!";
             }
             else
             {
-                TempData["ErrorMessage"] = "Nu s-a putut promova utilizatorul la administrator.";
+                TempData["ErrorMessage"] = "Could not promote user to admin.";
             }
             return RedirectToAction("LoginAdmin", "Home");
         }
@@ -204,10 +241,10 @@ namespace Web.Controllers
             {
                 if (_adminApi.CreateAdmin(userData))
                 {
-                    TempData["SuccessMessage"] = "Cont de administrator creat cu succes!";
+                    TempData["SuccessMessage"] = "Admin account created successfully!";
                     return RedirectToAction("LoginAdmin", "Home");
                 }
-                ModelState.AddModelError("", "Nu s-a putut crea contul de administrator.");
+                ModelState.AddModelError("", "Could not create admin account.");
             }
             return View("Registre", userData);
         }

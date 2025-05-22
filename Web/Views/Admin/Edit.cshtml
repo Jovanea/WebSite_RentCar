@@ -12,146 +12,95 @@
         @Html.AntiForgeryToken()
         @Html.HiddenFor(m => m.CarId)
 
-        <div class="form-group">
-            @Html.LabelFor(m => m.Brand)
-            @Html.TextBoxFor(m => m.Brand, new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.Brand, "", new { @class = "text-danger" })
-        </div>
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Brand)
+                            @Html.TextBoxFor(m => m.Brand, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.Brand, "", new { @class = "text-danger" })
+                        </div>
 
-        <div class="form-group">
-            @Html.LabelFor(m => m.Model)
-            @Html.TextBoxFor(m => m.Model, new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.Model, "", new { @class = "text-danger" })
-        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Model)
+                            @Html.TextBoxFor(m => m.Model, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.Model, "", new { @class = "text-danger" })
+                        </div>
 
-        <div class="form-group">
-            @Html.LabelFor(m => m.Year)
-            @Html.TextBoxFor(m => m.Year, new { @class = "form-control", type = "number" })
-            @Html.ValidationMessageFor(m => m.Year, "", new { @class = "text-danger" })
-        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Year)
+                            @Html.TextBoxFor(m => m.Year, new { @class = "form-control", type = "number" })
+                            @Html.ValidationMessageFor(m => m.Year, "", new { @class = "text-danger" })
+                        </div>
 
-        <div class="form-group">
-            @Html.LabelFor(m => m.PricePerDay)
-            @Html.TextBoxFor(m => m.PricePerDay, new { @class = "form-control", type = "number", step = "0.01" })
-            @Html.ValidationMessageFor(m => m.PricePerDay, "", new { @class = "text-danger" })
-        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.PricePerDay)
+                            @Html.TextBoxFor(m => m.PricePerDay, new { @class = "form-control", type = "number", step = "0.01" })
+                            @Html.ValidationMessageFor(m => m.PricePerDay, "", new { @class = "text-danger" })
+                        </div>
 
-        <div class="form-group">
-            @Html.LabelFor(m => m.Transmission)
-            @Html.DropDownListFor(m => m.Transmission,
-                new SelectList(new[] { "Automatic", "Manual" }),
-                "Select Transmission",
-                new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.Transmission, "", new { @class = "text-danger" })
-        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Category)
+                            @Html.TextBoxFor(m => m.Category, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.Category, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
 
-        <div class="form-group">
-            @Html.LabelFor(m => m.FuelType)
-            @Html.DropDownListFor(m => m.FuelType,
-                new SelectList(new[] { "Petrol", "Diesel", "Electric", "Hybrid" }),
-                "Select Fuel Type",
-                new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.FuelType, "", new { @class = "text-danger" })
-        </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Transmission)
+                            @Html.TextBoxFor(m => m.Transmission, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.Transmission, "", new { @class = "text-danger" })
+                        </div>
 
-        <div class="form-group">
-            @Html.LabelFor(m => m.Horsepower)
-            @Html.TextBoxFor(m => m.Horsepower, new { @class = "form-control", type = "number" })
-            @Html.ValidationMessageFor(m => m.Horsepower, "", new { @class = "text-danger" })
-        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.FuelType)
+                            @Html.TextBoxFor(m => m.FuelType, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.FuelType, "", new { @class = "text-danger" })
+                        </div>
 
-        <div class="form-group">
-            @Html.LabelFor(m => m.Seats)
-            @Html.TextBoxFor(m => m.Seats, new { @class = "form-control", type = "number" })
-            @Html.ValidationMessageFor(m => m.Seats, "", new { @class = "text-danger" })
-        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Horsepower)
+                            @Html.TextBoxFor(m => m.Horsepower, new { @class = "form-control", type = "number" })
+                            @Html.ValidationMessageFor(m => m.Horsepower, "", new { @class = "text-danger" })
+                        </div>
 
-        <div class="form-group">
-            @Html.LabelFor(m => m.Category)
-            @Html.DropDownListFor(m => m.Category,
-                new SelectList(new[] { "SUV", "Sedan", "Sports", "Luxury", "Supercar" }),
-                "Select Category",
-                new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.Category, "", new { @class = "text-danger" })
-        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Seats)
+                            @Html.TextBoxFor(m => m.Seats, new { @class = "form-control", type = "number" })
+                            @Html.ValidationMessageFor(m => m.Seats, "", new { @class = "text-danger" })
+                        </div>
 
-        <div class="form-group">
-            @Html.LabelFor(m => m.Description)
-            @Html.TextAreaFor(m => m.Description, new { @class = "form-control", rows = "4" })
-            @Html.ValidationMessageFor(m => m.Description, "", new { @class = "text-danger" })
-        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Stock)
+                            @Html.TextBoxFor(m => m.Stock, new { @class = "form-control", type = "number" })
+                            @Html.ValidationMessageFor(m => m.Stock, "", new { @class = "text-danger" })
+                        </div>
 
-        <div class="form-group">
-            @Html.LabelFor(m => m.Engine)
-            @Html.TextBoxFor(m => m.Engine, new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.Engine, "", new { @class = "text-danger" })
-        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.IsAvailable)
+                            @Html.CheckBoxFor(m => m.IsAvailable, new { @class = "form-check-input" })
+                        </div>
 
-        <div class="form-group">
-            @Html.LabelFor(m => m.Torque)
-            @Html.TextBoxFor(m => m.Torque, new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.Torque, "", new { @class = "text-danger" })
-        </div>
+                        <div class="form-group">
+                            <label>Car Image</label>
+                            @if (!string.IsNullOrEmpty(Model.MainImageUrl))
+                            {
+                                <div class="current-image">
+                                    <img src="@Model.MainImageUrl" alt="Current car image" style="max-width: 200px;" />
+                                </div>
+                            }
+                            <input type="file" name="carImage" class="form-control-file" accept="image/*" />
+                        </div>
+                    </div>
+                </div>
 
-        <div class="form-group">
-            @Html.LabelFor(m => m.Acceleration)
-            @Html.TextBoxFor(m => m.Acceleration, new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.Acceleration, "", new { @class = "text-danger" })
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(m => m.TopSpeed)
-            @Html.TextBoxFor(m => m.TopSpeed, new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.TopSpeed, "", new { @class = "text-danger" })
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(m => m.FuelConsumption)
-            @Html.TextBoxFor(m => m.FuelConsumption, new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.FuelConsumption, "", new { @class = "text-danger" })
-        </div>
-
-        <div class="form-group">
-            <label>Current Main Image</label>
-            @if (!string.IsNullOrEmpty(Model.MainImageUrl))
-            {
-                <img src="@Model.MainImageUrl" alt="Main Image" style="max-width: 200px; margin: 10px 0;" />
-            }
-            <input type="file" name="mainImage" class="form-control" accept="image/*" />
-            <small class="form-text text-muted">Leave empty to keep current image</small>
-        </div>
-
-        <div class="form-group">
-            <label>Current Interior Image</label>
-            @if (!string.IsNullOrEmpty(Model.InteriorImageUrl))
-            {
-                <img src="@Model.InteriorImageUrl" alt="Interior Image" style="max-width: 200px; margin: 10px 0;" />
-            }
-            <input type="file" name="interiorImage" class="form-control" accept="image/*" />
-            <small class="form-text text-muted">Leave empty to keep current image</small>
-        </div>
-
-        <div class="form-group">
-            <label>Current Exterior Image</label>
-            @if (!string.IsNullOrEmpty(Model.ExteriorImageUrl))
-            {
-                <img src="@Model.ExteriorImageUrl" alt="Exterior Image" style="max-width: 200px; margin: 10px 0;" />
-            }
-            <input type="file" name="exteriorImage" class="form-control" accept="image/*" />
-            <small class="form-text text-muted">Leave empty to keep current image</small>
-        </div>
-
-        <div class="form-group">
-            <div class="checkbox">
-                <label>
-                    @Html.CheckBoxFor(m => m.IsAvailable) Available for Rent
-                </label>
+                <div class="form-group mt-4">
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                    @Html.ActionLink("Back to List", "Cars", null, new { @class = "btn btn-secondary" })
+                </div>
             </div>
-        </div>
-
-        <div class="form-group">
-            <input type="submit" value="Save Changes" class="btn btn-primary" />
-            @Html.ActionLink("Back to List", "Cars", null, new { @class = "btn btn-secondary" })
         </div>
     }
 </div>
@@ -159,27 +108,28 @@
 <style>
     .admin-container {
         padding: 20px;
-        max-width: 800px;
-        margin: 0 auto;
+    }
+
+    .card {
+        margin-top: 20px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
 
     .form-group {
-        margin-bottom: 20px;
+        margin-bottom: 1rem;
+    }
+
+    .current-image {
+        margin: 10px 0;
     }
 
     .text-danger {
         color: #dc3545;
         font-size: 0.875rem;
-        margin-top: 5px;
     }
 
-    .btn {
-        margin-right: 10px;
-    }
-
-    .form-text {
-        font-size: 0.875rem;
-        color: #6c757d;
+    .mt-4 {
+        margin-top: 1.5rem;
     }
 </style>
 
