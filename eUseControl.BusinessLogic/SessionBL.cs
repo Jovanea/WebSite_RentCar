@@ -11,22 +11,31 @@ using Newtonsoft.Json;
 using eUseControl.BusinessLogic.DBModel;
 using eUseControl.BusinessLogic.Core;
 using Web.BusinessLogic;
+using eUseControl.BusinessLogic.Interfaces;
 
 namespace eUseControl.BusinessLogic
 {
-    public class SessionBL : UserApi, ISession
+    public class SessionBL : ISession
     {
-        public new UserLogin UserLogin(ULoginData data)
+        private readonly IUserApi _userApi;
+        private readonly UserContext _db;
+
+        public SessionBL(IUserApi userApi, UserContext dbContext)
         {
-            return new UserLogin(data);
+            _userApi = userApi;
+            _db = dbContext;
+        }
+
+        public UserLogin UserLogin(ULoginData data)
+        {
+            return _userApi.UserLogin(data);
         }
 
         public string CreateCookie(ULoginData data)
         {
             if (data == null) return null;
 
-            var userApi = new UserApi();
-            var userLogin = userApi.UserLogin(data);
+            var userLogin = _userApi.UserLogin(data);
 
             if (!userLogin.Status) return null;
 
@@ -55,19 +64,17 @@ namespace eUseControl.BusinessLogic
                 dynamic userData = JsonConvert.DeserializeObject(json);
                 if (userData == null) return null;
 
-                using (var db = new UserContext())
-                {
-                    int userId = (int)userData.Id;
-                    var user = db.Users.FirstOrDefault(u => u.Id == userId);
-                    if (user == null) return null;
+                int userId = (int)userData.Id;
+                var user = _db.Users.FirstOrDefault(u => u.Id == userId);
 
-                    return new ULoginData
-                    {
-                        Credential = user.UserName,
-                        LoginIp = user.UserIp,
-                        LoginDateTime = user.Last_Login
-                    };
-                }
+                if (user == null) return null;
+
+                return new ULoginData
+                {
+                    Credential = user.UserName,
+                    LoginIp = user.UserIp,
+                    LoginDateTime = user.Last_Login
+                };
             }
             catch
             {

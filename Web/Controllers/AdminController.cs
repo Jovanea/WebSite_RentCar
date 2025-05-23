@@ -52,6 +52,25 @@ namespace Web.Controllers
             }
         }
 
+        public ActionResult Details(int id)
+        {
+            try
+            {
+                var car = _adminApi.GetCarById(id);
+                if (car == null)
+                {
+                    return HttpNotFound();
+                }
+                return View("Details", car);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error in AdminController Details: {ex.Message}");
+                ViewBag.ErrorMessage = "Error loading car details: " + ex.Message;
+                return View("Details", null);
+            }
+        }
+
         public ActionResult Create()
         {
             var model = new Car

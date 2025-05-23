@@ -9,8 +9,7 @@ using eUseControl.BusinessLogic;
 using eUseControl.Domain.Entities.User;
 using eUseControl.Domain.Entities.Car;
 using eUseControl.BusinessLogic.Interfaces;
-
-
+using eUseControl.BusinessLogic.DBModel;
 
 
 namespace Web.Controllers
@@ -23,93 +22,13 @@ namespace Web.Controllers
         {
             var bl = new eUseControl.BusinessLogic.BusinessLogic();
             _session = bl.GetSessionBL();
-            _userApi = new UserApi();
+            var userContext = new UserContext();
+            _userApi = new UserApi(userContext);
         }
 
         public ActionResult Index()
         {
             return View();
-        }
-
-        public class CarController : Controller
-        {
-            private readonly ICarSession _carSession;
-
-            public CarController()
-            {
-                var bl = new eUseControl.BusinessLogic.BusinessLogic();
-            }
-
-            public ActionResult Details(int id)
-            {
-                var carDetails = _carSession.GetCarDetails(id);
-                if (carDetails == null)
-                {
-                    return HttpNotFound(); 
-                }
-                return View(carDetails);
-            }
-
-            public ActionResult Create()
-            {
-                return View();
-            }
-
-            [HttpPost]
-            [ValidateAntiForgeryToken]
-            public ActionResult Create(CarDetails carDetails)
-            {
-                if (ModelState.IsValid)
-                {
-                    
-                    return RedirectToAction("Details", new { id = carDetails.Id }); 
-                }
-
-                return View(carDetails);
-            }
-
-            public ActionResult Edit(int id)
-            {
-                var carDetails = _carSession.GetCarDetails(id);
-                if (carDetails == null)
-                {
-                    return HttpNotFound(); 
-                }
-                return View(carDetails);
-            }
-
-            [HttpPost]
-            [ValidateAntiForgeryToken]
-            public ActionResult Edit(int id, CarDetails carDetails)
-            {
-                if (ModelState.IsValid)
-                {
-
-                    return RedirectToAction("Details", new { id = carDetails.Id }); 
-                }
-
-                return View(carDetails);
-            }
-
-            public ActionResult Delete(int id)
-            {
-                var carDetails = _carSession.GetCarDetails(id);
-                if (carDetails == null)
-                {
-                    return HttpNotFound(); 
-                }
-                return View(carDetails);
-            }
-
-
-            [HttpPost, ActionName("Delete")]
-            [ValidateAntiForgeryToken]
-            public ActionResult DeleteConfirmed(int id)
-            {
-                
-
-                return RedirectToAction("Sections"); 
-            }
         }
     }
 }

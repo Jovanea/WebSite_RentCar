@@ -11,47 +11,50 @@ namespace eUseControl.BusinessLogic
 {
     public class UserApi : IUserApi
     {
+        private readonly UserContext _db;
+
+        public UserApi(UserContext dbContext)
+        {
+            _db = dbContext;
+        }
+
         public UserRegister UserRegister(URegisterData data)
         {
             try
             {
-                using (var db = new UserContext())
+                if (_db.Users.Any(u => u.Email == data.Email))
                 {
-                    if (db.Users.Any(u => u.Email == data.Email))
-                    {
-                        return new UserRegister { Status = false, StatusMsg = "Acest email există deja" };
-                    }
+                    return new UserRegister { Status = false, StatusMsg = "Acest email există deja" };
+                }
 
-                    if (db.Users.Any(u => u.UserName == data.UserName))
-                    {
-                        return new UserRegister { Status = false, StatusMsg = "Acest nume de utilizator există deja" };
-                    }
+                if (_db.Users.Any(u => u.UserName == data.UserName))
+                {
+                    return new UserRegister { Status = false, StatusMsg = "Acest nume de utilizator există deja" };
+                }
 
-                    // Hash the password before saving
-                    string hashedPassword = PasswordHasher.HashPassword(data.Password);
+                string hashedPassword = PasswordHasher.HashPassword(data.Password);
 
-                    var newUser = new UDbTable
-                    {
-                        UserName = data.UserName,
-                        Password = hashedPassword,
-                        Email = data.Email,
-                        Phone = data.Phone,
-                        Last_Login = DateTime.Now,
-                        UserIp = data.UserIp,
-                        Level = 0
-                    };
+                var newUser = new UDbTable
+                {
+                    UserName = data.UserName,
+                    Password = hashedPassword,
+                    Email = data.Email,
+                    Phone = data.Phone,
+                    Last_Login = DateTime.Now,
+                    UserIp = data.UserIp,
+                    Level = 0
+                };
 
-                    db.Users.Add(newUser);
-                    int result = db.SaveChanges();
+                _db.Users.Add(newUser);
+                int result = _db.SaveChanges();
 
-                    if (result > 0)
-                    {
-                        return new UserRegister { Status = true, StatusMsg = "Înregistrare reușită" };
-                    }
-                    else
-                    {
-                        return new UserRegister { Status = false, StatusMsg = "Nu s-a putut salva utilizatorul în baza de date" };
-                    }
+                if (result > 0)
+                {
+                    return new UserRegister { Status = true, StatusMsg = "Înregistrare reușită" };
+                }
+                else
+                {
+                    return new UserRegister { Status = false, StatusMsg = "Nu s-a putut salva utilizatorul în baza de date" };
                 }
             }
             catch (Exception ex)
@@ -66,37 +69,34 @@ namespace eUseControl.BusinessLogic
         {
             try
             {
-                using (var db = new UserContext())
+                var user = _db.Users.FirstOrDefault(u =>
+                    (u.Email == data.Credential || u.UserName == data.Credential));
+
+                if (user != null && PasswordHasher.VerifyPassword(data.Password, user.Password))
                 {
-                    var user = db.Users.FirstOrDefault(u =>
-                        (u.Email == data.Credential || u.UserName == data.Credential));
+                    user.Last_Login = DateTime.Now;
+                    user.UserIp = data.LoginIp;
+                    _db.SaveChanges();
 
-                    if (user != null && PasswordHasher.VerifyPassword(data.Password, user.Password))
+                    var userLogin = new UserLogin(data)
                     {
-                        user.Last_Login = DateTime.Now;
-                        user.UserIp = data.LoginIp;
-                        db.SaveChanges();
-
-                        var userLogin = new UserLogin(data)
-                        {
-                            Status = true,
-                            StatusMsg = "Autentificare reușită!",
-                            Credential = user.UserName,
-                            Password = data.Password,
-                            Phone = user.Phone,
-                            Id = user.Id
-                        };
-
-                        System.Diagnostics.Debug.WriteLine($"User login successful. Phone: {user.Phone}");
-                        return userLogin;
-                    }
-
-                    return new UserLogin(data)
-                    {
-                        Status = false,
-                        StatusMsg = "Credențiale incorecte. Vă rugăm să verificați email-ul și parola."
+                        Status = true,
+                        StatusMsg = "Autentificare reușită!",
+                        Credential = user.UserName,
+                        Password = data.Password,
+                        Phone = user.Phone,
+                        Id = user.Id
                     };
+
+                    System.Diagnostics.Debug.WriteLine($"User login successful. Phone: {user.Phone}");
+                    return userLogin;
                 }
+
+                return new UserLogin(data)
+                {
+                    Status = false,
+                    StatusMsg = "Credențiale incorecte. Vă rugăm să verificați email-ul și parola."
+                };
             }
             catch (Exception ex)
             {
@@ -112,7 +112,7 @@ namespace eUseControl.BusinessLogic
 
         public ISession GetSessionBL()
         {
-            return new SessionBL();
+            return new SessionBL(this, _db);
         }
     }
 }

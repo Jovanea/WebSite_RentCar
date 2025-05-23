@@ -228,6 +228,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\CarltController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LogicController.cs" />
     <Compile Include="Controllers\PaymentController.cs" />
@@ -304,6 +305,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\Base\" />
+    <Folder Include="Views\Carlt\" />
     <Folder Include="Views\Car\" />
     <Folder Include="Views\Logic\" />
     <Folder Include="Views\User\" />

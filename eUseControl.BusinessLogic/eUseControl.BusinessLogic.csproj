@@ -83,6 +83,10 @@
     <Compile Include="Migrations\202505221940091_ModifyPricePerDayToInt.Designer.cs">
       <DependentUpon>202505221940091_ModifyPricePerDayToInt.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202505230810586_CorrectPaymentBookingFK.cs" />
+    <Compile Include="Migrations\202505230810586_CorrectPaymentBookingFK.Designer.cs">
+      <DependentUpon>202505230810586_CorrectPaymentBookingFK.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ImageUpload.cs" />
     <Compile Include="Models\UserData.cs" />
@@ -119,6 +123,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202505221940091_ModifyPricePerDayToInt.resx">
       <DependentUpon>202505221940091_ModifyPricePerDayToInt.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202505230810586_CorrectPaymentBookingFK.resx">
+      <DependentUpon>202505230810586_CorrectPaymentBookingFK.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

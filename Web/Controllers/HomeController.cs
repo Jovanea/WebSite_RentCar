@@ -23,7 +23,8 @@ namespace Web.Controllers
 
         public HomeController()
         {
-            _userApi = new UserApi();
+            var userContext = new UserContext();
+            _userApi = new UserApi(userContext);
             _carApi = new CarApi();
             _bookingApi = new BookingApi();
             _paymentApi = new PaymentApi();
@@ -170,8 +171,7 @@ namespace Web.Controllers
 
                 if (userData != null)
                 {
-                    var userApi = new UserApi();
-                    var userLogin = userApi.UserLogin(userData);
+                    var userLogin = _userApi.UserLogin(userData);
 
                     if (userLogin.Status)
                     {
@@ -544,7 +544,7 @@ namespace Web.Controllers
                     PickupDate = pickupDate,
                     ReturnDate = returnDate,
                     TotalAmount = (int)totalAmount,
-                    Status = "Pending" 
+                    Status = "Pending"
                 };
 
                 if (_bookingApi.CreateBooking(booking))

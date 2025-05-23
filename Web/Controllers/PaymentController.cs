@@ -10,12 +10,10 @@ namespace Web.Controllers
 {
     public class PaymentController : Controller
     {
-        private readonly IPaymentApi _paymentApi;
         private readonly IBookingApi _bookingApi;
 
         public PaymentController()
         {
-            _paymentApi = new PaymentApi();
             _bookingApi = new BookingApi();
         }
 
