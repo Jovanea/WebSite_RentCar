@@ -21,14 +21,13 @@ namespace Web.Controllers
         private readonly IPaymentApi _paymentApi;
         private readonly IAdminApi _adminApi;
 
-        public HomeController()
+        public HomeController(IUserApi userApi, ICarApi carApi, IBookingApi bookingApi, IPaymentApi paymentApi, IAdminApi adminApi)
         {
-            var userContext = new UserContext();
-            _userApi = new UserApi(userContext);
-            _carApi = new CarApi();
-            _bookingApi = new BookingApi();
-            _paymentApi = new PaymentApi();
-            _adminApi = new AdminApi();
+            _userApi = userApi;
+            _carApi = carApi;
+            _bookingApi = bookingApi;
+            _paymentApi = paymentApi;
+            _adminApi = adminApi;
         }
 
         public ActionResult Index()

@@ -17,6 +17,9 @@ namespace Web
     {
         void Application_Start(object sender, EventArgs e)
         {
+            // Register custom controller factory FIRST
+            ControllerBuilder.Current.SetControllerFactory(new CustomControllerFactory());
+
             // Inițializarea bazei de date
             Database.SetInitializer(new ApplicationDbInitializer());
 
@@ -26,7 +29,7 @@ namespace Web
 
             //Register Bundle Table
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-            
+
             // Register custom model binders
             ModelBinders.Binders.Add(typeof(decimal), new DecimalModelBinder());
             ModelBinders.Binders.Add(typeof(decimal?), new DecimalModelBinder());

@@ -18,12 +18,11 @@ namespace Web.Controllers
     {
         private readonly ISession _session;
         private readonly IUserApi _userApi;
-        public LogicController()
+
+        public LogicController(ISession session, IUserApi userApi)
         {
-            var bl = new eUseControl.BusinessLogic.BusinessLogic();
-            _session = bl.GetSessionBL();
-            var userContext = new UserContext();
-            _userApi = new UserApi(userContext);
+            _session = session;
+            _userApi = userApi;
         }
 
         public ActionResult Index()
