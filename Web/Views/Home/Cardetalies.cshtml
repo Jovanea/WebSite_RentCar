@@ -15,7 +15,6 @@
                     <div class="main-image">
                         <img src="@(string.IsNullOrEmpty(Model.MainImageUrl) ? "/Content/images/car-placeholder.jpg" : Model.MainImageUrl)" alt="@Model.Brand @Model.Model" id="main-car-image">
                     </div>
-                    @* Add thumbnails if available in the model *@
                 </div>
 
                 <div class="car-basic-info">
@@ -72,33 +71,35 @@
                 <div class="alert alert-warning">Detalii mașină nu au putut fi încărcate.</div>
             }
 
-            <div class="booking-form">
+            <div class="car-details-booking-section">
                 <h4>Alegeți datele de închiriere</h4>
-                @if (Model != null)
-                {
-                    using (Html.BeginForm("AddToCart", "Home", FormMethod.Post))
+                <div class="car-details-booking-form-content">
+                    @if (Model != null)
                     {
-                        @Html.AntiForgeryToken()
-                        @Html.Hidden("CarId", Model.CarId)
+                        using (Html.BeginForm("AddToCart", "Home", FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.Hidden("CarId", Model.CarId)
 
-                        <div class="form-group">
-                            <label for="pickupDate">Data preluării:</label>
-                            <input type="date" id="pickupDate" name="pickupDate" class="form-control" required>
-                        </div>
+                            <div class="form-group">
+                                <label for="pickupDate">Data preluării:</label>
+                                <input type="date" id="pickupDate" name="pickupDate" class="form-control" required>
+                            </div>
 
-                        <div class="form-group">
-                            <label for="returnDate">Data returnării:</label>
-                            <input type="date" id="returnDate" name="returnDate" class="form-control" required>
-                        </div>
+                            <div class="form-group">
+                                <label for="returnDate">Data returnării:</label>
+                                <input type="date" id="returnDate" name="returnDate" class="form-control" required>
+                            </div>
 
-                        <div class="form-group">
-                            <label for="totalAmount">Preț Total:</label>
-                            <input type="text" id="totalAmount" name="totalAmount" class="form-control" readonly value="0">
-                        </div>
+                            <div class="form-group">
+                                <label for="totalAmount">Preț Total:</label>
+                                <input type="text" id="totalAmount" name="totalAmount" class="form-control" readonly value="0">
+                            </div>
 
-                        <button type="submit" class="btn btn-primary">Adaugă în Coș</button>
+                            <button type="submit" class="btn btn-primary">Adaugă în Coș</button>
+                        }
                     }
-                }
+                </div>
             </div>
         </div>
     </div>
@@ -139,182 +140,5 @@
         document.getElementById('main-car-image').src = src;
     }
 </script>
-
-<style>
-    .car-details-content {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 30px;
-        margin-top: 20px;
-    }
-
-    .car-images {
-        flex: 1;
-        min-width: 300px;
-    }
-
-        .car-images img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 8px;
-        }
-
-    .car-basic-info {
-        flex: 1;
-        min-width: 300px;
-        display: flex;
-        flex-direction: column;
-    }
-
-        .car-basic-info h2 {
-            font-size: 2em;
-            margin-bottom: 5px;
-            color: #333;
-        }
-
-        .car-basic-info h3 {
-            font-size: 1.5em;
-            margin-top: 0;
-            color: #666;
-            margin-bottom: 15px;
-        }
-
-    .price-tag {
-        font-size: 1.8em;
-        margin-bottom: 25px;
-        color: #ff7f00; /* Accent color */
-        font-weight: bold;
-    }
-
-        .price-tag .period {
-            font-size: 0.6em;
-            color: #555;
-            font-weight: normal;
-        }
-
-    .car-specs {
-        margin-bottom: 20px;
-        padding: 15px;
-        background-color: #f8f9fa; /* Light background for specs */
-        border-radius: 8px;
-    }
-
-        .car-specs .spec-item {
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-        }
-
-            .car-specs .spec-item i {
-                margin-right: 10px;
-                color: #ff7f00; /* Accent color for icons */
-                font-size: 1.1em;
-            }
-
-    .car-stock {
-        margin-top: 10px;
-        padding: 8px 12px;
-        border-radius: 4px;
-        background-color: #e9ecef; /* Different background for stock */
-        display: inline-block;
-        font-weight: bold;
-    }
-
-    .stock-label {
-        margin-right: 5px;
-    }
-
-    .in-stock {
-        color: #28a745; /* Green for in stock */
-    }
-
-    .out-of-stock {
-        color: #dc3545; /* Red for out of stock */
-    }
-
-    .car-description {
-        margin-top: 20px;
-        margin-bottom: 20px;
-    }
-
-        .car-description h4, .car-more-specs h4 {
-            color: #333;
-            margin-bottom: 10px;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 5px;
-        }
-
-    .car-more-specs ul {
-        list-style: none;
-        padding: 0;
-    }
-
-        .car-more-specs ul li {
-            margin-bottom: 8px;
-            line-height: 1.5;
-        }
-
-            .car-more-specs ul li strong {
-                color: #555;
-            }
-
-    .booking-form {
-        border: 1px solid #ddd; /* Lighter border */
-        padding: 25px; /* More padding */
-        border-radius: 8px;
-        background-color: #fff; /* White background */
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05); /* Subtle shadow */
-    }
-
-        .booking-form h4 {
-            margin-top: 0;
-            margin-bottom: 20px;
-            color: #333;
-            text-align: center;
-        }
-
-        .booking-form .form-group {
-            margin-bottom: 15px;
-        }
-
-            .booking-form .form-group label {
-                font-weight: bold;
-                display: block;
-                margin-bottom: 5px;
-                color: #555;
-            }
-
-        .booking-form .form-control {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box; /* Include padding and border in element's total width and height */
-        }
-
-        .booking-form button[type="submit"] {
-            display: block;
-            width: 100%;
-            padding: 10px;
-            background-color: #ff7f00; /* Accent color */
-            color: white;
-            border: none;
-            border-radius: 4px;
-            font-size: 1.2em;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-            .booking-form button[type="submit"]:hover {
-                background-color: #e67300;
-            }
-
-
-        .car-images, .car-basic-info, .booking-form {
-            min-width: unset;
-            width: 100%;
-        }
-    
-</style>
 
 @Html.Partial("_Footer")

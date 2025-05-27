@@ -16,7 +16,6 @@ namespace Web.BusinessLogic
             _context = new ApplicationDbContext();
         }
 
-        // Funcții de mapare între Car și CarDetails
         private CarDetails ToCarDetails(Car car)
         {
             if (car == null) return null;
@@ -69,7 +68,6 @@ namespace Web.BusinessLogic
             }
             catch (Exception ex)
             {
-                // Log the error
                 System.Diagnostics.Debug.WriteLine("Error getting car by ID: " + ex.Message);
                 return null;
             }
@@ -99,7 +97,6 @@ namespace Web.BusinessLogic
                     }
                     catch (Exception ex)
                     {
-                        // Logăm eroarea specifică pentru a o depana
                         System.Diagnostics.Debug.WriteLine($"Error converting car {car.CarId}: {ex.Message}");
                         System.Diagnostics.Debug.WriteLine($"Stack trace: {ex.StackTrace}");
                     }
@@ -114,10 +111,9 @@ namespace Web.BusinessLogic
             }
             catch (Exception ex)
             {
-                // Eroare generală - logăm, dar nu afișăm pe interfața publică
                 System.Diagnostics.Debug.WriteLine("Error getting cars from DB or during overall conversion: " + ex.Message);
                 System.Diagnostics.Debug.WriteLine($"Stack trace: {ex.StackTrace}");
-                return new List<CarDetails>(); // Returns an empty list if a general error occurs
+                return new List<CarDetails>();
             }
         }
 
@@ -182,11 +178,9 @@ namespace Web.BusinessLogic
         {
             try
             {
-                // Retrieve the car from the database
                 var car = _context.Cars.Find(carId);
                 if (car == null) return false;
 
-                // Check if the requested change is valid
                 int newStock = car.Stock + stockChange;
                 if (newStock < 0)
                 {
@@ -194,10 +188,8 @@ namespace Web.BusinessLogic
                     return false;
                 }
 
-                // Update the stock
                 car.Stock = newStock;
 
-                // If stock becomes 0, set IsAvailable to false
                 if (newStock == 0)
                 {
                     car.IsAvailable = false;

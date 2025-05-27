@@ -14,7 +14,6 @@ namespace eUseControl.BusinessLogic
 {
     public class BusinessLogic
     {
-        // Expose instances of the Business Logic APIs
         public ISession SessionBL { get; }
         public IUserApi UserApiBL { get; }
         public ICarApi CarApiBL { get; }
@@ -24,11 +23,10 @@ namespace eUseControl.BusinessLogic
 
         public BusinessLogic()
         {
-            // Instantiate dependencies here and assign to properties
             var userContext = new UserContext();
             SessionBL = new SessionBL(new UserApi(userContext), userContext);
             UserApiBL = new UserApi(userContext);
-            CarApiBL = new CarApi(); // Assuming CarApi, BookingApi, PaymentApi, AdminApi exist and have parameterless constructors or simple dependencies
+            CarApiBL = new CarApi(); 
             BookingApiBL = new BookingApi();
             PaymentApiBL = new PaymentApi();
             AdminApiBL = new AdminApi();

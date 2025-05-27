@@ -9,7 +9,6 @@ namespace Web.Interfaces
 {
     public interface IAdminApi
     {
-        // Car Management Methods
         List<Car> GetAllCars();
         Car GetCarById(int id);
         bool CreateCar(Car car);

@@ -129,32 +129,11 @@
             }
         });
         
-        // Handle date range change
         document.getElementById('dateRange').addEventListener('change', function () {
             var days = parseInt(this.value);
             window.location.href = '@Url.Action("AvailableCars", "Home")?days=' + days;
         });
     });
 </script>
-
-<style>
-    .availability-chart-container {
-        height: 400px;
-        margin-bottom: 30px;
-    }
-    
-    .availability-filters {
-        margin-bottom: 20px;
-    }
-    
-    .progress {
-        height: 25px;
-    }
-    
-    .progress-bar {
-        line-height: 25px;
-        font-weight: bold;
-    }
-</style>
 
 @Html.Partial("_Footer") 

@@ -18,19 +18,16 @@ namespace Web.BusinessLogic
         {
             try
             {
-                // Log the card details for debugging
                 System.Diagnostics.Debug.WriteLine($"Processing payment for amount: {amount}");
                 System.Diagnostics.Debug.WriteLine($"Card holder: {cardDetails.CardHolderName}");
                 System.Diagnostics.Debug.WriteLine($"Card number: {cardDetails.CardNumber?.Length} digits");
                 System.Diagnostics.Debug.WriteLine($"Expiry: {cardDetails.ExpiryMonth}/{cardDetails.ExpiryYear}");
                 
-                // Find the booking to associate with this payment
                 Booking booking = null;
                 try 
                 {
                     if (cardDetails.BookingId > 0)
                     {
-                        // First try to find by ID via direct SQL to avoid EF issues
                         var connection = _context.Database.Connection;
                         
                         // Ensure connection is open
@@ -80,7 +77,6 @@ namespace Web.BusinessLogic
                     
                     if (booking == null)
                     {
-                        // Try to find a pending booking with matching amount
                         System.Diagnostics.Debug.WriteLine("Booking not found by ID, looking for pending bookings...");
                         
                         var connection = _context.Database.Connection;
@@ -132,7 +128,6 @@ namespace Web.BusinessLogic
                 {
                     System.Diagnostics.Debug.WriteLine($"Error finding booking: {ex.Message}");
                     System.Diagnostics.Debug.WriteLine($"Stack trace: {ex.StackTrace}");
-                    // Continue with payment processing anyway for demo purposes
                 }
 
                 if (booking == null)
@@ -153,7 +148,6 @@ namespace Web.BusinessLogic
 
                 try
                 {
-                    // Use direct SQL to insert the payment record
                     var connection = _context.Database.Connection;
                     if (connection.State != System.Data.ConnectionState.Open)
                     {
@@ -231,7 +225,6 @@ namespace Web.BusinessLogic
                     System.Diagnostics.Debug.WriteLine($"Error saving payment: {ex.Message}");
                     System.Diagnostics.Debug.WriteLine($"Stack trace: {ex.StackTrace}");
                     
-                    // Actually return the error state so UI can handle it
                     return false;
                 }
             }
@@ -261,7 +254,6 @@ namespace Web.BusinessLogic
                 return false;
             }
 
-            // Validare număr card (remove any spaces)
             var cleanCardNumber = cardDetails.CardNumber.Replace(" ", "");
             if (cleanCardNumber.Length != 16 ||
                 !cleanCardNumber.All(char.IsDigit))

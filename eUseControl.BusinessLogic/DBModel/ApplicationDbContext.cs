@@ -50,7 +50,6 @@ namespace eUseControl.BusinessLogic.DBModel
             System.Diagnostics.Debug.WriteLine("ApplicationDbContext constructor called");
             Database.SetInitializer(new ApplicationDbInitializer());
             
-            // Force initialization
             try
             {
                 Database.Initialize(force: false);

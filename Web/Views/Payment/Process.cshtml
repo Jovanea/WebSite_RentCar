@@ -92,7 +92,6 @@
                         var month = parseInt(value);
                         if (month > 12) value = '12';
                         if (month < 1 && value.length >= 2) value = '01';
-                        // Ensure leading zero for months 1-9
                         if (value.length === 1 && parseInt(value) < 10) {
                             if (parseInt(value) === 0) value = '0';
                         }
