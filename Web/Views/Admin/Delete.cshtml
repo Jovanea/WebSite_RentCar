@@ -10,7 +10,7 @@
 
     <div class="car-details">
         <div class="car-image">
-            <img src="@Model.MainImageUrl" alt="@Model.Brand @Model.Model" style="max-width: 300px;" />
+            <img src="@Model.MainImageUrl" alt="@Model.Brand @Model.Model" class="img-fluid" />
         </div>
 
         <div class="car-info">
@@ -62,61 +62,3 @@
         </div>
     }
 </div>
-
-<style>
-    .admin-container {
-        padding: 20px;
-        max-width: 800px;
-        margin: 0 auto;
-    }
-
-    .car-details {
-        display: flex;
-        gap: 20px;
-        margin: 20px 0;
-        padding: 20px;
-        background: #f8f9fa;
-        border-radius: 8px;
-    }
-
-    .car-info {
-        flex: 1;
-    }
-
-    .dl-horizontal {
-        margin-top: 20px;
-    }
-
-        .dl-horizontal dt {
-            float: left;
-            clear: left;
-            width: 120px;
-            text-align: right;
-            font-weight: bold;
-            margin-right: 10px;
-        }
-
-        .dl-horizontal dd {
-            margin-left: 130px;
-        }
-
-    .badge {
-        padding: 5px 10px;
-    }
-
-    .badge-success {
-        background-color: #28a745;
-    }
-
-    .badge-danger {
-        background-color: #dc3545;
-    }
-
-    .form-actions {
-        margin-top: 20px;
-    }
-
-    .btn {
-        margin-right: 10px;
-    }
-</style> 

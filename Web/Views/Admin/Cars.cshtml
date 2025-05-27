@@ -50,7 +50,7 @@
                         <td>
                             @if (!string.IsNullOrEmpty(car.MainImageUrl))
                             {
-                                <img src="@car.MainImageUrl" alt="@car.Brand @car.Model" style="max-width: 100px;" />
+                                <img src="@car.MainImageUrl" alt="@car.Brand @car.Model" class="img-fluid" />
                             }
                         </td>
                         <td>@car.Brand</td>
@@ -61,10 +61,10 @@
                         <td>
                             <div class="stock-control">
                                 <span class="stock-value">@car.Stock</span>
-                                @using (Html.BeginForm("UpdateStock", "Admin", new { id = car.CarId }, FormMethod.Post, new { style = "display: inline;" }))
+                                @using (Html.BeginForm("UpdateStock", "Admin", new { id = car.CarId }, FormMethod.Post))
                                 {
                                     @Html.AntiForgeryToken()
-                                    <input type="number" name="stockChange" value="1" min="-@car.Stock" max="10" class="form-control form-control-sm" style="width: 60px; display: inline-block;" />
+                                    <input type="number" name="stockChange" value="1" min="-@car.Stock" max="10" class="form-control form-control-sm" />
                                     <button type="submit" class="btn btn-sm btn-info">Update</button>
                                 }
                             </div>
@@ -79,7 +79,7 @@
                                 @Html.ActionLink("Edit", "Edit", new { id = car.CarId }, new { @class = "btn btn-sm btn-info" })
                                 @Html.ActionLink("Details", "Details", new { id = car.CarId }, new { @class = "btn btn-sm btn-secondary" })
                                 @Html.ActionLink("Delete", "Delete", new { id = car.CarId }, new { @class = "btn btn-sm btn-danger", onclick = "return confirm('Are you sure you want to delete this car?');" })
-                                @using (Html.BeginForm("ToggleAvailability", "Admin", new { id = car.CarId }, FormMethod.Post, new { style = "display: inline;" }))
+                                @using (Html.BeginForm("ToggleAvailability", "Admin", new { id = car.CarId }, FormMethod.Post))
                                 {
                                     @Html.AntiForgeryToken()
                                     <button type="submit" class="btn btn-sm @(car.IsAvailable ? "btn-warning" : "btn-success")">
@@ -95,45 +95,3 @@
     </div>
 </div>
 
-<style>
-    .admin-container {
-        padding: 20px;
-    }
-
-    .table {
-        margin-top: 20px;
-    }
-
-    .btn-group {
-        display: flex;
-        gap: 5px;
-    }
-
-    .badge {
-        padding: 5px 10px;
-    }
-
-    .badge-success {
-        background-color: #28a745;
-    }
-
-    .badge-danger {
-        background-color: #dc3545;
-    }
-
-    .stock-control {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-
-    .stock-value {
-        font-weight: bold;
-        min-width: 30px;
-        text-align: center;
-    }
-
-    .alert {
-        margin-bottom: 20px;
-    }
-</style>

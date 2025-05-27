@@ -20,7 +20,6 @@ namespace Web.BusinessLogic
         {
             try
             {
-                // First check if there's enough stock
                 var carApi = new Web.BusinessLogic.CarApi();
                 int currentStock = carApi.GetCarStock(booking.CarId);
 
@@ -30,11 +29,9 @@ namespace Web.BusinessLogic
                     return false;
                 }
 
-                // Create the booking
                 _context.Bookings.Add(booking);
                 _context.SaveChanges();
 
-                // Now decrease the car stock
                 bool stockUpdated = carApi.UpdateCarStock(booking.CarId, -1);
                 if (!stockUpdated)
                 {
@@ -75,13 +72,11 @@ namespace Web.BusinessLogic
                 var booking = _context.Bookings.Find(bookingId);
                 if (booking == null) return false;
 
-                // Only increment stock if status wasn't already Cancelled
                 bool shouldIncrementStock = booking.Status != "Cancelled";
 
                 booking.Status = "Cancelled";
                 _context.SaveChanges();
 
-                // Increment car stock when booking is cancelled
                 if (shouldIncrementStock)
                 {
                     var carApi = new Web.BusinessLogic.CarApi();
@@ -105,7 +100,6 @@ namespace Web.BusinessLogic
         {
             try
             {
-                // First get all affected bookings to update stock later
                 var bookingsToCancel = new List<Booking>();
                 var connection = _context.Database.Connection;
                 connection.Open();
@@ -137,7 +131,6 @@ namespace Web.BusinessLogic
                     }
                 }
 
-                // Update the status to Cancelled
                 using (var command = connection.CreateCommand())
                 {
                     command.CommandText = "UPDATE Bookings SET Status = 'Cancelled' WHERE UserId = @userId AND Status = @status";
@@ -158,7 +151,6 @@ namespace Web.BusinessLogic
 
                 connection.Close();
 
-                // Update car stock for each cancelled booking
                 if (bookingsToCancel.Count > 0)
                 {
                     var carApi = new Web.BusinessLogic.CarApi();
@@ -186,10 +178,8 @@ namespace Web.BusinessLogic
         {
             try
             {
-                // Get the data directly from the database without Entity Framework conversion
                 var bookings = new List<Booking>();
 
-                // Use a raw SQL query to avoid EF conversion issues
                 var connection = _context.Database.Connection;
                 connection.Open();
                 using (var command = connection.CreateCommand())
@@ -207,7 +197,6 @@ namespace Web.BusinessLogic
                         {
                             try
                             {
-                                // Manual conversion to handle any type mismatches
                                 var booking = new Booking
                                 {
                                     BookingId = Convert.ToInt32(reader["BookingId"]),
@@ -218,7 +207,6 @@ namespace Web.BusinessLogic
                                     Status = reader["Status"].ToString()
                                 };
 
-                                // Handle TotalAmount specifically to convert from decimal to int if needed
                                 if (reader["TotalAmount"] != DBNull.Value)
                                 {
                                     if (reader["TotalAmount"] is decimal)
@@ -236,7 +224,6 @@ namespace Web.BusinessLogic
                             catch (Exception ex)
                             {
                                 System.Diagnostics.Debug.WriteLine($"Error converting booking: {ex.Message}");
-                                // Continue to next booking instead of failing
                             }
                         }
                     }
@@ -257,7 +244,6 @@ namespace Web.BusinessLogic
         {
             try
             {
-                // Use raw SQL instead of Entity Framework to avoid conversion issues
                 var connection = _context.Database.Connection;
                 connection.Open();
                 Booking booking = null;
@@ -285,7 +271,6 @@ namespace Web.BusinessLogic
                                 Status = reader["Status"].ToString()
                             };
 
-                            // Handle TotalAmount specifically to convert from decimal to int if needed
                             if (reader["TotalAmount"] != DBNull.Value)
                             {
                                 if (reader["TotalAmount"] is decimal)
@@ -319,7 +304,6 @@ namespace Web.BusinessLogic
                 var booking = _context.Bookings.Find(bookingId);
                 if (booking == null) return false;
 
-                // Increment car stock when booking is deleted
                 var carApi = new Web.BusinessLogic.CarApi();
                 bool stockUpdated = carApi.UpdateCarStock(booking.CarId, 1);
                 if (!stockUpdated)
@@ -344,12 +328,10 @@ namespace Web.BusinessLogic
         {
             try
             {
-                // First get all affected bookings to update stock later
                 var bookingsToDelete = _context.Bookings
                     .Where(b => b.UserId == userId && b.Status == status)
                     .ToList();
 
-                // Update car stock for each booking
                 var carApi = new Web.BusinessLogic.CarApi();
                 foreach (var booking in bookingsToDelete)
                 {
@@ -360,7 +342,6 @@ namespace Web.BusinessLogic
                     }
                 }
 
-                // Delete all bookings
                 _context.Bookings.RemoveRange(bookingsToDelete);
                 _context.SaveChanges();
 

@@ -289,7 +289,6 @@
     <Content Include="Views\Payment\Success.cshtml" />
     <Content Include="Views\Home\Pay.cshtml" />
     <Content Include="Views\Home\LoginAdmin.cshtml" />
-    <Content Include="Views\Home\AdminManagment.cshtml" />
     <Content Include="Views\Admin\Cars.cshtml" />
     <Content Include="Views\Admin\Create.cshtml" />
     <Content Include="Views\Admin\Delete.cshtml" />

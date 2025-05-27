@@ -13,7 +13,7 @@
                 <div class="col-md-6">
                     @if (!string.IsNullOrEmpty(Model.MainImageUrl))
                     {
-                        <img src="@Model.MainImageUrl" alt="@Model.Brand @Model.Model" class="img-fluid" style="max-height: 400px;" />
+                        <img src="@Model.MainImageUrl" alt="@Model.Brand @Model.Model" class="img-fluid" />
                     }
                 </div>
                 <div class="col-md-6">
@@ -68,48 +68,3 @@
         </div>
     </div>
 </div>
-
-<style>
-    .admin-container {
-        padding: 20px;
-    }
-
-    .card {
-        margin-top: 20px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-
-    .details-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 15px;
-        margin-top: 20px;
-    }
-
-    .detail-item {
-        display: flex;
-        flex-direction: column;
-    }
-
-        .detail-item label {
-            font-weight: bold;
-            color: #666;
-            margin-bottom: 5px;
-        }
-
-    .badge {
-        padding: 5px 10px;
-    }
-
-    .badge-success {
-        background-color: #28a745;
-    }
-
-    .badge-danger {
-        background-color: #dc3545;
-    }
-
-    .mt-4 {
-        margin-top: 1.5rem;
-    }
-</style> 
