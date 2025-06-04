@@ -17,8 +17,6 @@ namespace Web
     {
         void Application_Start(object sender, EventArgs e)
         {
-            // Register custom controller factory FIRST
-            ControllerBuilder.Current.SetControllerFactory(new CustomControllerFactory());
 
             // Inițializarea bazei de date
             Database.SetInitializer(new ApplicationDbInitializer());
@@ -33,6 +31,9 @@ namespace Web
             // Register custom model binders
             ModelBinders.Binders.Add(typeof(decimal), new DecimalModelBinder());
             ModelBinders.Binders.Add(typeof(decimal?), new DecimalModelBinder());
+
+            // Configure Unity
+            UnityConfig.RegisterComponents();
         }
     }
 }

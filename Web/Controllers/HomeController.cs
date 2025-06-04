@@ -20,14 +20,16 @@ namespace Web.Controllers
         private readonly IBookingApi _bookingApi;
         private readonly IPaymentApi _paymentApi;
         private readonly IAdminApi _adminApi;
+        private readonly UserContext _userContext;
 
-        public HomeController(IUserApi userApi, ICarApi carApi, IBookingApi bookingApi, IPaymentApi paymentApi, IAdminApi adminApi)
+        public HomeController(IUserApi userApi, ICarApi carApi, IBookingApi bookingApi, IPaymentApi paymentApi, IAdminApi adminApi, UserContext userContext)
         {
             _userApi = userApi;
             _carApi = carApi;
             _bookingApi = bookingApi;
             _paymentApi = paymentApi;
             _adminApi = adminApi;
+            _userContext = userContext;
         }
 
         public ActionResult Index()
@@ -337,16 +339,13 @@ namespace Web.Controllers
             }
             else
             {
-                using (var db = new eUseControl.BusinessLogic.DBModel.UserContext())
+                var username = Session["Id"]?.ToString();
+                if (!string.IsNullOrEmpty(username))
                 {
-                    var username = Session["Id"]?.ToString();
-                    if (!string.IsNullOrEmpty(username))
+                    var user = _userContext.Users.FirstOrDefault(u => u.UserName == username);
+                    if (user != null)
                     {
-                        var user = db.Users.FirstOrDefault(u => u.UserName == username);
-                        if (user != null)
-                        {
-                            userId = user.Id;
-                        }
+                        userId = user.Id;
                     }
                 }
             }
@@ -376,16 +375,13 @@ namespace Web.Controllers
                 }
                 else
                 {
-                    using (var db = new eUseControl.BusinessLogic.DBModel.UserContext())
+                    var username = Session["Id"].ToString();
+                    var user = _userContext.Users.FirstOrDefault(u => u.UserName == username);
+                    if (user == null)
                     {
-                        var username = Session["Id"].ToString();
-                        var user = db.Users.FirstOrDefault(u => u.UserName == username);
-                        if (user == null)
-                        {
-                            return RedirectToAction("Carsection", "Home");
-                        }
-                        userId = user.Id;
+                        return RedirectToAction("Carsection", "Home");
                     }
+                    userId = user.Id;
                 }
 
                 var pendingBookings = _bookingApi.GetUserBookings(userId)
@@ -522,18 +518,15 @@ namespace Web.Controllers
                 }
                 else
                 {
-                    using (var db = new eUseControl.BusinessLogic.DBModel.UserContext())
+                    var username = Session["Id"].ToString();
+                    var user = _userContext.Users.FirstOrDefault(u => u.UserName == username);
+                    if (user == null)
                     {
-                        var username = Session["Id"].ToString();
-                        var user = db.Users.FirstOrDefault(u => u.UserName == username);
-                        if (user == null)
-                        {
-                            TempData["ErrorMessage"] = "Utilizatorul nu a fost găsit.";
-                            return RedirectToAction("Login");
-                        }
-                        userId = user.Id;
-                        Session["Id"] = userId;
+                        TempData["ErrorMessage"] = "Utilizatorul nu a fost găsit.";
+                        return RedirectToAction("Login");
                     }
+                    userId = user.Id;
+                    Session["Id"] = userId;
                 }
 
                 var booking = new Booking
@@ -582,48 +575,45 @@ namespace Web.Controllers
 
             try
             {
-                using (var db = new eUseControl.BusinessLogic.DBModel.UserContext())
+                var username = Session["Id"].ToString();
+                var user = _userContext.Users.FirstOrDefault(u => u.UserName == username);
+
+                if (user == null)
                 {
-                    string currentUsername = Session["Id"].ToString();
-                    var user = db.Users.FirstOrDefault(u => u.UserName == currentUsername);
-
-                    if (user == null)
-                    {
-                        TempData["ErrorMessage"] = "Utilizatorul nu a fost găsit.";
-                        return RedirectToAction("Profile");
-                    }
-
-                    if (UserName != currentUsername && db.Users.Any(u => u.UserName == UserName))
-                    {
-                        TempData["ErrorMessage"] = "Acest nume de utilizator există deja.";
-                        return RedirectToAction("Profile");
-                    }
-                    if (Email != user.Email && db.Users.Any(u => u.Email == Email))
-                    {
-                        TempData["ErrorMessage"] = "Acest email există deja.";
-                        return RedirectToAction("Profile");
-                    }
-
-                    if (Phone != user.Phone && db.Users.Any(u => u.Phone == Phone))
-                    {
-                        TempData["ErrorMessage"] = "Acest telefon există deja.";
-                        return RedirectToAction("Profile");
-                    }
-
-                    user.UserName = UserName;
-                    user.Email = Email;
-                    user.Phone = Phone;
-
-                    db.SaveChanges();
-
-                    Session["Id"] = UserName;
-                    Session["UserName"] = UserName;
-                    Session["Email"] = Email;
-                    Session["Phone"] = Phone;
-
-                    TempData["SuccessMessage"] = "Profilul a fost actualizat cu succes!";
+                    TempData["ErrorMessage"] = "Utilizatorul nu a fost găsit.";
                     return RedirectToAction("Profile");
                 }
+
+                if (UserName != username && _userContext.Users.Any(u => u.UserName == UserName))
+                {
+                    TempData["ErrorMessage"] = "Acest nume de utilizator există deja.";
+                    return RedirectToAction("Profile");
+                }
+                if (Email != user.Email && _userContext.Users.Any(u => u.Email == Email))
+                {
+                    TempData["ErrorMessage"] = "Acest email există deja.";
+                    return RedirectToAction("Profile");
+                }
+
+                if (Phone != user.Phone && _userContext.Users.Any(u => u.Phone == Phone))
+                {
+                    TempData["ErrorMessage"] = "Acest telefon există deja.";
+                    return RedirectToAction("Profile");
+                }
+
+                user.UserName = UserName;
+                user.Email = Email;
+                user.Phone = Phone;
+
+                _userContext.SaveChanges();
+
+                Session["Id"] = UserName;
+                Session["UserName"] = UserName;
+                Session["Email"] = Email;
+                Session["Phone"] = Phone;
+
+                TempData["SuccessMessage"] = "Profilul a fost actualizat cu succes!";
+                return RedirectToAction("Profile");
             }
             catch (Exception ex)
             {
@@ -650,36 +640,33 @@ namespace Web.Controllers
 
             try
             {
-                using (var db = new eUseControl.BusinessLogic.DBModel.UserContext())
+                var username = Session["Id"].ToString();
+                var user = _userContext.Users.FirstOrDefault(u => u.UserName == username);
+
+                if (user == null)
                 {
-                    string username = Session["Id"].ToString();
-                    var user = db.Users.FirstOrDefault(u => u.UserName == username);
+                    TempData["ErrorMessage"] = "Utilizatorul nu a fost găsit.";
+                    return RedirectToAction("Profile");
+                }
 
-                    if (user == null)
-                    {
-                        TempData["ErrorMessage"] = "Utilizatorul nu a fost găsit.";
-                        return RedirectToAction("Profile");
-                    }
+                if (!eUseControl.BusinessLogic.Core.PasswordHasher.VerifyPassword(CurrentPassword, user.Password))
+                {
+                    TempData["ErrorMessage"] = "Parola curentă este incorectă.";
+                    return RedirectToAction("Profile");
+                }
 
-                    if (!eUseControl.BusinessLogic.Core.PasswordHasher.VerifyPassword(CurrentPassword, user.Password))
-                    {
-                        TempData["ErrorMessage"] = "Parola curentă este incorectă.";
-                        return RedirectToAction("Profile");
-                    }
+                user.Password = eUseControl.BusinessLogic.Core.PasswordHasher.HashPassword(NewPassword);
 
-                    user.Password = eUseControl.BusinessLogic.Core.PasswordHasher.HashPassword(NewPassword);
-
-                    try
-                    {
-                        db.SaveChanges();
-                        TempData["SuccessMessage"] = "Parola a fost schimbată cu succes!";
-                    }
-                    catch (Exception dbEx)
-                    {
-                        System.Diagnostics.Debug.WriteLine($"Database error: {dbEx.Message}");
-                        System.Diagnostics.Debug.WriteLine($"Stack trace: {dbEx.StackTrace}");
-                        TempData["ErrorMessage"] = "Eroare la salvarea în baza de date: " + dbEx.Message;
-                    }
+                try
+                {
+                    _userContext.SaveChanges();
+                    TempData["SuccessMessage"] = "Parola a fost schimbată cu succes!";
+                }
+                catch (Exception dbEx)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Database error: {dbEx.Message}");
+                    System.Diagnostics.Debug.WriteLine($"Stack trace: {dbEx.StackTrace}");
+                    TempData["ErrorMessage"] = "Eroare la salvarea în baza de date: " + dbEx.Message;
                 }
             }
             catch (Exception ex)
@@ -749,16 +736,13 @@ namespace Web.Controllers
                 }
                 else
                 {
-                    using (var db = new eUseControl.BusinessLogic.DBModel.UserContext())
+                    var username = Session["Id"]?.ToString();
+                    if (!string.IsNullOrEmpty(username))
                     {
-                        var username = Session["Id"]?.ToString();
-                        if (!string.IsNullOrEmpty(username))
+                        var user = _userContext.Users.FirstOrDefault(u => u.UserName == username);
+                        if (user != null)
                         {
-                            var user = db.Users.FirstOrDefault(u => u.UserName == username);
-                            if (user != null)
-                            {
-                                userId = user.Id;
-                            }
+                            userId = user.Id;
                         }
                     }
                 }
@@ -791,26 +775,23 @@ namespace Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                using (var db = new eUseControl.BusinessLogic.DBModel.UserContext())
+                var admin = _userContext.Users.FirstOrDefault(u =>
+                    (u.Email == login.Username || u.UserName == login.Username) &&
+                    u.Level == 1);
+
+                if (admin != null && eUseControl.BusinessLogic.Core.PasswordHasher.VerifyPassword(login.Password, admin.Password))
                 {
-                    var admin = db.Users.FirstOrDefault(u =>
-                        (u.Email == login.Username || u.UserName == login.Username) &&
-                        u.Level == 1);
+                    Session["Id"] = admin.Id;
+                    Session["UserName"] = admin.UserName;
+                    Session["Email"] = admin.Email;
+                    Session["Level"] = admin.Level;
+                    Session.Timeout = 60;
 
-                    if (admin != null && eUseControl.BusinessLogic.Core.PasswordHasher.VerifyPassword(login.Password, admin.Password))
-                    {
-                        Session["Id"] = admin.Id;
-                        Session["UserName"] = admin.UserName;
-                        Session["Email"] = admin.Email;
-                        Session["Level"] = admin.Level;
-                        Session.Timeout = 60;
-
-                        return RedirectToAction("Cars", "Admin");
-                    }
-                    else
-                    {
-                        ModelState.AddModelError("", "Credențiale incorecte sau nu aveți drepturi de administrator.");
-                    }
+                    return RedirectToAction("Cars", "Admin");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Credențiale incorecte sau nu aveți drepturi de administrator.");
                 }
             }
             return View(login);
@@ -848,19 +829,16 @@ namespace Web.Controllers
         {
             try
             {
-                using (var db = new eUseControl.BusinessLogic.DBModel.UserContext())
+                var user = _userContext.Users.FirstOrDefault(u => u.Email == email);
+                if (user != null)
                 {
-                    var user = db.Users.FirstOrDefault(u => u.Email == email);
-                    if (user != null)
-                    {
-                        user.Level = 1;
-                        db.SaveChanges();
-                        TempData["SuccessMessage"] = "Utilizatorul a fost promovat la administrator cu succes!";
-                    }
-                    else
-                    {
-                        TempData["ErrorMessage"] = "Utilizatorul nu a fost găsit.";
-                    }
+                    user.Level = 1;
+                    _userContext.SaveChanges();
+                    TempData["SuccessMessage"] = "Utilizatorul a fost promovat la administrator cu succes!";
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "Utilizatorul nu a fost găsit.";
                 }
             }
             catch (Exception ex)
