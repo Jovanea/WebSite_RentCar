@@ -268,7 +268,7 @@ namespace Web.Controllers
                 ViewBag.ErrorMessage = TempData["ErrorMessage"];
             }
 
-            var cart = Session["Cart"] as List<eUseControl.BusinessLogic.DBModel.Booking>;
+            var cart = Session["Cart"] as List<Booking>;
 
             if (cart == null)
             {
@@ -286,18 +286,18 @@ namespace Web.Controllers
                     }
                     else
                     {
-                        cart = new List<eUseControl.BusinessLogic.DBModel.Booking>();
+                        cart = new List<Booking>();
                         Session["Cart"] = cart;
                     }
                 }
                 else
                 {
-                    cart = new List<eUseControl.BusinessLogic.DBModel.Booking>();
+                    cart = new List<Booking>();
                     Session["Cart"] = cart;
                 }
             }
 
-            var cartWithCarDetails = new List<(eUseControl.BusinessLogic.DBModel.Booking, eUseControl.BusinessLogic.DBModel.Car)>();
+            var cartWithCarDetails = new List<(Booking, Car)>();
 
             if (cart != null && cart.Count > 0)
             {
@@ -361,7 +361,7 @@ namespace Web.Controllers
                 return RedirectToAction("Login", "Home");
             }
 
-            var cart = Session["Cart"] as List<eUseControl.BusinessLogic.DBModel.Booking>;
+            var cart = Session["Cart"] as List<Booking>;
             if (cart == null || cart.Count == 0)
             {
                 int userId;
@@ -695,7 +695,7 @@ namespace Web.Controllers
         {
             try
             {
-                var cart = Session["Cart"] as List<eUseControl.BusinessLogic.DBModel.Booking>;
+                var cart = Session["Cart"] as List<Booking>;
                 if (cart != null)
                 {
                     var bookingToRemove = cart.FirstOrDefault(b => b.BookingId == bookingId);
@@ -751,7 +751,7 @@ namespace Web.Controllers
                 {
                     _bookingApi.DeleteBookingsByUserAndStatus(userId, "Pending");
 
-                    Session["Cart"] = new List<eUseControl.BusinessLogic.DBModel.Booking>();
+                    Session["Cart"] = new List<Booking>();
 
                     TempData["SuccessMessage"] = "Coșul a fost golit cu succes.";
                 }
